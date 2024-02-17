@@ -38,7 +38,7 @@ typedef struct {
 
 Player* allocPlayer();
 void player_init(Player* player, s16 startX, s16 startY, s16 mapOverheight);
-void player_update(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, u16 mapShiftX, u16 mapShiftY);
+void player_update(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles);
 void player_setAnim(Player* player, u16 animIndex);
 void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles);
 bool player_checkMapScrollX(Player* player, s16 mapShiftX, u16 mapW);

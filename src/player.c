@@ -9,14 +9,11 @@ void player_init(Player* player, s16 startX, s16 startY, s16 mapOverheight) {
     player->sprite = SPR_addSprite(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, FALSE, TRUE));
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
     // Положение и перемещение
-    player->aabb.x.min = startX;
-    player->aabb.y.min = startY + mapOverheight;
-    player->aabb.x.max = player->aabb.x.min + PLAYER_WIDTH;
-    player->aabb.y.max = player->aabb.y.min + PLAYER_WIDTH;
-    player->aabb.xTiles.min = player->aabb.x.min >> 3;
-    player->aabb.xTiles.max = player->aabb.x.max >> 3;
-    player->aabb.yTiles.min = player->aabb.y.min >> 3;
-    player->aabb.yTiles.max = player->aabb.y.max >> 3;
+    player->aabb.x.min = intToFix32(startX);
+    player->aabb.y.min = intToFix32(startY + mapOverheight);
+    player->aabb.x.max = player->aabb.x.min + FIX32(PLAYER_WIDTH);
+    player->aabb.y.max = player->aabb.y.min + FIX32(PLAYER_WIDTH);
+    engine_initAABBTileIndexes(&player->aabb);
     player->mapOverheight = mapOverheight;
     player->moving.x = DIRECTION_NONE;
     player->moving.y = DIRECTION_NONE;
@@ -28,7 +25,7 @@ void player_init(Player* player, s16 startX, s16 startY, s16 mapOverheight) {
     player->onGround = FALSE;
 }
 
-void player_update(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, u16 mapShiftX, u16 mapShiftY) {
+void player_update(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles) {
     player->isJumping = !player->onGround && player->velocity.y < 0;
     player->isFalling = !player->onGround && player->velocity.y > 0;
     player->isMoving  = player->velocity.x != 0 || player->velocity.y != 0;
@@ -127,7 +124,6 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
             player->velocity.y = 0;
             break;
         }
-
     }
 
     direction.x = 0;
@@ -170,7 +166,7 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
     player->aabb = nextPlayerAABB;
 
     // Обновляем позицию спрайта на экране
-    SPR_setPosition(player->sprite, player->aabb.x.min - mapShiftX, player->aabb.y.min - mapShiftY);
+    SPR_setPosition(player->sprite, fix32ToInt(player->aabb.x.min) - mapShiftX, fix32ToInt(player->aabb.y.min) - mapShiftY);
 }
 
 bool player_checkMapScrollX(Player* player, s16 mapShiftX, u16 mapW) {
@@ -211,7 +207,35 @@ bool player_checkMapScrollY(Player* player, s16 mapShiftY, u16 mapH) {
 
 
 
+        /**
 
+        engine_drawInt("1", (nextPlayerAABB.xTiles.min), 30, 0);
+        engine_drawInt("2", (nextPlayerAABB.xTiles.max), 30, 1);
+        engine_drawInt("3", (nextPlayerAABB.yTiles.min), 30, 2);
+        engine_drawInt("4", (nextPlayerAABB.yTiles.max), 30, 3);
+
+        engine_drawInt("1", (aabbLeft.xTiles.min), 30, 4);
+        engine_drawInt("2", (aabbLeft.xTiles.max), 30, 5);
+        engine_drawInt("3", (aabbLeft.yTiles.min), 30, 6);
+        engine_drawInt("4", (aabbLeft.yTiles.max), 30, 7);
+
+        engine_drawInt("1", (aabbRight.xTiles.min), 30, 8);
+        engine_drawInt("2", (aabbRight.xTiles.max), 30, 9);
+        engine_drawInt("3", (aabbRight.yTiles.min), 30, 10);
+        engine_drawInt("4", (aabbRight.yTiles.max), 30, 11);
+
+        engine_drawInt("1", (aabbTop.xTiles.min), 30, 12);
+        engine_drawInt("2", (aabbTop.xTiles.max), 30, 13);
+        engine_drawInt("3", (aabbTop.yTiles.min), 30, 14);
+        engine_drawInt("4", (aabbTop.yTiles.max), 30, 15);
+
+        engine_drawInt("1", (aabbBottom.xTiles.min), 30, 16);
+        engine_drawInt("2", (aabbBottom.xTiles.max), 30, 17);
+        engine_drawInt("3", (aabbBottom.yTiles.min), 30, 18);
+        engine_drawInt("4", (aabbBottom.yTiles.max), 30, 19);
+
+        //waitMs(1000);
+*/
     /*
 
     engine_drawInt("R1", aabbRight.xTiles.min, 30, 4);

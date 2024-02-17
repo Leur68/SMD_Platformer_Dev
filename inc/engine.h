@@ -19,15 +19,20 @@
 #define DIRECTION_NONE         0
 
 typedef struct {
-    s16 min;
-    s16 max;
-} AxisLine;
+    f32 min;
+    f32 max;
+} AxisLineF32;
 
 typedef struct {
-    AxisLine x;
-    AxisLine y;
-    AxisLine xTiles;
-    AxisLine yTiles;
+    s16 min;
+    s16 max;
+} AxisLineS16;
+
+typedef struct {
+    AxisLineF32 x;
+    AxisLineF32 y;
+    AxisLineS16 xTiles;
+    AxisLineS16 yTiles;
 } AABB;
 
 typedef struct {
@@ -46,7 +51,7 @@ void engine_fadeOutScreen(u16 numFrame);
 void engine_drawInt(const char* text, s16 num, u16 x, u16 y);
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles);
 AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles);
-bool engine_isOverlappingAxisLines(AxisLine x1, AxisLine x2);
+bool engine_isOverlappingAxisLines(AxisLineF32 x1, AxisLineF32 x2);
 bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2);
 AABB engine_getTopAABB(AABB aabb);
 AABB engine_getBottomAABB(AABB aabb);
@@ -54,4 +59,4 @@ AABB engine_getLeftAABB(AABB aabb);
 AABB engine_getRightAABB(AABB aabb);
 void engine_initAABBTileIndexes(AABB* aabb);
 AABB engine_getNewAABB(AABB aabb, Vect2D_s8 velocity);
-s16 engine_roundUpByEight(s16 x);
+f32 engine_roundUpByEight(f32 x);

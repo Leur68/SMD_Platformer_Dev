@@ -145,7 +145,7 @@ void stateLevel1_printMap() {
 }
 
 void stateLevel1_update() {
-    player_update(player, collisions1, MAP_WIDTH_TILES, MAP_HEIGHT_TILES, mapShiftX, mapShiftY);
+    player_update(player, collisions1, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     stateLevel1_scrollMap();
 
 }

@@ -4,6 +4,9 @@
     },
     "files.associations": {
         "game.h": "c",
-        "genesis.h": "c"
+        "genesis.h": "c",
+        "limits": "c",
+        "ratio": "c",
+        "valarray": "c"
     }
 }
