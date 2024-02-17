@@ -1,0 +1,9 @@
+{
+    "[m68k]": {
+        "editor.rulers": []
+    },
+    "files.associations": {
+        "game.h": "c",
+        "genesis.h": "c"
+    }
+}
