@@ -154,10 +154,10 @@ void stateLevel1_scrollMap() {
     bool scrollX = player_checkMapScrollX(player, mapShiftX, MAP_WIDTH);
     bool scrollY = player_checkMapScrollY(player, mapShiftY, MAP_HEIGHT);
     if (scrollX) {
-        mapShiftX += player->velocity.x;
+        mapShiftX += fastFix32ToInt(player->velocity.x);
     } 
     if (scrollY) {
-        mapShiftY += player->velocity.y;
+        mapShiftY += fastFix32ToInt(player->velocity.y);
     }
     if (scrollX || scrollY) {
         MAP_scrollTo(level1Map, mapShiftX, mapShiftY);
@@ -171,8 +171,8 @@ void stateLevel1_release() {
 void stateLevel1_joyHandlerBefore() {
     player->moving.x = DIRECTION_NONE;
     player->moving.y = DIRECTION_NONE;
-    player->velocity.x = 0;
-    player->velocity.y = 0;
+    player->velocity.x = FASTFIX32(0);
+    player->velocity.y = FASTFIX32(0);
 }
 
 void stateLevel1_joyHandlerAfter() {
@@ -183,7 +183,7 @@ void stateLevel1_buttonUp() {
     player->moving.y = DIRECTION_UP;
 
     if (!player->onCeiling) {
-        player->velocity.y = -1;
+        player->velocity.y = FASTFIX32(-1);
     }
 }
 
@@ -191,7 +191,7 @@ void stateLevel1_buttonDown() {
     player->moving.y = DIRECTION_DOWN;
 
     if (!player->onGround) {
-        player->velocity.y = 1;
+        player->velocity.y = FASTFIX32(1);
     }
 }
 
@@ -200,7 +200,7 @@ void stateLevel1_buttonLeft() {
     player->moving.x = DIRECTION_LEFT;
 
     if (!player->onLeftStuff) {
-        player->velocity.x = -1;
+        player->velocity.x = FASTFIX32(-1);
     }
 }
 
@@ -209,7 +209,7 @@ void stateLevel1_buttonRight() {
     player->moving.x = DIRECTION_RIGHT;
 
     if (!player->onRightStuff) {
-        player->velocity.x = 1;
+        player->velocity.x = FASTFIX32(1);
     }
 }
 

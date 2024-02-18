@@ -107,7 +107,7 @@ AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles
     return res;
 }
 
-bool engine_isOverlappingAxisLines(AxisLineFF32 line1, AxisLineFF32 line2) {
+bool engine_isOverlappingAxisLines(AxisLine_ff32 line1, AxisLine_ff32 line2) {
     return line1.max >= line2.min && line2.max >= line1.min;
 }
 

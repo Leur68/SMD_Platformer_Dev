@@ -19,8 +19,8 @@ void player_init(Player* player, s16 startX, s16 startY, s16 mapOverheight) {
     player->mapOverheight = mapOverheight;
     player->moving.x = DIRECTION_NONE;
     player->moving.y = DIRECTION_NONE;
-    player->velocity.x = 0;
-    player->velocity.y = 0;
+    player->velocity.x = FASTFIX32(0);
+    player->velocity.y = FASTFIX32(0);
     // Состояние
     player->isJumping = FALSE;
     player->isFalling = FALSE;
@@ -28,13 +28,13 @@ void player_init(Player* player, s16 startX, s16 startY, s16 mapOverheight) {
 }
 
 void player_update(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles) {
-    player->isJumping = !player->onGround && player->velocity.y < 0;
-    player->isFalling = !player->onGround && player->velocity.y > 0;
-    player->isMoving  = player->velocity.x != 0 || player->velocity.y != 0;
+    player->isJumping = !player->onGround && player->velocity.y < FASTFIX32(0);
+    player->isFalling = !player->onGround && player->velocity.y > FASTFIX32(0);
+    player->isMoving  = player->velocity.x != FASTFIX32(0) || player->velocity.y != FASTFIX32(0);
 
     // Добавляем гравитацию
     if (!player->onGround && player->moving.y == 0) {  //  
-        player->velocity.y = 1;
+        player->velocity.y = FASTFIX32(1);
     }
 
     // Обрабатываем коллизии и перемещаем персонажа
@@ -63,8 +63,8 @@ void player_update(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTil
     engine_drawInt("g", player->onGround, 30, 1);
     engine_drawInt("l", player->onLeftStuff, 30, 2);
     engine_drawInt("r", player->onRightStuff, 30, 3);
-    engine_drawInt("vx", player->velocity.x, 30, 4);
-    engine_drawInt("vy", player->velocity.y, 30, 5);
+    engine_drawInt("vx", fastFix32ToInt(player->velocity.x), 30, 4);
+    engine_drawInt("vy", fastFix32ToInt(player->velocity.y), 30, 5);
     engine_drawInt("dx", player->moving.x, 30, 6);
     engine_drawInt("dy", player->moving.y, 30, 7);
 
@@ -92,15 +92,15 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
     s16 i = 0;
     Vect2D_s8 direction;
     direction.y = 0;
-    if (player->velocity.y > 0) {
+    if (player->velocity.y > FASTFIX32(0)) {
         direction.y = 1;
     }
-    if (player->velocity.y < 0) {
+    if (player->velocity.y < FASTFIX32(0)) {
         direction.y = -1;
     }
     direction.x = 0;
 
-    for (i = 0; i < abs(player->velocity.y); i++) {
+    for (i = 0; i < abs(fastFix32ToInt(player->velocity.y)); i++) {
         // Находим AABB персонажа, для которого нужно проверить коллизии и принять решение о дальнейшем движении персонажа
         nextPlayerAABB = engine_getNewAABB(nextPlayerAABB, direction);
 
@@ -123,20 +123,20 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
         player->onGround     = engine_isOverlappingAABBs(nextPlayerAABB, aabbBottom);
 
         if (player->onCeiling || player->onGround) {
-            player->velocity.y = 0;
+            player->velocity.y = FASTFIX32(0);
             break;
         }
     }
 
     direction.x = 0;
-    if (player->velocity.x > 0) {
+    if (player->velocity.x > FASTFIX32(0)) {
         direction.x = 1;
     }
-    if (player->velocity.x < 0) {
+    if (player->velocity.x < FASTFIX32(0)) {
         direction.x = -1;
     }
     direction.y = 0;
-    for (i = 0; i < abs(player->velocity.x); i++) {
+    for (i = 0; i < abs(fastFix32ToInt(player->velocity.x)); i++) {
         // Находим AABB персонажа, для которого нужно проверить коллизии и принять решение о дальнейшем движении персонажа
         nextPlayerAABB = engine_getNewAABB(nextPlayerAABB, direction);
 
@@ -159,7 +159,7 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
         player->onGround = engine_isOverlappingAABBs(nextPlayerAABB, aabbBottom);
 
         if (player->onLeftStuff || player->onRightStuff) {
-            player->velocity.x = 0;
+            player->velocity.x = FASTFIX32(0);
             break;
         }
     }
@@ -174,28 +174,28 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
 bool player_checkMapScrollX(Player* player, s16 mapShiftX, u16 mapW) {
     s16 playerX = SPR_getPositionX(player->sprite);
     return (
-        player->velocity.x != 0 &&                                                                           // Чтобы смещение происходило при движении персонажа
+        player->velocity.x != FASTFIX32(0) &&                                                                           // Чтобы смещение происходило при движении персонажа
         player->onLeftStuff == FALSE && player->onRightStuff == FALSE &&                                     // Чтобы смещение останавливалось при столкновении с препятствием
 
-        (player->velocity.x > 0 || (mapShiftX - 1) >= 0) &&                                                  // Чтобы не смещать за левую границу
-        (player->velocity.x < 0 || mapShiftX + 1 <= (mapW - SCREEN_WIDTH)) &&                         // Чтобы не смещать за правую границу
+        (player->velocity.x > FASTFIX32(0) || (mapShiftX - 1) >= 0) &&                                                  // Чтобы не смещать за левую границу
+        (player->velocity.x < FASTFIX32(0) || mapShiftX + 1 <= (mapW - SCREEN_WIDTH)) &&                         // Чтобы не смещать за правую границу
         
-        ((player->velocity.x < 0 && playerX <= SCREEN_MIN_X) ||                                              // Чтобы смещать влево
-        (player->velocity.x > 0 && playerX + PLAYER_WIDTH >= SCREEN_MAX_X))                                  // Чтобы смещать вправо
+        ((player->velocity.x < FASTFIX32(0) && playerX <= SCREEN_MIN_X) ||                                              // Чтобы смещать влево
+        (player->velocity.x > FASTFIX32(0) && playerX + PLAYER_WIDTH >= SCREEN_MAX_X))                                  // Чтобы смещать вправо
     );
 }
 
 bool player_checkMapScrollY(Player* player, s16 mapShiftY, u16 mapH) {
     s16 playerY = SPR_getPositionY(player->sprite);
     return (
-        player->velocity.y != 0 &&                                                              // Чтобы смещение происходило при движении персонажа
+        player->velocity.y != FASTFIX32(0) &&                                                              // Чтобы смещение происходило при движении персонажа
         player->onCeiling == FALSE && player->onGround == FALSE &&                              // Чтобы смещение останавливалось при столкновении с препятствием
 
-        (player->velocity.y > 0 || (mapShiftY - 1) >= 0) &&                                     // Чтобы не смещать за верхнюю границу
-        (player->velocity.y < 0 || mapShiftY + 1 <= (mapH - SCREEN_HEIGHT)) &&           // Чтобы не смещать за нижнюю границу
+        (player->velocity.y > FASTFIX32(0) || (mapShiftY - 1) >= 0) &&                                     // Чтобы не смещать за верхнюю границу
+        (player->velocity.y < FASTFIX32(0) || mapShiftY + 1 <= (mapH - SCREEN_HEIGHT)) &&           // Чтобы не смещать за нижнюю границу
         
-        ((player->velocity.y < 0 && playerY <= SCREEN_MIN_Y) ||                                 // Чтобы смещать вверх
-        (player->velocity.y > 0 && playerY + PLAYER_HEIGHT >= SCREEN_MAX_Y))                    // Чтобы смещать вниз
+        ((player->velocity.y < FASTFIX32(0) && playerY <= SCREEN_MIN_Y) ||                                 // Чтобы смещать вверх
+        (player->velocity.y > FASTFIX32(0) && playerY + PLAYER_HEIGHT >= SCREEN_MAX_Y))                    // Чтобы смещать вниз
     );
 }
 
