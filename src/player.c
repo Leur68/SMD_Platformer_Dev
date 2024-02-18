@@ -1,5 +1,7 @@
 #include "../inc/game.h"
 
+// Если зажаты вверх и вниз глючит
+
 Player* allocPlayer() {
     return (Player*) MEM_alloc(sizeof(Player));
 }
@@ -9,10 +11,10 @@ void player_init(Player* player, s16 startX, s16 startY, s16 mapOverheight) {
     player->sprite = SPR_addSprite(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, FALSE, TRUE));
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
     // Положение и перемещение
-    player->aabb.x.min = intToFix32(startX);
-    player->aabb.y.min = intToFix32(startY + mapOverheight);
-    player->aabb.x.max = player->aabb.x.min + FIX32(PLAYER_WIDTH);
-    player->aabb.y.max = player->aabb.y.min + FIX32(PLAYER_WIDTH);
+    player->aabb.x.min = intToFastFix32(startX);
+    player->aabb.y.min = intToFastFix32(startY + mapOverheight);
+    player->aabb.x.max = player->aabb.x.min + FASTFIX32(PLAYER_WIDTH);
+    player->aabb.y.max = player->aabb.y.min + FASTFIX32(PLAYER_WIDTH);
     engine_initAABBTileIndexes(&player->aabb);
     player->mapOverheight = mapOverheight;
     player->moving.x = DIRECTION_NONE;
@@ -166,7 +168,7 @@ void player_move(Player* player, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles
     player->aabb = nextPlayerAABB;
 
     // Обновляем позицию спрайта на экране
-    SPR_setPosition(player->sprite, fix32ToInt(player->aabb.x.min) - mapShiftX, fix32ToInt(player->aabb.y.min) - mapShiftY);
+    SPR_setPosition(player->sprite, fastFix32ToInt(player->aabb.x.min) - mapShiftX, fastFix32ToInt(player->aabb.y.min) - mapShiftY);
 }
 
 bool player_checkMapScrollX(Player* player, s16 mapShiftX, u16 mapW) {

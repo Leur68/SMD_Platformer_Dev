@@ -18,10 +18,12 @@
 #define DIRECTION_DOWN         1
 #define DIRECTION_NONE         0
 
+#define masPointer2(mas, i, j, jLen)  (*(mas + (i * jLen) + j))
+
 typedef struct {
-    f32 min;
-    f32 max;
-} AxisLineF32;
+    ff32 min;
+    ff32 max;
+} AxisLineFF32;
 
 typedef struct {
     s16 min;
@@ -29,8 +31,8 @@ typedef struct {
 } AxisLineS16;
 
 typedef struct {
-    AxisLineF32 x;
-    AxisLineF32 y;
+    AxisLineFF32 x;
+    AxisLineFF32 y;
     AxisLineS16 xTiles;
     AxisLineS16 yTiles;
 } AABB;
@@ -51,7 +53,7 @@ void engine_fadeOutScreen(u16 numFrame);
 void engine_drawInt(const char* text, s16 num, u16 x, u16 y);
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles);
 AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles);
-bool engine_isOverlappingAxisLines(AxisLineF32 x1, AxisLineF32 x2);
+bool engine_isOverlappingAxisLines(AxisLineFF32 x1, AxisLineFF32 x2);
 bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2);
 AABB engine_getTopAABB(AABB aabb);
 AABB engine_getBottomAABB(AABB aabb);
@@ -59,4 +61,4 @@ AABB engine_getLeftAABB(AABB aabb);
 AABB engine_getRightAABB(AABB aabb);
 void engine_initAABBTileIndexes(AABB* aabb);
 AABB engine_getNewAABB(AABB aabb, Vect2D_s8 velocity);
-f32 engine_roundUpByEight(f32 x);
+ff32 engine_roundUpByEight(ff32 x);
