@@ -5,6 +5,9 @@
 
 #define GROUND_PLANE              BG_B
 
+#define MAX_VELOCITY              0.25
+#define ACCELERATION              0.0625
+
 #define NORMAL_VELOCITY           1
 #define NORMAL_GRAVITY            1
 
@@ -12,6 +15,9 @@
 #define MAP_HEIGHT_TILES          100  // Высота карты в тайлах
 #define MAP_WIDTH                 MAP_WIDTH_TILES * 8  // Ширина карты в пикселях
 #define MAP_HEIGHT                MAP_HEIGHT_TILES * 8  // Высота карты в пикселях
+#define MAP_SHIFT_X_MAX           MAP_WIDTH - SCREEN_WIDTH  // 
+#define MAP_SHIFT_Y_MAX           MAP_HEIGHT - SCREEN_HEIGHT  // 
+#define MAP_OVERHEIGHT            MAP_HEIGHT - SCREEN_HEIGHT // 
 
 #define SCREEN_MIN_X              160
 #define SCREEN_MAX_X              160

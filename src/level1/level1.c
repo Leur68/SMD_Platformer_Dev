@@ -106,11 +106,8 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
 Player* player;
 Map* level1Map;
 
-#define MAP_OVERHEIGHT MAP_HEIGHT - SCREEN_HEIGHT
-
 s16 mapShiftX = 0;
 s16 mapShiftY = MAP_OVERHEIGHT;
-
 
 void stateLevel1_tooglePause() {
     paused = !paused;
@@ -145,8 +142,8 @@ void stateLevel1_printMap() {
 }
 
 void stateLevel1_update() {
-    player_update(player, collisions1, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     stateLevel1_scrollMap();
+    player_update(player, collisions1, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
 
 }
 
@@ -160,6 +157,19 @@ void stateLevel1_scrollMap() {
         mapShiftY += fastFix32ToInt(player->velocity.y);
     }
     if (scrollX || scrollY) {
+        if (mapShiftX < 0) {
+            mapShiftX = 0;
+        }
+        if (mapShiftY < 0) {
+            mapShiftY = 0;
+        }
+        if (mapShiftX > MAP_SHIFT_X_MAX) {
+            mapShiftX = MAP_SHIFT_X_MAX;
+        }
+        if (mapShiftY > MAP_SHIFT_Y_MAX) {
+            mapShiftY = MAP_SHIFT_Y_MAX;
+        }
+
         MAP_scrollTo(level1Map, mapShiftX, mapShiftY);
     }
 }
@@ -183,7 +193,11 @@ void stateLevel1_buttonUp() {
     player->moving.y = DIRECTION_UP;
 
     if (!player->onCeiling) {
-        player->velocity.y = FASTFIX32(-1);
+        player->velocity.y -= FASTFIX32(ACCELERATION);
+
+        if (player->velocity.y < FASTFIX32(-MAX_VELOCITY)) {
+            player->velocity.y = FASTFIX32(-MAX_VELOCITY);
+        }
     }
 }
 
@@ -191,7 +205,11 @@ void stateLevel1_buttonDown() {
     player->moving.y = DIRECTION_DOWN;
 
     if (!player->onGround) {
-        player->velocity.y = FASTFIX32(1);
+        player->velocity.y += FASTFIX32(ACCELERATION);
+        
+        if (player->velocity.y > FASTFIX32(MAX_VELOCITY)) {
+            player->velocity.y = FASTFIX32(MAX_VELOCITY);
+        }
     }
 }
 
@@ -199,8 +217,12 @@ void stateLevel1_buttonDown() {
 void stateLevel1_buttonLeft() {
     player->moving.x = DIRECTION_LEFT;
 
-    if (!player->onLeftStuff) {
-        player->velocity.x = FASTFIX32(-1);
+    if (!player->onLeftObstacle) {
+        player->velocity.x -= FASTFIX32(ACCELERATION);
+
+        if (player->velocity.x < FASTFIX32(-MAX_VELOCITY)) {
+            player->velocity.x = FASTFIX32(-MAX_VELOCITY);
+        }
     }
 }
 
@@ -208,8 +230,12 @@ void stateLevel1_buttonLeft() {
 void stateLevel1_buttonRight() {
     player->moving.x = DIRECTION_RIGHT;
 
-    if (!player->onRightStuff) {
-        player->velocity.x = FASTFIX32(1);
+    if (!player->onRightObstacle) {
+        player->velocity.x += FASTFIX32(ACCELERATION);
+
+        if (player->velocity.x > FASTFIX32(MAX_VELOCITY)) {
+            player->velocity.x = FASTFIX32(MAX_VELOCITY);
+        }
     }
 }
 

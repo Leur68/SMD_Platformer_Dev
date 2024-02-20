@@ -10,11 +10,10 @@
 #define ANIM_WALK                 1
 #define ANIM_CLIMB                2
 
-#define MAX_SPEED                 1 // скорость - кол-во пикселей которые прибавляются к позиции персонажа за фрейм
-
 typedef struct {
     Sprite* sprite;       // Спрайт игрока
     AABB aabb;
+    Vect2D_ff32 posBuffer;
     
     bool isJumping;       // Состояние прыжка
     bool isFalling;       // 
@@ -26,8 +25,8 @@ typedef struct {
 
     bool onGround;        // Находится ли персонаж на земле
     bool onCeiling;       // Находится ли персонаж в препятствие над его головой
-    bool onLeftStuff;     // Упирается ли персонаж в препятствие слева от него
-    bool onRightStuff;    // Упирается ли персонаж в препятствие справа от него
+    bool onLeftObstacle;     // Упирается ли персонаж в препятствие слева от него
+    bool onRightObstacle;    // Упирается ли персонаж в препятствие справа от него
 
     s16 acceleration;
 

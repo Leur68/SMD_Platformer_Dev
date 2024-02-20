@@ -67,45 +67,6 @@ void npc_setAnim(NPC* npc, u16 animIndex) {
 
 void npc_checkCollision(NPC* npc, u8* collisionsMap, u16 mapW, u16 mapH) {
     // Находим AABB персонажа, для которого нужно проверить коллизии и принять решение о дальнейшем движении персонажа
-    AABB newPlayerAABB = engine_getNewAABB(npc->aabb, npc->direction);
-    // Находим координаты тайлов снизу от игрока
-    AABB aabbBottom = engine_getBottomAABB(newPlayerAABB);
-    aabbBottom = engine_checkMapArea(collisionsMap, aabbBottom, mapW, mapH); // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте для дальнейшей проверки столкновения
-    // Находим координаты тайлов слева от игрока
-    AABB aabbLeft = engine_getLeftAABB(newPlayerAABB);
-    aabbLeft = engine_checkMapArea(collisionsMap, aabbLeft, mapW, mapH); // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте для дальнейшей проверки столкновения
-    // Находим координаты тайлов справа от игрока
-    AABB aabbRight = engine_getRightAABB(newPlayerAABB);
-    aabbRight = engine_checkMapArea(collisionsMap, aabbRight, mapW, mapH); // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте для дальнейшей проверки столкновения
-    // Находим координаты тайлов сверху от игрока
-    AABB aabbTop = engine_getTopAABB(newPlayerAABB);
-    aabbTop = engine_checkMapArea(collisionsMap, aabbTop, mapW, mapH); // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте для дальнейшей проверки столкновения
-
-    // Проверяем столкновение
-    npc->onGround = engine_isOverlappingAABBs(newPlayerAABB, aabbBottom);
-    if (npc->onGround && npc->direction.y == DIRECTION_DOWN) {
-        //engine_copyAABBY(npc->aabb, &newPlayerAABB);
-    }
     
-    // Проверяем столкновение
-    npc->onLeftStuff = engine_isOverlappingAABBs(newPlayerAABB, aabbLeft);
-    if (npc->onLeftStuff && npc->direction.x == DIRECTION_LEFT) {
-        //engine_copyAABBX(npc->aabb, &newPlayerAABB);
-    }
-
-    // Проверяем столкновение
-    npc->onRightStuff = engine_isOverlappingAABBs(newPlayerAABB, aabbRight);
-    if (npc->onRightStuff && npc->direction.x == DIRECTION_RIGHT) {
-        //engine_copyAABBX(npc->aabb, &newPlayerAABB);
-    }
-
-    // Проверяем столкновение
-    // Чтобы нормально работал прыжок при нажатой "влево" или "вправо", обработку коллизий сверху от игрока следует поместить здесь
-    npc->onCeiling = engine_isOverlappingAABBs(newPlayerAABB, aabbTop);
-    if (npc->onCeiling && npc->direction.y == DIRECTION_UP) {
-        //engine_copyAABBY(npc->aabb, &newPlayerAABB);
-    }
-
-    npc->aabb = newPlayerAABB;
 
 }

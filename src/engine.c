@@ -59,6 +59,24 @@ void engine_drawInt(const char* text, s16 num, u16 x, u16 y) {
     VDP_drawText(result, x, y);
 }
 
+void engine_drawFF32(const char* text, f32 num, u16 x, u16 y) {
+    VDP_clearText(x + 4, y, 6);
+    
+    char numStr[6];
+    fix32ToStr(num, &numStr, 6);
+
+    char result[10];
+
+    strcpy(result, text);
+    strcat(result, " ");
+    for (u8 i = 0; i < 2 - strlen(text); i++) {
+        strcat(result, " ");
+    }
+    strcat(result, numStr);
+
+    VDP_drawText(result, x, y);
+}
+
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles) {
     // Проверяем границы карты
     if (xTile < 0 || yTile < 0 || xTile >= mapWTiles || yTile >= mapHTiles) return TRUE;
@@ -113,6 +131,28 @@ bool engine_isOverlappingAxisLines(AxisLine_ff32 line1, AxisLine_ff32 line2) {
 
 bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2) {
     return (aabb1.x.max >= aabb2.x.min && aabb2.x.max >= aabb1.x.min) && (aabb1.y.max >= aabb2.y.min && aabb2.y.max >= aabb1.y.min);
+}
+
+AABB engine_shiftAABBx(AABB aabb, s8 x) {
+    AABB newPlayerAABB;
+    ff32 xFF32 = intToFastFix32(x);
+    newPlayerAABB.x.min = aabb.x.min + xFF32;
+    newPlayerAABB.x.max = aabb.x.max + xFF32;
+    newPlayerAABB.y.min = aabb.y.min;
+    newPlayerAABB.y.max = aabb.y.max;
+    engine_initAABBTileIndexes(&newPlayerAABB);
+    return newPlayerAABB;
+}
+
+AABB engine_shiftAABBy(AABB aabb, s8 y) {
+    AABB newPlayerAABB;
+    ff32 yFF32 = intToFastFix32(y);
+    newPlayerAABB.y.min = aabb.y.min + yFF32;
+    newPlayerAABB.y.max = aabb.y.max + yFF32;
+    newPlayerAABB.x.min = aabb.x.min;
+    newPlayerAABB.x.max = aabb.x.max;
+    engine_initAABBTileIndexes(&newPlayerAABB);
+    return newPlayerAABB;
 }
 
 AABB engine_getNewAABB(AABB aabb, Vect2D_s8 direction) {
@@ -174,4 +214,23 @@ void engine_initAABBTileIndexes(AABB* aabb) {
 
 ff32 engine_roundUpByEight(ff32 x) {
     return (x + FASTFIX32(7)) & FASTFIX32(-8);
+}
+
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, bool* left, bool* right, bool* top, bool* bottom) {
+    AABB aabbLeft   = engine_getLeftAABB(aabb);
+    AABB aabbRight  = engine_getRightAABB(aabb);
+    AABB aabbTop    = engine_getTopAABB(aabb);
+    AABB aabbBottom = engine_getBottomAABB(aabb);
+
+    // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте для дальнейшей проверки столкновений
+    aabbLeft   = engine_checkMapArea(collisionsMap, aabbLeft, mapWTiles, mapHTiles);
+    aabbRight  = engine_checkMapArea(collisionsMap, aabbRight, mapWTiles, mapHTiles);
+    aabbTop    = engine_checkMapArea(collisionsMap, aabbTop, mapWTiles, mapHTiles);
+    aabbBottom = engine_checkMapArea(collisionsMap, aabbBottom, mapWTiles, mapHTiles);
+
+    // Проверяем столкновения
+    *left   = engine_isOverlappingAABBs(aabb, aabbLeft);
+    *right  = engine_isOverlappingAABBs(aabb, aabbRight);
+    *top    = engine_isOverlappingAABBs(aabb, aabbTop);
+    *bottom = engine_isOverlappingAABBs(aabb, aabbBottom);    
 }
