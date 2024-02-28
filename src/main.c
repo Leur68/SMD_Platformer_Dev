@@ -5,7 +5,7 @@ int main(resetType) {
     states_setLevel1State();
 	engine_init();
     
-    while(TRUE) {
+    while(true) {
         switch(currentState) {
             case STATE_INTRO : {
                 stateIntro_process();

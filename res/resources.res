@@ -4,6 +4,13 @@ IMAGE grass "images/grass.png" 0
 SPRITE cursor_spr               "sprites/cursor.bmp" 1 1 NONE 0
 SPRITE player_sprite            "sprites/player.png" 3 3 FAST 5
 
+SPRITE tile_cursor_l_r          "images/tile_cursor_l_r.png" 1 1 FAST 5
+SPRITE tile_cursor_r_r          "images/tile_cursor_r_r.png" 1 1 FAST 5
+SPRITE tile_cursor_t_r          "images/tile_cursor_t_r.png" 1 1 FAST 5
+SPRITE tile_cursor_b_r          "images/tile_cursor_b_r.png" 1 1 FAST 5
+
+SPRITE player_cursor            "images/player_cursor.png" 3 3 FAST 5
+
 TILESET level1_tileset          "maps/Sprite-0001.png"           FAST ALL
 MAP     level1_map              "maps/Sprite-0001.png"           level1_tileset FAST 0
 PALETTE level1_palette          "maps/Sprite-0001.png"

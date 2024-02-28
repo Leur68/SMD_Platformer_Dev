@@ -1,7 +1,8 @@
 #pragma once
 #include <genesis.h>
 
-#define DEBUG                  1
+#define DEBUG_PLAYER           1
+#define DEBUG_COLLISIONS       0
 
 #define SCREEN_WIDTH           320
 #define SCREEN_HEIGHT          224
@@ -17,6 +18,21 @@
 #define DIRECTION_UP           -1
 #define DIRECTION_DOWN         1
 #define DIRECTION_NONE         0
+
+#define COL_NONE               0
+#define COL_SHIFT_L            1
+#define COL_SHIFT_R            2
+#define COL_SHIFT_T            3
+#define COL_SHIFT_B            4
+#define COL_SHIFT_LT           5
+#define COL_SHIFT_LB           6
+#define COL_SHIFT_RT           7
+#define COL_SHIFT_RB           8
+#define COL_SHIFT_LR           9
+#define COL_SHIFT_TB           10
+
+extern Sprite* tileCursorsR[12];
+extern Sprite* playerCursor;
 
 #define masPointer2(mas, i, j, jLen)  (*(mas + (i * jLen) + j))
 
@@ -36,10 +52,11 @@ typedef struct {
 } AxisLine_s16;
 
 typedef struct {
-    AxisLine_ff32 x;
-    AxisLine_ff32 y;
+    AxisLine_s16 x;
+    AxisLine_s16 y;
     AxisLine_s16 xTiles;
     AxisLine_s16 yTiles;
+    bool exists;
 } AABB;
 
 typedef struct {
@@ -56,17 +73,21 @@ void engine_fadeInPalette(const u16 * pal, u16 numFrame);
 void engine_fadeInScreen(u16 numFrame);
 void engine_fadeOutScreen(u16 numFrame);
 void engine_drawInt(const char* text, s16 num, u16 x, u16 y);
-void engine_drawFF32(const char* text, f32 num, u16 x, u16 y);
+void engine_drawFix32(const char* text, f32 num, u16 x, u16 y);
+
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles);
 AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles);
-bool engine_isOverlappingAxisLines(AxisLine_ff32 x1, AxisLine_ff32 x2);
+bool engine_isOverlappingAxisLines(AxisLine_s16 x1, AxisLine_s16 x2);
 bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2);
-AABB engine_getTopAABB(AABB aabb);
-AABB engine_getBottomAABB(AABB aabb);
-AABB engine_getLeftAABB(AABB aabb);
-AABB engine_getRightAABB(AABB aabb);
+AABB engine_getTopTileBox(AABB aabb);
+AABB engine_getBottomTileBox(AABB aabb);
+AABB engine_getLeftTileBox(AABB aabb);
+AABB engine_getRightTileBox(AABB aabb);
 void engine_initAABBTileIndexes(AABB* aabb);
-AABB engine_shiftAABBx(AABB aabb, s8 x);
-AABB engine_shiftAABBy(AABB aabb, s8 y);
-ff32 engine_roundUpByEight(ff32 x);
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, bool* left, bool* right, bool* top, bool* bottom);
+void engine_shiftAABB(AABB* aabb, s8 x, s8 y);
+void engine_setAABB(AABB* aabb, s16 x, s16 y);
+s16 engine_roundUpByEight(s16 x);
+s16 engine_roundDownByEight(s16 x);
+bool engine_isMultipleOfEight(int num);
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 moving, u8* left, u8* right, u8* top, u8* bottom);
+s16 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b);

@@ -6,7 +6,7 @@ NPC* allocNPC() {
 
 void npc_init(NPC* npc, s16 startX, s16 startY) {
     // Спрайт
-    npc->sprite = SPR_addSprite(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, FALSE, TRUE));
+    npc->sprite = SPR_addSprite(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, false, true));
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
     // Положение и перемещение
     npc->aabb.x.min = startX;
@@ -20,19 +20,19 @@ void npc_init(NPC* npc, s16 startX, s16 startY) {
     npc->direction.x = DIRECTION_NONE;
     npc->direction.y = DIRECTION_NONE;
     // Состояние
-    npc->isJumping = FALSE;
-    npc->isClimbing = FALSE;
-    npc->isMoving = FALSE;
-    npc->onGround = FALSE;
+    npc->isJumping = false;
+    npc->isClimbing = false;
+    npc->isMoving = false;
+    npc->inGround = false;
 }
 
 void npc_update(NPC* npc, u8* collisionsMap, u16 mapW, u16 mapH) {
     // Обновляем пространственную ориентацию спрайта
     if (npc->direction.x == DIRECTION_RIGHT) {
-        SPR_setHFlip(npc->sprite, TRUE);
+        SPR_setHFlip(npc->sprite, false);
     }
     if (npc->direction.x == DIRECTION_LEFT) {
-        SPR_setHFlip(npc->sprite, FALSE);
+        SPR_setHFlip(npc->sprite, false);
     }
 
     // Добавляем гравитацию

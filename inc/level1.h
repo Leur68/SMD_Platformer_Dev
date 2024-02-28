@@ -5,11 +5,13 @@
 
 #define GROUND_PLANE              BG_B
 
-#define MAX_VELOCITY              0.25
-#define ACCELERATION              0.0625
+#define MAX_VELOCITY              3.5
+#define ACCELERATION              0.25
+
+#define GRAVITY                   3
+#define GRAVITY_ACCELERATION      0.25
 
 #define NORMAL_VELOCITY           1
-#define NORMAL_GRAVITY            1
 
 #define MAP_WIDTH_TILES           100  // Ширина карты в тайлах
 #define MAP_HEIGHT_TILES          100  // Высота карты в тайлах
@@ -20,35 +22,54 @@
 #define MAP_OVERHEIGHT            MAP_HEIGHT - SCREEN_HEIGHT // 
 
 #define SCREEN_MIN_X              160
-#define SCREEN_MAX_X              160
+#define SCREEN_MAX_X              184
 #define SCREEN_MIN_Y              112
-#define SCREEN_MAX_Y              112
+#define SCREEN_MAX_Y              136
 
 extern bool paused;
 extern bool xyzButtons;
 extern u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES];
 extern s16 mapShiftX;
 extern s16 mapShiftY;
+extern bool isDebug;
 
 void stateLevel1_init();
-void stateLevel1_release();
 void stateLevel1_joyInit();
+void stateLevel1_release();
+
+void stateLevel1_process();
+void stateLevel1_update();
+
+void stateLevel1_scrollMap(s16 scrollX, s16 scrollY);
+void stateLevel1_tooglePause();
+
 void stateLevel1_joyHandlerBefore();
 void stateLevel1_joyHandlerAfter();
+
 void stateLevel1_joyHandler3(u16 joy, u16 changed, u16 state);
 void stateLevel1_joyHandler6(u16 joy, u16 changed, u16 state);
-void stateLevel1_buttonUp();
-void stateLevel1_buttonDown();
-void stateLevel1_buttonLeft();
-void stateLevel1_buttonRight();
+
+void stateLevel1_buttonUpHold();
+void stateLevel1_buttonDownHold();
+void stateLevel1_buttonLeftHold();
+void stateLevel1_buttonRightHold();
+
+void stateLevel1_buttonUpPress();
+void stateLevel1_buttonDownPress();
+void stateLevel1_buttonLeftPress();
+void stateLevel1_buttonRightPress();
+
+void stateLevel1_buttonUpRelease();
+void stateLevel1_buttonDownRelease();
+void stateLevel1_buttonLeftRelease();
+void stateLevel1_buttonRightRelease();
+
 void stateLevel1_buttonStart();
+void stateLevel1_buttonMode();
+
 void stateLevel1_buttonX();
 void stateLevel1_buttonY();
 void stateLevel1_buttonZ();
 void stateLevel1_buttonA();
 void stateLevel1_buttonB();
 void stateLevel1_buttonC();
-void stateLevel1_process();
-void stateLevel1_scrollMap();
-void stateLevel1_update();
-void stateLevel1_tooglePause();

@@ -13,7 +13,7 @@ void stateIntro_init() {
 void stateIntro_update() {
     VDP_drawImage(BG_A, &sgdk, 15, 9);
     engine_fadeInScreen(NORMAL_FADE);
-    while (TRUE) {
+    while (true) {
         SYS_doVBlankProcess();
         counter++;
         if (counter >= 180) {
@@ -21,7 +21,7 @@ void stateIntro_update() {
         }
     }
     engine_fadeOutScreen(NORMAL_FADE);
-    VDP_clearPlane(BG_A, TRUE);
+    VDP_clearPlane(BG_A, true);
     states_setStartState();
 }
 
