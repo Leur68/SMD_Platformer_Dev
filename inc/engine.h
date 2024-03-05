@@ -1,8 +1,9 @@
 #pragma once
 #include <genesis.h>
 
-#define DEBUG_PLAYER           1
+#define DEBUG_PLAYER           0
 #define DEBUG_COLLISIONS       0
+#define DEBUG_GAME             1
 
 #define SCREEN_WIDTH           320
 #define SCREEN_HEIGHT          224
@@ -79,15 +80,15 @@ bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16
 AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles);
 bool engine_isOverlappingAxisLines(AxisLine_s16 x1, AxisLine_s16 x2);
 bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2);
-AABB engine_getTopTileBox(AABB aabb);
-AABB engine_getBottomTileBox(AABB aabb);
-AABB engine_getLeftTileBox(AABB aabb);
-AABB engine_getRightTileBox(AABB aabb);
+AABB engine_getTopAABB(AABB aabb);
+AABB engine_getBottomAABB(AABB aabb);
+AABB engine_getLeftAABB(AABB aabb);
+AABB engine_getRightAABB(AABB aabb);
 void engine_initAABBTileIndexes(AABB* aabb);
 void engine_shiftAABB(AABB* aabb, s8 x, s8 y);
 void engine_setAABB(AABB* aabb, s16 x, s16 y);
 s16 engine_roundUpByEight(s16 x);
 s16 engine_roundDownByEight(s16 x);
 bool engine_isMultipleOfEight(int num);
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 moving, u8* left, u8* right, u8* top, u8* bottom);
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom);
 s16 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b);

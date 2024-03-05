@@ -1,17 +1,25 @@
 #include <genesis.h>
 
-#define GROUND_PALETTE            PAL0
+// Палитры
+#define BACKGROUND_PALETTE        PAL1
+#define GROUND_PALETTE            PAL2
 #define PLAYER_PALETTE            PAL3
 
-#define GROUND_PLANE              BG_B
+// Плейны
+#define BACKGROUND_PLANE          BG_B
+#define GROUND_PLANE              BG_A
+
+#define TEXT_PLANE                BG_A
+#define TEXT_PALETTE              PAL0
+#define DEBUG_PALETTE             PAL3
 
 #define MAX_VELOCITY              3.5
-#define ACCELERATION              0.25
+#define ACCELERATION              0.125
 
 #define GRAVITY                   3
-#define GRAVITY_ACCELERATION      0.25
+#define GRAVITY_ACCELERATION      0.125
 
-#define NORMAL_VELOCITY           1
+#define JUMP                      8
 
 #define MAP_WIDTH_TILES           100  // Ширина карты в тайлах
 #define MAP_HEIGHT_TILES          100  // Высота карты в тайлах
@@ -21,6 +29,14 @@
 #define MAP_SHIFT_Y_MAX           MAP_HEIGHT - SCREEN_HEIGHT  // 
 #define MAP_OVERHEIGHT            MAP_HEIGHT - SCREEN_HEIGHT // 
 
+#define BACK_WIDTH_TILES          50  // Ширина фона в тайлах
+#define BACK_HEIGHT_TILES         50  // Высота фона в тайлах
+#define BACK_WIDTH                BACK_WIDTH_TILES * 8  // Ширина фона в пикселях
+#define BACK_HEIGHT               BACK_HEIGHT_TILES * 8  // Высота фона в пикселях
+#define BACK_SHIFT_X_MAX          BACK_WIDTH - SCREEN_WIDTH  // 
+#define BACK_SHIFT_Y_MAX          BACK_HEIGHT - SCREEN_HEIGHT  // 
+#define BACK_OVERHEIGHT           BACK_HEIGHT - SCREEN_HEIGHT // 
+
 #define SCREEN_MIN_X              160
 #define SCREEN_MAX_X              184
 #define SCREEN_MIN_Y              112
@@ -29,11 +45,12 @@
 extern bool paused;
 extern bool xyzButtons;
 extern u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES];
-extern s16 mapShiftX;
-extern s16 mapShiftY;
+extern u16 mapShiftX;
+extern u16 mapShiftY;
 extern bool isDebug;
 
 void stateLevel1_init();
+void stateLevel1_load();
 void stateLevel1_joyInit();
 void stateLevel1_release();
 

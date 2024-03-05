@@ -105,11 +105,17 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
 
 Player* player;
 Map* level1Map;
+Map* level1Back;
 
-s16 mapShiftX = 0;
-s16 mapShiftY = MAP_OVERHEIGHT;
+u16 mapShiftX = 0;
+u16 mapShiftY = MAP_OVERHEIGHT;
 
-bool isDebug = false;
+ff32 backShiftX = FASTFIX32(0);
+ff32 backShiftY = FASTFIX32(BACK_OVERHEIGHT);
+
+#if (DEBUG_GAME)
+    bool isDebug = false;
+#endif
 
 void stateLevel1_tooglePause() {
     paused = !paused;
@@ -118,51 +124,58 @@ void stateLevel1_tooglePause() {
 void stateLevel1_init() {
     stateLevel1_joyInit();
 
-    stateLevel1_printMap();
+    stateLevel1_load();
     
     player = allocPlayer();
     player_init(player, 15, 144, MAP_OVERHEIGHT, &stateLevel1_scrollMap);
 
     #if (DEBUG_COLLISIONS)
-        playerCursor = SPR_addSprite(&player_cursor, -24, -24, TILE_ATTR(PAL2, 0, false, false));
-        PAL_setPalette(PAL2, player_cursor.palette->data, DMA);
+        playerCursor = SPR_addSprite(&player_cursor, -24, -24, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
+        PAL_setPalette(DEBUG_PALETTE, player_cursor.palette->data, DMA);
 
         u8 i = 0;
         while (i < 3) {
-            Sprite* tileCursor = SPR_addSprite(&tile_cursor_l_r, -8, -8, TILE_ATTR(PAL1, 0, false, false));
-            PAL_setPalette(PAL1, tile_cursor_l_r.palette->data, DMA);
+            Sprite* tileCursor = SPR_addSprite(&tile_cursor_l_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
+            PAL_setPalette(DEBUG_PALETTE, tile_cursor_l_r.palette->data, DMA);
             tileCursorsR[i] = tileCursor;
             i++;
         }
         while (i < 6) {
-            Sprite* tileCursor = SPR_addSprite(&tile_cursor_r_r, -8, -8, TILE_ATTR(PAL1, 0, false, false));
-            PAL_setPalette(PAL1, tile_cursor_r_r.palette->data, DMA);
+            Sprite* tileCursor = SPR_addSprite(&tile_cursor_r_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
+            PAL_setPalette(DEBUG_PALETTE, tile_cursor_r_r.palette->data, DMA);
             tileCursorsR[i] = tileCursor;
             i++;
         }
         while (i < 9) {
-            Sprite* tileCursor = SPR_addSprite(&tile_cursor_t_r, -8, -8, TILE_ATTR(PAL1, 0, false, false));
-            PAL_setPalette(PAL1, tile_cursor_t_r.palette->data, DMA);
+            Sprite* tileCursor = SPR_addSprite(&tile_cursor_t_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
+            PAL_setPalette(DEBUG_PALETTE, tile_cursor_t_r.palette->data, DMA);
             tileCursorsR[i] = tileCursor;
             i++;
         }
         while (i < 12) {
-            Sprite* tileCursor = SPR_addSprite(&tile_cursor_b_r, -8, -8, TILE_ATTR(PAL1, 0, false, false));
-            PAL_setPalette(PAL1, tile_cursor_b_r.palette->data, DMA);
+            Sprite* tileCursor = SPR_addSprite(&tile_cursor_b_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
+            PAL_setPalette(DEBUG_PALETTE, tile_cursor_b_r.palette->data, DMA);
             tileCursorsR[i] = tileCursor;
             i++;
         }
     #endif
-    
 }
 
-void stateLevel1_printMap() {
-    PAL_setPalette(PAL0, level1_palette.data, DMA);
-	VDP_loadTileSet(&level1_tileset, TILE_USER_INDEX, DMA);
-	level1Map = MAP_create(&level1_map, GROUND_PLANE, TILE_ATTR_FULL(PAL0, false, false, false, TILE_USER_INDEX));
-    MAP_scrollTo(level1Map, 0, MAP_OVERHEIGHT);
+void stateLevel1_load() {
+    VDP_setTextPlane(TEXT_PLANE);
+    VDP_setTextPalette(TEXT_PALETTE);
 
-    PAL_setColor(0, palette_grey); // ???????
+    PAL_setPalette(BACKGROUND_PALETTE, level1_back_palette.data, DMA);
+    PAL_setPalette(GROUND_PALETTE, level1_palette.data, DMA);
+
+	VDP_loadTileSet(&level1_tileset, TILE_USER_INDEX, DMA);
+	VDP_loadTileSet(&level1_back_tileset, TILE_USER_INDEX + level1_tileset.numTile, DMA);
+
+	level1Map = MAP_create(&level1_map, GROUND_PLANE, TILE_ATTR_FULL(GROUND_PALETTE, false, false, false, TILE_USER_INDEX));
+	level1Back = MAP_create(&level1_back_map, BACKGROUND_PLANE, TILE_ATTR_FULL(BACKGROUND_PALETTE, false, false, false, TILE_USER_INDEX + level1_tileset.numTile));
+
+    MAP_scrollTo(level1Map, mapShiftX, mapShiftY);
+    MAP_scrollTo(level1Back, fastFix32ToInt(backShiftX), fastFix32ToInt(backShiftY));
 }
 
 void stateLevel1_update() {
@@ -170,27 +183,23 @@ void stateLevel1_update() {
     #if (DEBUG_COLLISIONS)
         SPR_setPosition(playerCursor, player->aabb.x.min - mapShiftX, player->aabb.y.min - mapShiftY);
     #endif
+    #if (DEBUG_GAME)
+        if (isDebug) {
+            waitMs(500);
+        }
+    #endif
 }
 
 void stateLevel1_scrollMap(s16 scrollX, s16 scrollY) {
     if (scrollX != 0 || scrollY != 0) {
         mapShiftX += scrollX;
         mapShiftY += scrollY;
-
-        if (mapShiftX < 0) {
-            mapShiftX = 0;
-        }
-        if (mapShiftY < 0) {
-            mapShiftY = 0;
-        }
-        if (mapShiftX > MAP_SHIFT_X_MAX) {
-            mapShiftX = MAP_SHIFT_X_MAX;
-        }
-        if (mapShiftY > MAP_SHIFT_Y_MAX) {
-            mapShiftY = MAP_SHIFT_Y_MAX;
-        }
+ 
+        backShiftX += fastFix32Div(FASTFIX32(scrollX), FASTFIX32(6.0)); 
+        backShiftY += fastFix32Div(FASTFIX32(scrollY), FASTFIX32(3.3));
 
         MAP_scrollTo(level1Map, mapShiftX, mapShiftY);
+        MAP_scrollTo(level1Back, fastFix32ToInt(backShiftX), fastFix32ToInt(backShiftY));
     }
 }
 
@@ -207,32 +216,24 @@ void stateLevel1_joyHandlerAfter() {
 }
 
 void stateLevel1_buttonUpHold() {
-    #if (!DEBUG_COLLISIONS)
-    if (!player->inCeiling) {
-    #endif
+    #if (DEBUG_COLLISIONS)
         if (player->velocity.y != FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.y -= FASTFIX32(ACCELERATION);
         }
         if (player->velocity.y < FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.y = FASTFIX32(-MAX_VELOCITY);
         }
-    #if (!DEBUG_COLLISIONS)
-    }
     #endif
 }
 
 void stateLevel1_buttonDownHold() {
-    #if (!DEBUG_COLLISIONS)
-    if (!player->inGround) {
-    #endif
+    #if (DEBUG_COLLISIONS)
         if (player->velocity.y != FASTFIX32(MAX_VELOCITY)) {
             player->velocity.y += FASTFIX32(ACCELERATION);
         }
         if (player->velocity.y > FASTFIX32(MAX_VELOCITY)) {
             player->velocity.y = FASTFIX32(MAX_VELOCITY);
         }
-    #if (!DEBUG_COLLISIONS)
-    }
     #endif
 }
 
@@ -267,53 +268,45 @@ void stateLevel1_buttonRightHold() {
 }
 
 void stateLevel1_buttonUpPress() {
-    if (player->moving.y == DIRECTION_NONE) {
-        player->moving.y = DIRECTION_UP;
-    }
+    
 }
 
 void stateLevel1_buttonDownPress() {
-    if (player->moving.y == DIRECTION_NONE) {
-        player->moving.y = DIRECTION_DOWN;
-    }
+    
 }
 
 void stateLevel1_buttonLeftPress() {
-    if (player->moving.x == DIRECTION_NONE) {
-        player->moving.x = DIRECTION_LEFT;
-    }
+    
 }
 
 void stateLevel1_buttonRightPress() {
-    if (player->moving.x == DIRECTION_NONE) {
-        player->moving.x = DIRECTION_RIGHT;
-    }
+    
 }
 
 void stateLevel1_buttonUpRelease() {
-    if (player->moving.y == DIRECTION_UP) {
-        player->moving.y = DIRECTION_NONE;  // При отпускании кнопки выключаем движение
-        player->velocity.y = FASTFIX32(0);
-    }
+    #if (DEBUG_COLLISIONS)
+        if (player->velocity.y < FASTFIX32(0)) {
+            player->velocity.y = FASTFIX32(0);
+        }
+    #endif
 }
 
 void stateLevel1_buttonDownRelease() {
-    if (player->moving.y == DIRECTION_DOWN) {
-        player->moving.y = DIRECTION_NONE;  // При отпускании кнопки выключаем движение
-        player->velocity.y = FASTFIX32(0);
-    }
+    #if (DEBUG_COLLISIONS)
+        if (player->velocity.y > FASTFIX32(0)) {
+            player->velocity.y = FASTFIX32(0);
+        }
+    #endif
 }
 
 void stateLevel1_buttonLeftRelease() {
-    if (player->moving.x == DIRECTION_LEFT) {
-        player->moving.x = DIRECTION_NONE;  // При отпускании кнопки выключаем движение
+    if (player->velocity.x < FASTFIX32(0)) {
         player->velocity.x = FASTFIX32(0);
     }
 }
 
 void stateLevel1_buttonRightRelease() {
-    if (player->moving.x == DIRECTION_RIGHT) {
-        player->moving.x = DIRECTION_NONE;  // При отпускании кнопки выключаем движение
+    if (player->velocity.x > FASTFIX32(0)) {
         player->velocity.x = FASTFIX32(0);
     }
 }
@@ -335,21 +328,26 @@ void stateLevel1_buttonZ() {
 }
 
 void stateLevel1_buttonA() {
-    
+    backShiftY -= FASTFIX32(1);
+
+    engine_drawInt("y", fastFix32ToInt(backShiftY), 20, 0);
 }
 
 void stateLevel1_buttonB() {
+    backShiftY += FASTFIX32(1);
     
+    engine_drawInt("y", fastFix32ToInt(backShiftY), 20, 0);
 }
 
 void stateLevel1_buttonC() {
-    if (player->inGround) {
-        player->velocity.y = FASTFIX32(-5);
-        player->inGround = 0;
-        player->moving.y = DIRECTION_UP;
+    if (player->inLowerObstacle) {
+        player->velocity.y = FASTFIX32(-JUMP);
+        player->inLowerObstacle = 0;
     }
 }
 
 void stateLevel1_buttonMode() {
-    isDebug = !isDebug;
+    #if (DEBUG_GAME)
+        isDebug = !isDebug;
+    #endif
 }

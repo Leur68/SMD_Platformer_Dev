@@ -13,5 +13,8 @@ extern const SpriteDefinition player_cursor;
 extern const TileSet level1_tileset;
 extern const MapDefinition level1_map;
 extern const Palette level1_palette;
+extern const TileSet level1_back_tileset;
+extern const MapDefinition level1_back_map;
+extern const Palette level1_back_palette;
 
 #endif // _RES_RESOURCES_H_

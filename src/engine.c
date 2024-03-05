@@ -84,7 +84,7 @@ bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16
     return masPointer2(collisions, yTile, xTile, mapWTiles) != COL_NONE;
 }
 
-AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles) {    
+AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles) {
     AABB res;
     res.x.min = 0;
     res.y.min = 0;
@@ -148,7 +148,7 @@ void engine_setAABB(AABB* aabb, s16 x, s16 y) {
     engine_initAABBTileIndexes(aabb);
 }
 
-AABB engine_getTopTileBox(AABB aabb) {
+AABB engine_getTopAABB(AABB aabb) {
     AABB aabbTop;
     aabbTop.x = aabb.x;
     aabbTop.xTiles = aabb.xTiles;
@@ -172,7 +172,7 @@ AABB engine_getTopTileBox(AABB aabb) {
     return aabbTop;
 }
 
-AABB engine_getBottomTileBox(AABB aabb) {
+AABB engine_getBottomAABB(AABB aabb) {
     AABB aabbBottom;
     aabbBottom.x = aabb.x;
     aabbBottom.xTiles = aabb.xTiles;
@@ -190,7 +190,7 @@ AABB engine_getBottomTileBox(AABB aabb) {
     return aabbBottom;
 }
 
-AABB engine_getLeftTileBox(AABB aabb) {
+AABB engine_getLeftAABB(AABB aabb) {
     AABB aabbLeft;
     aabbLeft.y = aabb.y;
     aabbLeft.yTiles = aabb.yTiles;
@@ -214,7 +214,7 @@ AABB engine_getLeftTileBox(AABB aabb) {
     return aabbLeft;
 }
 
-AABB engine_getRightTileBox(AABB aabb) {
+AABB engine_getRightAABB(AABB aabb) {
     AABB aabbRight;
     aabbRight.y = aabb.y;
     aabbRight.yTiles = aabb.yTiles;
@@ -256,24 +256,24 @@ bool engine_isMultipleOfEight(int num) {
     Sprite* playerCursor;
 #endif
 
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 moving, u8* left, u8* right, u8* top, u8* bottom) {
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom) {
     // Получаем AABB для проверки столкновений
-    AABB aabbLeft   = engine_getLeftTileBox(aabb);
-    AABB aabbRight  = engine_getRightTileBox(aabb);
-    AABB aabbTop    = engine_getTopTileBox(aabb);
-    AABB aabbBottom = engine_getBottomTileBox(aabb);
+    AABB aabbLeft   = engine_getLeftAABB(aabb);
+    AABB aabbRight  = engine_getRightAABB(aabb);
+    AABB aabbTop    = engine_getTopAABB(aabb);
+    AABB aabbBottom = engine_getBottomAABB(aabb);
 
     // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте. Данными тайлами считаются те, вплотную к которым или внутри которых находятся соответствующие стороны AABB персонажа
-    AABB aabbLeftOverlap   = engine_checkMapArea(collisionsMap, aabbLeft, mapWTiles, mapHTiles);
-    AABB aabbRightOverlap  = engine_checkMapArea(collisionsMap, aabbRight, mapWTiles, mapHTiles);
-    AABB aabbTopOverlap    = engine_checkMapArea(collisionsMap, aabbTop, mapWTiles, mapHTiles);
-    AABB aabbBottomOverlap = engine_checkMapArea(collisionsMap, aabbBottom, mapWTiles, mapHTiles);
+    AABB aabbLeftObstacle   = engine_checkMapArea(collisionsMap, aabbLeft, mapWTiles, mapHTiles);
+    AABB aabbRightObstacle  = engine_checkMapArea(collisionsMap, aabbRight, mapWTiles, mapHTiles);
+    AABB aabbTopObstacle    = engine_checkMapArea(collisionsMap, aabbTop, mapWTiles, mapHTiles);
+    AABB aabbBottomObstacle = engine_checkMapArea(collisionsMap, aabbBottom, mapWTiles, mapHTiles);
 
     // Рисуем тайлы с пересечениями для дебага
     #if (DEBUG_COLLISIONS)
         u8 tilesIR = 0;
-        for (s16 x = aabbLeftOverlap.x.min; x < aabbLeftOverlap.x.max; x += 8) {    
-            for (s16 y = aabbLeftOverlap.y.min; y < aabbLeftOverlap.y.max; y += 8) {
+        for (s16 x = aabbLeftObstacle.x.min; x < aabbLeftObstacle.x.max; x += 8) {    
+            for (s16 y = aabbLeftObstacle.y.min; y < aabbLeftObstacle.y.max; y += 8) {
                 SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
             }
         }
@@ -281,8 +281,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             SPR_setPosition(tileCursorsR[i], -8, -8);
         }
         tilesIR = 3;
-        for (s16 x = aabbRightOverlap.x.min; x < aabbRightOverlap.x.max; x += 8) {    
-            for (s16 y = aabbRightOverlap.y.min; y < aabbRightOverlap.y.max; y += 8) {
+        for (s16 x = aabbRightObstacle.x.min; x < aabbRightObstacle.x.max; x += 8) {    
+            for (s16 y = aabbRightObstacle.y.min; y < aabbRightObstacle.y.max; y += 8) {
                 SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
             }
         }
@@ -290,8 +290,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             SPR_setPosition(tileCursorsR[i], -8, -8);
         }
         tilesIR = 6;
-        for (s16 x = aabbTopOverlap.x.min; x < aabbTopOverlap.x.max; x += 8) {    
-            for (s16 y = aabbTopOverlap.y.min; y < aabbTopOverlap.y.max; y += 8) {
+        for (s16 x = aabbTopObstacle.x.min; x < aabbTopObstacle.x.max; x += 8) {    
+            for (s16 y = aabbTopObstacle.y.min; y < aabbTopObstacle.y.max; y += 8) {
                 SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
             }
         }
@@ -299,8 +299,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             SPR_setPosition(tileCursorsR[i], -8, -8);
         }
         tilesIR = 9;
-        for (s16 x = aabbBottomOverlap.x.min; x < aabbBottomOverlap.x.max; x += 8) {    
-            for (s16 y = aabbBottomOverlap.y.min; y < aabbBottomOverlap.y.max; y += 8) {
+        for (s16 x = aabbBottomObstacle.x.min; x < aabbBottomObstacle.x.max; x += 8) {    
+            for (s16 y = aabbBottomObstacle.y.min; y < aabbBottomObstacle.y.max; y += 8) {
                 SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
             }
         }
@@ -316,136 +316,126 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     *bottom = 0;
 
     // Двигаемся только влево
-    if (moving.x == DIRECTION_LEFT && moving.y == DIRECTION_NONE) {
-        if (aabbLeftOverlap.exists) {
-            *left = aabbLeftOverlap.x.max - aabb.x.min + 1;
+    if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_NONE) {
+        if (aabbLeftObstacle.exists) {
+            *left = aabbLeftObstacle.x.max - aabb.x.min + 1;
         }
     } else 
     // Двигаемся только вправо
-    if (moving.x == DIRECTION_RIGHT && moving.y == DIRECTION_NONE) {
-        if (aabbRightOverlap.exists) {
-            *right = aabb.x.max - aabbRightOverlap.x.min + 1;
+    if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_NONE) {
+        if (aabbRightObstacle.exists) {
+            *right = aabb.x.max - aabbRightObstacle.x.min + 1;
         }
     } else 
     // Двигаемся только вверх
-    if (moving.x == DIRECTION_NONE && moving.y == DIRECTION_UP) {
-        if (aabbTopOverlap.exists) {
-            *top = aabbTopOverlap.y.max - aabb.y.min + 1;
+    if (direction.x == DIRECTION_NONE && direction.y == DIRECTION_UP) {
+        if (aabbTopObstacle.exists) {
+            *top = aabbTopObstacle.y.max - aabb.y.min + 1;
         }
     } else 
     // Двигаемся только вниз
-    if (moving.x == DIRECTION_NONE && moving.y == DIRECTION_DOWN) {
-        if (aabbBottomOverlap.exists) {
-            *bottom = aabb.y.max - aabbBottomOverlap.y.min + 1;
+    if (direction.x == DIRECTION_NONE && direction.y == DIRECTION_DOWN) {
+        if (aabbBottomObstacle.exists) {
+            *bottom = aabb.y.max - aabbBottomObstacle.y.min + 1;
         }
     } else
     // Двигаемся влево вверх
-    if (moving.x == DIRECTION_LEFT && moving.y == DIRECTION_UP) {
-        if (aabbLeftOverlap.exists || aabbTopOverlap.exists) {
-            if (aabbLeftOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbLeftOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbLeftOverlap.y, aabb.y) + 1;
+    if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_UP) {
+        if (aabbLeftObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
 
-                if (v > h) {
-                    *left = h;
-                } else if (v == h) {
-                    *left = h;
-                    *top = v;
-                }
+            if (v > h) {
+                *left = h;
+            } else if (v == h) {
+                *left = h;
+                *top = v;
             }
-            if (aabbTopOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbTopOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbTopOverlap.y, aabb.y) + 1;
+        }
+        if (aabbTopObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
 
-                if (h > v) {
-                    *top = v;
-                } else if (v == h) {
-                    *left = h;
-                    *top = v;
-                }
+            if (h > v) {
+                *top = v;
+            } else if (v == h) {
+                *left = h;
+                *top = v;
             }
         }
     } else
     // Двигаемся вправо вверх
-    if (moving.x == DIRECTION_RIGHT && moving.y == DIRECTION_UP) {
-        if (aabbRightOverlap.exists || aabbTopOverlap.exists) {
-            if (aabbRightOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbRightOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbRightOverlap.y, aabb.y) + 1;
+    if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_UP) {
+        if (aabbRightObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
 
-                if (v > h) {
-                    *right = h;
-                } if (v == h) {
-                    *right = h;
-                    *top = v;
-                }
+            if (v > h) {
+                *right = h;
+            } if (v == h) {
+                *right = h;
+                *top = v;
             }
-            if (aabbTopOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbTopOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbTopOverlap.y, aabb.y) + 1;
+        }
+        if (aabbTopObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
 
-                if (h > v) {
-                    *top = v;
-                } if (v == h) {
-                    *right = h;
-                    *top = v;
-                }
+            if (h > v) {
+                *top = v;
+            } if (v == h) {
+                *right = h;
+                *top = v;
             }
         }
     } else 
     // Двигаемся влево вниз
-    if (moving.x == DIRECTION_LEFT && moving.y == DIRECTION_DOWN) {
-        if (aabbLeftOverlap.exists || aabbBottomOverlap.exists) {
-            
-            if (aabbLeftOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbLeftOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbLeftOverlap.y, aabb.y) + 1;
-            
-                if (v > h) {
-                    *left = h;
-                } else if (v == h) {
-                    *left = h;
-                    *bottom = v;
-                }
+    if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_DOWN) {
+        if (aabbLeftObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
+        
+            if (v > h) {
+                *left = h;
+            } else if (v == h) {
+                *left = h;
+                *bottom = v;
             }
-            if (aabbBottomOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbBottomOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbBottomOverlap.y, aabb.y) + 1;
-            
-                if (h > v) {
-                    *bottom = v;
-                } else if (v == h) {
-                    *left = h;
-                    *bottom = v;
-                }
+        }
+        if (aabbBottomObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
+        
+            if (h > v) {
+                *bottom = v;
+            } else if (v == h) {
+                *left = h;
+                *bottom = v;
             }
         }
     } else 
     // Двигаемся вправо вниз
-    if (moving.x == DIRECTION_RIGHT && moving.y == DIRECTION_DOWN) {
-        if (aabbRightOverlap.exists || aabbBottomOverlap.exists) {
+    if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_DOWN) {
+        if (aabbRightObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
 
-            if (aabbRightOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbRightOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbRightOverlap.y, aabb.y) + 1;
-
-                if (v > h) {
-                    *right = h;
-                } else if (v == h) {
-                    *right = h;
-                    *bottom = v;
-                }
+            if (v > h) {
+                *right = h;
+            } else if (v == h) {
+                *right = h;
+                *bottom = v;
             }
-            if (aabbBottomOverlap.y.min > 0) {
-                s16 h = engine_getIntersectionLen(aabbBottomOverlap.x, aabb.x) + 1;
-                s16 v = engine_getIntersectionLen(aabbBottomOverlap.y, aabb.y) + 1;
+        }
+        if (aabbBottomObstacle.exists) {
+            s16 h = engine_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
+            s16 v = engine_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
 
-                if (h > v) {
-                    *bottom = v;
-                } else if (v == h) {
-                    *right = h;
-                    *bottom = v;
-                }
+            if (h > v) {
+                *bottom = v;
+            } else if (v == h) {
+                *right = h;
+                *bottom = v;
             }
         }
     }
