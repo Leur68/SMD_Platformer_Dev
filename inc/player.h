@@ -9,6 +9,9 @@
 #define ANIM_WALK                 1
 #define ANIM_CLIMB                2
 
+#define MAX_COYOTE_TIME           10 // максимальное кол-во фреймов после покидания земли, когда еще можно активировать прыжок
+#define MAX_JUMP_TIME             30 // максимальное кол-во фреймов перед преземлением, когда уже можно активировать прыжок
+
 typedef struct {
     Sprite *sprite; // Спрайт игрока
     AABB globalAABB;
@@ -26,6 +29,9 @@ typedef struct {
     u8 inRightObstacle;
     u8 inUpperObstacle;
     u8 inLowerObstacle;
+
+    u8 coyoteTimer;
+    u8 jumpTimer;
 } Player;
 
 Player *allocPlayer();

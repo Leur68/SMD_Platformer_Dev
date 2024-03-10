@@ -1,7 +1,7 @@
 #pragma once
 #include <genesis.h>
 
-#define DEBUG_PLAYER           0
+#define DEBUG_PLAYER           1
 #define DEBUG_COLLISIONS       0
 #define DEBUG_GAME             1
 

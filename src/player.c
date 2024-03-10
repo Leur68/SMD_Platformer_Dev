@@ -75,8 +75,22 @@ void player_update() {
         }
     #endif
 
+    u8 lastLower = player->inLowerObstacle;
+
     // Обрабатываем коллизии и перемещаем персонажа
     player_move();
+
+    if (player->inLowerObstacle && player->coyoteTimer != 0) {
+        player->coyoteTimer = 0; // Обнуляем таймер
+    } else if (lastLower && !player->inLowerObstacle) {
+        player->coyoteTimer = 1; // Запускаем таймер если персонаж сорвался вниз
+    } else if (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME) { // Позволяем таймеру выйти за максимальный предел на единицу
+        player->coyoteTimer++;
+    }
+
+    #if (DEBUG_PLAYER)
+        player_debug();
+    #endif
 }
 
 void player_move() {
@@ -108,10 +122,6 @@ void player_move() {
     // Обновляем позицию спрайта на экране
         
     SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
-
-    #if (DEBUG_PLAYER)
-        player_debug();
-    #endif
 }
 
 void player_calculateVelocity() {
@@ -191,31 +201,33 @@ void player_handleCollisions() {
 void player_debug() {
     s16 i = 0; 
 
-    engine_drawInt("u", player->inUpperObstacle, 30, i++);
-    engine_drawInt("g", player->inLowerObstacle, 30, i++);
-    engine_drawInt("l", player->inLeftObstacle, 30, i++);
-    engine_drawInt("r", player->inRightObstacle, 30, i++);
-    engine_drawInt("j", player->isJumping, 30, i++);
-    engine_drawInt("f", player->isFalling, 30, i++);
-    engine_drawInt("m", player->isMoving, 30, i++);
+    engine_drawDebugInt("u", player->inUpperObstacle, 34, i++);
+    engine_drawDebugInt("g", player->inLowerObstacle, 34, i++);
+    engine_drawDebugInt("l", player->inLeftObstacle, 34, i++);
+    engine_drawDebugInt("r", player->inRightObstacle, 34, i++);
+    engine_drawDebugInt("j", player->isJumping, 34, i++);
+    engine_drawDebugInt("f", player->isFalling, 34, i++);
+    engine_drawDebugInt("m", player->isMoving, 34, i++);
+    engine_drawDebugInt("ct", player->coyoteTimer, 34, i++);
+    engine_drawDebugInt("jt", player->jumpTimer, 34, i++);
 
-    engine_drawInt("gx1", player->globalAABB.x.min, 30, i++);
-    engine_drawInt("gx2", player->globalAABB.x.max, 30, i++);
-    engine_drawInt("gy1", player->globalAABB.y.min, 30, i++);
-    engine_drawInt("gy2", player->globalAABB.y.max, 30, i++);
+    //engine_drawInt("gx1", player->globalAABB.x.min, 30, i++);
+    //engine_drawInt("gx2", player->globalAABB.x.max, 30, i++);
+    //engine_drawInt("gy1", player->globalAABB.y.min, 30, i++);
+    //engine_drawInt("gy2", player->globalAABB.y.max, 30, i++);
 
-    engine_drawInt("sX", player->screenPos.x, 30, i++);
-    engine_drawInt("sY", player->screenPos.y, 30, i++);
+    //engine_drawInt("sX", player->screenPos.x, 30, i++);
+    //engine_drawInt("sY", player->screenPos.y, 30, i++);
 
-    engine_drawInt("dx", player->facingDirection.x, 30, i++);
-    engine_drawInt("dy", player->facingDirection.y, 30, i++);
+    //engine_drawInt("dx", player->facingDirection.x, 30, i++);
+    //engine_drawInt("dy", player->facingDirection.y, 30, i++);
 
-    engine_drawInt("vx", fastFix32ToInt(fastFix32Int(abs(player->velocity.x))), 30, i++);
-    engine_drawInt("vy", fastFix32ToInt(fastFix32Int(abs(player->velocity.y))), 30, i++);
+    //engine_drawInt("vx", fastFix32ToInt(fastFix32Int(abs(player->velocity.x))), 30, i++);
+    //engine_drawInt("vy", fastFix32ToInt(fastFix32Int(abs(player->velocity.y))), 30, i++);
 
-    engine_drawInt("cpX", cameraPosition.x, 30, i++);
-    engine_drawInt("cpY", cameraPosition.y, 30, i++);
+    //engine_drawInt("cpX", cameraPosition.x, 30, i++);
+    //engine_drawInt("cpY", cameraPosition.y, 30, i++);
 
-    engine_drawInt("mpX", player->movedPixels.x, 30, i++);
-    engine_drawInt("mpY", player->movedPixels.y, 30, i++);
+    //engine_drawInt("mpX", player->movedPixels.x, 30, i++);
+    //engine_drawInt("mpY", player->movedPixels.y, 30, i++);
 }

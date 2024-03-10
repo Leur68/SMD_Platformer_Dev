@@ -169,6 +169,10 @@ void stateLevel1_load() {
     VDP_setTextPalette(TEXT_PALETTE);
     VDP_setWindowVPos(false, 1);
 
+    if (DEBUG_PLAYER) {
+        VDP_setWindowHPos(true, 17);
+    }
+
     PAL_setPalette(BACKGROUND_PALETTE, level1_back_palette.data, DMA);
     PAL_setPalette(GROUND_PALETTE, level1_palette.data, DMA);
     //PAL_setColor(15, 0x0000);
@@ -336,7 +340,7 @@ void stateLevel1_buttonB() {
 }
 
 void stateLevel1_buttonC() {
-    if (player->inLowerObstacle) {
+    if (player->inLowerObstacle || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
         player->velocity.y = FASTFIX32(-JUMP);
         player->inLowerObstacle = 0;
     }

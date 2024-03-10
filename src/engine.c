@@ -469,13 +469,10 @@ u8 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b) {
 void engine_showFPS(u16 asFloat, u16 x, u16 y) {
     char str[16];
 
-    if (asFloat)
-    {
+    if (asFloat) {
         fix32ToStr(SYS_getFPSAsFloat(), str, 1);
         VDP_clearText(2, 1, 5);
-    }
-    else
-    {
+    } else {
         uintToStr(SYS_getFPS(), str, 1);
         VDP_clearText(2, 1, 2);
     }

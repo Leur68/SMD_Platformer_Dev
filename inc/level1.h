@@ -1,17 +1,16 @@
 #include <genesis.h>
 
 // Палитры
+#define TEXT_PALETTE              PAL0
 #define BACKGROUND_PALETTE        PAL1
 #define GROUND_PALETTE            PAL2
 #define PLAYER_PALETTE            PAL3
+#define DEBUG_PALETTE             PAL3
 
 // Плейны
-#define BACKGROUND_PLANE          BG_B
 #define GROUND_PLANE              BG_A
-
+#define BACKGROUND_PLANE          BG_B
 #define TEXT_PLANE                WINDOW
-#define TEXT_PALETTE              PAL0
-#define DEBUG_PALETTE             PAL3
 
 #define MAX_VELOCITY              3.5
 #define ACCELERATION              0.125
