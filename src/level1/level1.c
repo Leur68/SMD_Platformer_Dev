@@ -103,20 +103,6 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 };
 
-Player* player;
-Map* level1Map;
-Map* level1Back;
-
-u16 mapShiftX = 0;
-u16 mapShiftY = MAP_OVERHEIGHT;
-
-ff32 backShiftX = FASTFIX32(0);
-ff32 backShiftY = FASTFIX32(BACK_OVERHEIGHT);
-
-#if (DEBUG_GAME)
-    bool isDebug = false;
-#endif
-
 void stateLevel1_tooglePause() {
     paused = !paused;
 }
@@ -124,10 +110,27 @@ void stateLevel1_tooglePause() {
 void stateLevel1_init() {
     stateLevel1_joyInit();
 
+    camera_init();
+
     stateLevel1_load();
-    
+
     player = allocPlayer();
-    player_init(player, 15, 144, MAP_OVERHEIGHT, &stateLevel1_scrollMap);
+
+    mapH = MAP_HEIGHT;
+    mapW = MAP_WIDTH;
+    mapWTiles = MAP_HEIGHT_TILES;
+    mapHTiles = MAP_WIDTH_TILES;
+    mapOverheight = MAP_OVERHEIGHT;
+    backOverheight = BACK_OVERHEIGHT;
+    collisionsMap = collisions1;
+
+    player_init(15, 144);
+
+    score = -1;
+
+    VDP_drawText("Score: ", 10, 0);
+
+    stateLevel1_updateScore(0);
 
     #if (DEBUG_COLLISIONS)
         playerCursor = SPR_addSprite(&player_cursor, -24, -24, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
@@ -164,24 +167,26 @@ void stateLevel1_init() {
 void stateLevel1_load() {
     VDP_setTextPlane(TEXT_PLANE);
     VDP_setTextPalette(TEXT_PALETTE);
+    VDP_setWindowVPos(false, 1);
 
     PAL_setPalette(BACKGROUND_PALETTE, level1_back_palette.data, DMA);
     PAL_setPalette(GROUND_PALETTE, level1_palette.data, DMA);
+    //PAL_setColor(15, 0x0000);
 
 	VDP_loadTileSet(&level1_tileset, TILE_USER_INDEX, DMA);
 	VDP_loadTileSet(&level1_back_tileset, TILE_USER_INDEX + level1_tileset.numTile, DMA);
 
-	level1Map = MAP_create(&level1_map, GROUND_PLANE, TILE_ATTR_FULL(GROUND_PALETTE, false, false, false, TILE_USER_INDEX));
-	level1Back = MAP_create(&level1_back_map, BACKGROUND_PLANE, TILE_ATTR_FULL(BACKGROUND_PALETTE, false, false, false, TILE_USER_INDEX + level1_tileset.numTile));
+	map = MAP_create(&level1_map, GROUND_PLANE, TILE_ATTR_FULL(GROUND_PALETTE, false, false, false, TILE_USER_INDEX));
+	back = MAP_create(&level1_back_map, BACKGROUND_PLANE, TILE_ATTR_FULL(BACKGROUND_PALETTE, false, false, false, TILE_USER_INDEX + level1_tileset.numTile));
 
-    MAP_scrollTo(level1Map, mapShiftX, mapShiftY);
-    MAP_scrollTo(level1Back, fastFix32ToInt(backShiftX), fastFix32ToInt(backShiftY));
+    MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
+    MAP_scrollTo(back, fastFix32ToInt(backPosition.x), fastFix32ToInt(backPosition.y));
 }
 
 void stateLevel1_update() {
     player_update(player, collisions1, MAP_WIDTH_TILES, MAP_HEIGHT_TILES);
     #if (DEBUG_COLLISIONS)
-        SPR_setPosition(playerCursor, player->aabb.x.min - mapShiftX, player->aabb.y.min - mapShiftY);
+        SPR_setPosition(playerCursor, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
     #endif
     #if (DEBUG_GAME)
         if (isDebug) {
@@ -190,16 +195,11 @@ void stateLevel1_update() {
     #endif
 }
 
-void stateLevel1_scrollMap(s16 scrollX, s16 scrollY) {
-    if (scrollX != 0 || scrollY != 0) {
-        mapShiftX += scrollX;
-        mapShiftY += scrollY;
- 
-        backShiftX += fastFix32Div(FASTFIX32(scrollX), FASTFIX32(6.0)); 
-        backShiftY += fastFix32Div(FASTFIX32(scrollY), FASTFIX32(3.3));
+void stateLevel1_updateScore(s16 newScore) {
+    if (newScore != score) {
+        score = newScore;
 
-        MAP_scrollTo(level1Map, mapShiftX, mapShiftY);
-        MAP_scrollTo(level1Back, fastFix32ToInt(backShiftX), fastFix32ToInt(backShiftY));
+        engine_drawInt(score, 17, 0, 3);
     }
 }
 
@@ -328,15 +328,11 @@ void stateLevel1_buttonZ() {
 }
 
 void stateLevel1_buttonA() {
-    backShiftY -= FASTFIX32(1);
-
-    engine_drawInt("y", fastFix32ToInt(backShiftY), 20, 0);
+    
 }
 
 void stateLevel1_buttonB() {
-    backShiftY += FASTFIX32(1);
     
-    engine_drawInt("y", fastFix32ToInt(backShiftY), 20, 0);
 }
 
 void stateLevel1_buttonC() {

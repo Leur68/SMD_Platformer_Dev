@@ -32,8 +32,10 @@
 #define COL_SHIFT_LR           9
 #define COL_SHIFT_TB           10
 
-extern Sprite* tileCursorsR[12];
-extern Sprite* playerCursor;
+#if (DEBUG_COLLISIONS)
+    extern Sprite* tileCursorsR[12];
+    extern Sprite* playerCursor;
+#endif
 
 #define masPointer2(mas, i, j, jLen)  (*(mas + (i * jLen) + j))
 
@@ -65,6 +67,12 @@ typedef struct {
     s8 y;
 } Vect2D_s8;
 
+#if (DEBUG_GAME)
+    extern bool isDebug;
+#endif
+extern bool paused;
+extern bool xyzButtons;
+
 void engine_init();
 void engine_disableSoftReset(bool resetType);
 void engine_setBlackCRAM();
@@ -73,7 +81,8 @@ void engine_fadeInImage(Image img, u16 numFrame);
 void engine_fadeInPalette(const u16 * pal, u16 numFrame);
 void engine_fadeInScreen(u16 numFrame);
 void engine_fadeOutScreen(u16 numFrame);
-void engine_drawInt(const char* text, s16 num, u16 x, u16 y);
+void engine_drawDebugInt(const char* text, s16 num, u16 x, u16 y);
+void engine_drawInt(s16 num, u16 x, u16 y, u16 len);
 void engine_drawFix32(const char* text, f32 num, u16 x, u16 y);
 
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles);
@@ -85,10 +94,12 @@ AABB engine_getBottomAABB(AABB aabb);
 AABB engine_getLeftAABB(AABB aabb);
 AABB engine_getRightAABB(AABB aabb);
 void engine_initAABBTileIndexes(AABB* aabb);
-void engine_shiftAABB(AABB* aabb, s8 x, s8 y);
+void engine_shiftAABB(AABB* aabb, Vect2D_s16 shift);
 void engine_setAABB(AABB* aabb, s16 x, s16 y);
 s16 engine_roundUpByEight(s16 x);
 s16 engine_roundDownByEight(s16 x);
 bool engine_isMultipleOfEight(int num);
 void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom);
-s16 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b);
+u8 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b);
+
+void engine_showFPS(u16 asFloat, u16 x, u16 y);

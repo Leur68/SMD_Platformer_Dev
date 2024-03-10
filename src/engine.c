@@ -1,5 +1,13 @@
 #include "../inc/game.h"
 
+#if (DEBUG_GAME)
+    bool isDebug = false;
+#endif
+
+bool paused = false;
+bool xyzButtons = false;
+
+
 void engine_init() {
     VDP_setScreenWidth320();
 	// JOY_init(); // Automatically called at SGDK initialization, no need to call it manually
@@ -41,7 +49,7 @@ void engine_fadeOutScreen(u16 numFrame) {
     PAL_fadeOut(0, 63, numFrame, false);                    // Производим эффект FadeOut для всего экрана. async = false, чтобы не происходил преждевременный переход к следующей сцене
 }
 
-void engine_drawInt(const char* text, s16 num, u16 x, u16 y) {
+void engine_drawDebugInt(const char* text, s16 num, u16 x, u16 y) {
     VDP_clearText(x + 4, y, 6);
     
     char numStr[6];
@@ -57,6 +65,15 @@ void engine_drawInt(const char* text, s16 num, u16 x, u16 y) {
     strcat(result, numStr);
 
     VDP_drawText(result, x, y);
+}
+
+void engine_drawInt(s16 num, u16 x, u16 y, u16 len) {
+    VDP_clearText(x, y, len);
+    
+    char numStr[len];
+    intToStr(num, &numStr, 1);
+
+    VDP_drawText(numStr, x, y);
 }
 
 void engine_drawFix32(const char* text, f32 num, u16 x, u16 y) {
@@ -132,11 +149,11 @@ bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2) {
     return (aabb1.x.max >= aabb2.x.min && aabb2.x.max >= aabb1.x.min) && (aabb1.y.max >= aabb2.y.min && aabb2.y.max >= aabb1.y.min);
 }
 
-void engine_shiftAABB(AABB* aabb, s8 x, s8 y) {
-    aabb->x.min = aabb->x.min + x;
-    aabb->x.max = aabb->x.max + x;
-    aabb->y.min = aabb->y.min + y;
-    aabb->y.max = aabb->y.max + y;
+void engine_shiftAABB(AABB* aabb, Vect2D_s16 shift) {
+    aabb->x.min = aabb->x.min + shift.x;
+    aabb->x.max = aabb->x.max + shift.x;
+    aabb->y.min = aabb->y.min + shift.y;
+    aabb->y.max = aabb->y.max + shift.y;
     engine_initAABBTileIndexes(aabb);
 }
 
@@ -274,7 +291,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
         u8 tilesIR = 0;
         for (s16 x = aabbLeftObstacle.x.min; x < aabbLeftObstacle.x.max; x += 8) {    
             for (s16 y = aabbLeftObstacle.y.min; y < aabbLeftObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
+                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
             }
         }
         for (u8 i = tilesIR; i < 3; i++) {
@@ -283,7 +300,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
         tilesIR = 3;
         for (s16 x = aabbRightObstacle.x.min; x < aabbRightObstacle.x.max; x += 8) {    
             for (s16 y = aabbRightObstacle.y.min; y < aabbRightObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
+                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
             }
         }
         for (u8 i = tilesIR; i < 6; i++) {
@@ -292,7 +309,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
         tilesIR = 6;
         for (s16 x = aabbTopObstacle.x.min; x < aabbTopObstacle.x.max; x += 8) {    
             for (s16 y = aabbTopObstacle.y.min; y < aabbTopObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
+                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
             }
         }
         for (u8 i = tilesIR; i < 9; i++) {
@@ -301,7 +318,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
         tilesIR = 9;
         for (s16 x = aabbBottomObstacle.x.min; x < aabbBottomObstacle.x.max; x += 8) {    
             for (s16 y = aabbBottomObstacle.y.min; y < aabbBottomObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - mapShiftX, y - mapShiftY);
+                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
             }
         }
         for (u8 i = tilesIR; i < 12; i++) {
@@ -342,8 +359,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     // Двигаемся влево вверх
     if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_UP) {
         if (aabbLeftObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
 
             if (v > h) {
                 *left = h;
@@ -353,8 +370,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             }
         }
         if (aabbTopObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
 
             if (h > v) {
                 *top = v;
@@ -367,8 +384,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     // Двигаемся вправо вверх
     if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_UP) {
         if (aabbRightObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
 
             if (v > h) {
                 *right = h;
@@ -378,8 +395,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             }
         }
         if (aabbTopObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
 
             if (h > v) {
                 *top = v;
@@ -392,8 +409,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     // Двигаемся влево вниз
     if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_DOWN) {
         if (aabbLeftObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
         
             if (v > h) {
                 *left = h;
@@ -403,8 +420,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             }
         }
         if (aabbBottomObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
         
             if (h > v) {
                 *bottom = v;
@@ -417,8 +434,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     // Двигаемся вправо вниз
     if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_DOWN) {
         if (aabbRightObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
 
             if (v > h) {
                 *right = h;
@@ -428,8 +445,8 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
             }
         }
         if (aabbBottomObstacle.exists) {
-            s16 h = engine_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
-            s16 v = engine_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
+            u8 h = engine_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
+            u8 v = engine_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
 
             if (h > v) {
                 *bottom = v;
@@ -441,10 +458,27 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     }
 }
 
-s16 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b) {
+u8 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b) {
     s16 start = a.min > b.min ? a.min : b.min; // Большее из минимальных значений
     s16 end = a.max < b.max ? a.max : b.max;   // Меньшее из максимальных значений
 
-    s16 len = end - start; // Вычисляем длину пересечения
+    u8 len = end - start; // Вычисляем длину пересечения
     return len > 0 ? len : 0; // Если длина пересечения отрицательная, значит, пересечения нет
+}
+
+void engine_showFPS(u16 asFloat, u16 x, u16 y) {
+    char str[16];
+
+    if (asFloat)
+    {
+        fix32ToStr(SYS_getFPSAsFloat(), str, 1);
+        VDP_clearText(2, 1, 5);
+    }
+    else
+    {
+        uintToStr(SYS_getFPS(), str, 1);
+        VDP_clearText(2, 1, 2);
+    }
+
+    VDP_drawText(str, x, y);
 }

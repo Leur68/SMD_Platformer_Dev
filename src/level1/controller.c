@@ -1,8 +1,5 @@
 #include "../inc/game.h"
 
-bool paused = false;
-bool xyzButtons = false;
-
 // Joy
 
 void stateLevel1_joyInit() {
@@ -144,7 +141,7 @@ void stateLevel1_process() {
 
             SPR_update();
         }
-        VDP_showFPS(0);
+        engine_showFPS(0, 0, 0);
 
         SYS_doVBlankProcess();
     }

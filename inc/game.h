@@ -10,7 +10,8 @@
 #include "level1.h"
 
 #include "player.h"
-#include "npc.h"
+#include "camera.h"
+#include "global.h"
 
 #include "../res/resources.h"
 

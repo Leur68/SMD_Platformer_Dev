@@ -13,6 +13,13 @@
         "array": "c",
         "string": "c",
         "string_view": "c",
-        "vector": "c"
+        "vector": "c",
+        "__tree": "c",
+        "map": "c",
+        "__bit_reference": "c",
+        "bitset": "c",
+        "set": "c",
+        "unordered_map": "c",
+        "unordered_set": "c"
     }
 }

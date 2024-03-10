@@ -9,12 +9,13 @@
 #define BACKGROUND_PLANE          BG_B
 #define GROUND_PLANE              BG_A
 
-#define TEXT_PLANE                BG_A
+#define TEXT_PLANE                WINDOW
 #define TEXT_PALETTE              PAL0
 #define DEBUG_PALETTE             PAL3
 
 #define MAX_VELOCITY              3.5
 #define ACCELERATION              0.125
+#define DECELERATION              0.125
 
 #define GRAVITY                   3
 #define GRAVITY_ACCELERATION      0.125
@@ -42,22 +43,15 @@
 #define SCREEN_MIN_Y              112
 #define SCREEN_MAX_Y              136
 
-extern bool paused;
-extern bool xyzButtons;
-extern u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES];
-extern u16 mapShiftX;
-extern u16 mapShiftY;
-extern bool isDebug;
-
 void stateLevel1_init();
-void stateLevel1_load();
 void stateLevel1_joyInit();
+void stateLevel1_load();
 void stateLevel1_release();
 
 void stateLevel1_process();
 void stateLevel1_update();
 
-void stateLevel1_scrollMap(s16 scrollX, s16 scrollY);
+void stateLevel1_scroll();
 void stateLevel1_tooglePause();
 
 void stateLevel1_joyHandlerBefore();
