@@ -49,13 +49,31 @@ void engine_fadeOutScreen(u16 numFrame) {
     PAL_fadeOut(0, 63, numFrame, false);                    // Производим эффект FadeOut для всего экрана. async = false, чтобы не происходил преждевременный переход к следующей сцене
 }
 
-void engine_drawDebugInt(const char* text, s16 num, u16 x, u16 y) {
-    VDP_clearText(x + 4, y, 6);
+void engine_drawDebugInt(const char* text, s32 num, u16 x, u16 y) {
+    VDP_clearText(x + 5, y, 4);
     
-    char numStr[6];
+    char numStr[4];
     intToStr(num, &numStr, 1);
 
-    char result[10];
+    char result[8];
+
+    strcpy(result, text);
+    strcat(result, " ");
+    for (u8 i = 0; i < 3 - strlen(text); i++) {
+        strcat(result, " ");
+    }
+    strcat(result, numStr);
+
+    VDP_drawText(result, x, y);
+}
+
+void engine_drawDebugUInt(const char* text, u32 num, u16 x, u16 y) {
+    VDP_clearText(x + 5, y, 4);
+    
+    char numStr[4];
+    uintToStr(num, &numStr, 1);
+
+    char result[8];
 
     strcpy(result, text);
     strcat(result, " ");
@@ -98,7 +116,7 @@ bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16
     // Проверяем границы карты
     if (xTile < 0 || yTile < 0 || xTile >= mapWTiles || yTile >= mapHTiles) return true;
     // Возвращаем состояние тайла
-    return masPointer2(collisions, yTile, xTile, mapWTiles) != COL_NONE;
+    return masPointer2(collisions, yTile, xTile, mapWTiles) == COL_OBT;
 }
 
 AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles) {

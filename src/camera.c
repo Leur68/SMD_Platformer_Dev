@@ -4,8 +4,8 @@ void camera_init() {
     cameraPosition.x = 0;
     cameraPosition.y = MAP_OVERHEIGHT;
 
-    backPosition.x = FASTFIX32(0);
-    backPosition.y = FASTFIX32(BACK_OVERHEIGHT);
+    backPosition.x = 0;
+    backPosition.y = BACK_OVERHEIGHT;
 }
 
 void camera_update() {
@@ -29,17 +29,21 @@ void camera_update() {
     );
 
     // TODO Нужно что-то сделать с отрицательными значениями cameraPosition
-    u16 scrollX = isScrollX ? player->movedPixels.x : 0;
-    u16 scrollY = isScrollY ? player->movedPixels.y : 0;
+    s16 scrollX = isScrollX ? player->movedPixels.x : 0;
+    s16 scrollY = isScrollY ? player->movedPixels.y : 0;
 
     if (scrollX != 0 || scrollY != 0) {
         cameraPosition.x += scrollX;
         cameraPosition.y += scrollY;
-        
-        backPosition.x += fastFix32Div(FASTFIX32(scrollX), FASTFIX32(6.0)); 
-        backPosition.y += fastFix32Div(FASTFIX32(scrollY), FASTFIX32(3.3));
 
         MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
-        MAP_scrollTo(back, fastFix32ToInt(backPosition.x), fastFix32ToInt(backPosition.y));
+        
+        //backPosition.x = divmodu(cameraPosition.x, 2);
+        //backPosition.y = divmodu(cameraPosition.y, 2);
+
+        backPosition.x = fix32ToInt(fix32Div(intToFix32(cameraPosition.x), intToFix32(6.0))); 
+        backPosition.y = fix32ToInt(fix32Div(intToFix32(cameraPosition.y - 40), intToFix32(3.3)));
+
+        MAP_scrollTo(back, backPosition.x, backPosition.y);
     }
 }

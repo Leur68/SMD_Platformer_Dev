@@ -2,7 +2,7 @@
 
 int main(resetType) {
     engine_disableSoftReset(resetType);
-    states_setLevel1State();
+    states_setIntroState();
 	engine_init();
     
     while(true) {

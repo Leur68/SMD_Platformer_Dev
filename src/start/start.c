@@ -15,7 +15,7 @@ void stateStart_init() {
 
     VDP_drawText("Menu", 8, 5);
 
-    cursor = SPR_addSprite(&cursor_spr, 0, 0, 0);
+    cursor = SPR_addSpriteSafe(&cursor_spr, 0, 0, 0);
     cursorIndex = 0;
     stateStart_updateCursorPosition();
 
@@ -24,22 +24,14 @@ void stateStart_init() {
         VDP_drawText(o.label, o.x, o.y);
     }
 
-    PAL_setColors(0, palette_grey, 64, DMA);
+    //PAL_setColors(0, palette_grey, 64, DMA);
     //fadeInScreen(NORMAL_FADE);
 }
 
 void stateStart_release() {
     JOY_setEventHandler(NULL);
 
-    VDP_clearText(8, 5, 4);
-
-    SPR_releaseSprite(cursor);
-
-    u16 i = 0;
-    for (i; i < NUM_OPTIONS; i++) {
-        Option o = options[i];
-        VDP_clearText(o.x, o.y, strlen(o.label));
-    }
+    VDP_init();
 }
 
 // Joy

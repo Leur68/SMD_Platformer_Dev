@@ -19,4 +19,4 @@ out/src/global.o: src/global.c src/../inc/game.h /sgdk/inc/genesis.h \
  /sgdk/inc/maths.h /sgdk/inc/dma.h src/../inc/engine.h src/../inc/state.h \
  src/../inc/intro.h src/../inc/start.h src/../inc/options.h \
  src/../inc/level1.h src/../inc/player.h src/../inc/camera.h \
- src/../inc/global.h z:\src\res\resources.h
+ src/../inc/global.h src/../inc/../res/resources.h

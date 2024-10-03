@@ -19,7 +19,7 @@
 #define GRAVITY                   3
 #define GRAVITY_ACCELERATION      0.125
 
-#define JUMP                      8
+#define JUMP                      5
 
 #define MAP_WIDTH_TILES           100  // Ширина карты в тайлах
 #define MAP_HEIGHT_TILES          100  // Высота карты в тайлах
@@ -42,6 +42,19 @@
 #define SCREEN_MIN_Y              112
 #define SCREEN_MAX_Y              136
 
+typedef struct {
+    u8 objType;
+    Sprite *sprite; // Спрайт объекта
+    Vect2D_s16 globalPos;
+    bool visible;
+} GameObject;
+
+#define MAX_OBJECTS               100
+extern u8 lastLoadedObject;
+extern GameObject* objects[MAX_OBJECTS];
+
+#define OBJECT_BONUS              2
+
 void stateLevel1_init();
 void stateLevel1_joyInit();
 void stateLevel1_load();
@@ -49,6 +62,8 @@ void stateLevel1_release();
 
 void stateLevel1_process();
 void stateLevel1_update();
+void stateLevel1_environmentInit(u8* collisions);
+void stateLevel1_environmentUpdate();
 
 void stateLevel1_scroll();
 void stateLevel1_tooglePause();

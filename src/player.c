@@ -6,7 +6,7 @@ Player* allocPlayer() {
 
 void player_init(s16 startX, s16 startY) {
     // Спрайт
-    player->sprite = SPR_addSprite(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, false, true));
+    player->sprite = SPR_addSpriteSafe(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, false, true));
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
     // Положение и перемещение
     player->globalAABB.x.min = startX;
@@ -25,6 +25,8 @@ void player_init(s16 startX, s16 startY) {
     player->inLowerObstacle = false;
     player->inLeftObstacle = false;
     player->inRightObstacle = false;
+    player->screenPos.x = startX;
+    player->screenPos.y = startY;
 }
 
 void player_update() {
@@ -200,16 +202,22 @@ void player_handleCollisions() {
 
 void player_debug() {
     s16 i = 0; 
+    u16 x = 32;
 
-    engine_drawDebugInt("u", player->inUpperObstacle, 34, i++);
-    engine_drawDebugInt("g", player->inLowerObstacle, 34, i++);
-    engine_drawDebugInt("l", player->inLeftObstacle, 34, i++);
-    engine_drawDebugInt("r", player->inRightObstacle, 34, i++);
-    engine_drawDebugInt("j", player->isJumping, 34, i++);
-    engine_drawDebugInt("f", player->isFalling, 34, i++);
-    engine_drawDebugInt("m", player->isMoving, 34, i++);
-    engine_drawDebugInt("ct", player->coyoteTimer, 34, i++);
-    engine_drawDebugInt("jt", player->jumpTimer, 34, i++);
+    engine_drawDebugInt("u", player->inUpperObstacle, x, i++);
+    engine_drawDebugInt("g", player->inLowerObstacle, x, i++);
+    engine_drawDebugInt("l", player->inLeftObstacle, x, i++);
+    engine_drawDebugInt("r", player->inRightObstacle, x, i++);
+    engine_drawDebugInt("j", player->isJumping, x, i++);
+    engine_drawDebugInt("f", player->isFalling, x, i++);
+    engine_drawDebugInt("m", player->isMoving, x, i++);
+    engine_drawDebugInt("ct", player->coyoteTimer, x, i++);
+    engine_drawDebugInt("jt", player->jumpTimer, x, i++);
+
+    engine_drawDebugInt("cx", cameraPosition.x, x, i++);
+    engine_drawDebugInt("cy", cameraPosition.y, x, i++);
+    engine_drawDebugUInt("bx", backPosition.x, x, i++);
+    engine_drawDebugUInt("by", backPosition.y, x, i++);
 
     //engine_drawInt("gx1", player->globalAABB.x.min, 30, i++);
     //engine_drawInt("gx2", player->globalAABB.x.max, 30, i++);

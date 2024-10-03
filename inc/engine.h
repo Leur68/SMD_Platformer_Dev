@@ -1,9 +1,9 @@
 #pragma once
 #include <genesis.h>
 
-#define DEBUG_PLAYER           1
-#define DEBUG_COLLISIONS       0
-#define DEBUG_GAME             1
+#define DEBUG_PLAYER           0 // Боковая панель (WINDOW PLANE) с отладочной информацией
+#define DEBUG_COLLISIONS       0 // Отключение гравитации, свободное перемещение. Визуальная демонстрация тайлов, пересекающихся с персонажем
+#define DEBUG_GAME             1 // Доступность режима дебага (замедления). При нажатии на mode игра сильно замедляется
 
 #define SCREEN_WIDTH           320
 #define SCREEN_HEIGHT          224
@@ -21,23 +21,15 @@
 #define DIRECTION_NONE         0
 
 #define COL_NONE               0
-#define COL_SHIFT_L            1
-#define COL_SHIFT_R            2
-#define COL_SHIFT_T            3
-#define COL_SHIFT_B            4
-#define COL_SHIFT_LT           5
-#define COL_SHIFT_LB           6
-#define COL_SHIFT_RT           7
-#define COL_SHIFT_RB           8
-#define COL_SHIFT_LR           9
-#define COL_SHIFT_TB           10
+#define COL_OBT                1
+#define COL_BON                1
 
 #if (DEBUG_COLLISIONS)
     extern Sprite* tileCursorsR[12];
     extern Sprite* playerCursor;
 #endif
 
-#define masPointer2(mas, i, j, jLen)  (*(mas + (i * jLen) + j))
+#define masPointer2(mas, i, j, jLen) (*(mas + (i * jLen) + j))
 
 typedef struct {
     ff32 min;
@@ -81,7 +73,8 @@ void engine_fadeInImage(Image img, u16 numFrame);
 void engine_fadeInPalette(const u16 * pal, u16 numFrame);
 void engine_fadeInScreen(u16 numFrame);
 void engine_fadeOutScreen(u16 numFrame);
-void engine_drawDebugInt(const char* text, s16 num, u16 x, u16 y);
+void engine_drawDebugInt(const char* text, s32 num, u16 x, u16 y);
+void engine_drawDebugUInt(const char* text, u32 num, u16 x, u16 y);
 void engine_drawInt(s16 num, u16 x, u16 y, u16 len);
 void engine_drawFix32(const char* text, f32 num, u16 x, u16 y);
 

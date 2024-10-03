@@ -140,6 +140,7 @@ void stateLevel1_process() {
             stateLevel1_update();
 
             SPR_update();
+            SPR_defragVRAM();
         }
         engine_showFPS(0, 0, 0);
 
