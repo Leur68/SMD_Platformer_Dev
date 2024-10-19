@@ -52,6 +52,8 @@ void stateOptions_process() {
         SPR_update();
         SYS_doVBlankProcess();
     }
-
-    stateOptions_release();
+    
+    // release all resources
+    JOY_setEventHandler(NULL);
+    VDP_init();
 }

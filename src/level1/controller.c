@@ -138,14 +138,18 @@ void stateLevel1_process() {
             stateLevel1_updateDPad();
 
             stateLevel1_update();
-
-            SPR_update();
-            SPR_defragVRAM();
         }
+        
         engine_showFPS(0, 0, 0);
+        engine_showCPULoad(4, 0);
+
+        SPR_update();
+        SPR_defragVRAM();
 
         SYS_doVBlankProcess();
     }
 
-    stateLevel1_release();
+    // release all resources
+    JOY_setEventHandler(NULL);
+    VDP_init();
 }

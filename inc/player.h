@@ -18,12 +18,14 @@ typedef struct {
     Vect2D_s16 screenPos;
     Vect2D_ff32 posBuffer; // Для расчета скорости
     Vect2D_ff32 velocity;  // Скорость движения. Используется для управления положением персонажа.
+    Vect2D_ff32 autoVelocity;  // Скорость движения. Используется для управления положением персонажа.
     Vect2D_s8 facingDirection;
     Vect2D_s16 movedPixels;
 
     bool isJumping;
     bool isFalling;
     bool isMoving;
+    bool isAutoMoving;
 
     u8 inLeftObstacle;
     u8 inRightObstacle;

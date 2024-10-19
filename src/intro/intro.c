@@ -23,8 +23,3 @@ void stateIntro_update() {
     engine_fadeOutScreen(NORMAL_FADE);
     states_setStartState();
 }
-
-void stateIntro_release() {
-    JOY_setEventHandler(NULL);
-    VDP_init();
-}

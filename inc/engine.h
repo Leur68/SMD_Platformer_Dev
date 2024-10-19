@@ -1,14 +1,14 @@
 #pragma once
 #include <genesis.h>
 
-#define DEBUG_PLAYER           0 // Боковая панель (WINDOW PLANE) с отладочной информацией
+#define DEBUG                  0 // Боковая панель (WINDOW PLANE) с отладочной информацией
 #define DEBUG_COLLISIONS       0 // Отключение гравитации, свободное перемещение. Визуальная демонстрация тайлов, пересекающихся с персонажем
 #define DEBUG_GAME             1 // Доступность режима дебага (замедления). При нажатии на mode игра сильно замедляется
 
 #define SCREEN_WIDTH           320
 #define SCREEN_HEIGHT          224
-#define SCREEN_WIDTH_TILES     SCREEN_WIDTH  / 8  // 40
-#define SCREEN_HEIGHT_TILES    SCREEN_HEIGHT / 8  // 28
+#define SCREEN_WIDTH_TILES     (SCREEN_WIDTH  / 8)  // 40
+#define SCREEN_HEIGHT_TILES    (SCREEN_HEIGHT / 8)  // 28
 
 #define SLOW_FADE              50
 #define NORMAL_FADE            30
@@ -20,16 +20,20 @@
 #define DIRECTION_DOWN         1
 #define DIRECTION_NONE         0
 
-#define COL_NONE               0
-#define COL_OBT                1
-#define COL_BON                1
+#define MIN_CAMERA_POS_X       0
+#define MIN_CAMERA_POS_Y       0
+
+#define NONE_TILE_INDEX        0
+#define SOLID_TILE_INDEX       1
+#define BONUS_TILE_INDEX       2
+#define M_PLATFORM_TILE_INDEX  11 // оставляем пропуски для определения смещения на 8 пикселей в любую сторону по горизонтали
 
 #if (DEBUG_COLLISIONS)
     extern Sprite* tileCursorsR[12];
     extern Sprite* playerCursor;
 #endif
 
-#define masPointer2(mas, i, j, jLen) (*(mas + (i * jLen) + j))
+#define masPointer2(mas, i, j) (*(mas + (i * mapWTiles) + j))
 
 typedef struct {
     ff32 min;
@@ -78,8 +82,12 @@ void engine_drawDebugUInt(const char* text, u32 num, u16 x, u16 y);
 void engine_drawInt(s16 num, u16 x, u16 y, u16 len);
 void engine_drawFix32(const char* text, f32 num, u16 x, u16 y);
 
-bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles);
-AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles);
+u8 engine_getTileIndex(u8* collisions, s16 xTile, s16 yTile);
+bool engine_checkMovingTileIndex(s16 index, s16 middleIndex);
+s8 engine_getMovingTileShift(u8 *collisions, s16 xTile, s16 yTile, s16 middleIndex);
+bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile);
+
+AABB engine_checkMapArea(u8* collisions, AABB aabb);
 bool engine_isOverlappingAxisLines(AxisLine_s16 x1, AxisLine_s16 x2);
 bool engine_isOverlappingAABBs(AABB aabb1, AABB aabb2);
 AABB engine_getTopAABB(AABB aabb);
@@ -92,7 +100,8 @@ void engine_setAABB(AABB* aabb, s16 x, s16 y);
 s16 engine_roundUpByEight(s16 x);
 s16 engine_roundDownByEight(s16 x);
 bool engine_isMultipleOfEight(int num);
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom);
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom);
 u8 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b);
 
 void engine_showFPS(u16 asFloat, u16 x, u16 y);
+void engine_showCPULoad(u16 x, u16 y);

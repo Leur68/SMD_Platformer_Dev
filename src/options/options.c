@@ -9,10 +9,6 @@ void stateOptions_init() {
 
 }
 
-void stateOptions_release() {
-    
-}
-
 void stateOptions_joyHandlerBefore() {
     
 }

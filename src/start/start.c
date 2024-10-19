@@ -28,12 +28,6 @@ void stateStart_init() {
     //fadeInScreen(NORMAL_FADE);
 }
 
-void stateStart_release() {
-    JOY_setEventHandler(NULL);
-
-    VDP_init();
-}
-
 // Joy
 
 void stateStart_buttonUp() {

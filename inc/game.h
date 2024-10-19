@@ -3,6 +3,7 @@
 
 #include "engine.h"
 #include "state.h"
+#include "environment.h"
 
 #include "intro.h"
 #include "start.h"

@@ -17,6 +17,6 @@ out/src/camera.o: src/camera.c src/../inc/game.h /sgdk/inc/genesis.h \
  /sgdk/inc/types.h /sgdk/inc/ext/flash-save/saveman.h \
  /sgdk/inc/ext/console.h /sgdk/inc/config.h /sgdk/inc/string.h \
  /sgdk/inc/maths.h /sgdk/inc/dma.h src/../inc/engine.h src/../inc/state.h \
- src/../inc/intro.h src/../inc/start.h src/../inc/options.h \
- src/../inc/level1.h src/../inc/player.h src/../inc/camera.h \
- src/../inc/global.h src/../inc/../res/resources.h
+ src/../inc/environment.h src/../inc/intro.h src/../inc/start.h \
+ src/../inc/options.h src/../inc/level1.h src/../inc/player.h \
+ src/../inc/camera.h src/../inc/global.h src/../inc/../res/resources.h

@@ -22,6 +22,9 @@
         "unordered_map": "c",
         "unordered_set": "c",
         "__locale": "c",
-        "sprite_eng.h": "c"
+        "sprite_eng.h": "c",
+        "environment.h": "c",
+        "variant": "c",
+        "cmath": "c"
     }
 }

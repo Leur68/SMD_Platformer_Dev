@@ -7,7 +7,6 @@
 bool paused = false;
 bool xyzButtons = false;
 
-
 void engine_init() {
     VDP_setScreenWidth320();
 	// JOY_init(); // Automatically called at SGDK initialization, no need to call it manually
@@ -112,14 +111,73 @@ void engine_drawFix32(const char* text, f32 num, u16 x, u16 y) {
     VDP_drawText(result, x, y);
 }
 
-bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile, u16 mapWTiles, u16 mapHTiles) {
+u8 engine_getTileIndex(u8* collisions, s16 xTile, s16 yTile) {
     // Проверяем границы карты
     if (xTile < 0 || yTile < 0 || xTile >= mapWTiles || yTile >= mapHTiles) return true;
     // Возвращаем состояние тайла
-    return masPointer2(collisions, yTile, xTile, mapWTiles) == COL_OBT;
+    return masPointer2(collisions, yTile, xTile);
 }
 
-AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles) {
+bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile) {
+    s16 index = engine_getTileIndex(collisions, xTile, yTile);
+    return index == SOLID_TILE_INDEX || engine_checkMovingTileIndex(index, M_PLATFORM_TILE_INDEX);
+}
+
+bool engine_checkMovingTileIndex(s16 index, s16 middleIndex) {
+    return index >= middleIndex - 8 && index <= middleIndex + 8;
+}
+
+s8 engine_getMovingTileShift(u8 *collisions, s16 xTile, s16 yTile, s16 middleIndex) {
+    u8 index = engine_getTileIndex(collisions, xTile, yTile);
+    if (!engine_checkMovingTileIndex(index, middleIndex)) {
+        return 0;
+    } else {
+        return index - middleIndex;
+    }
+}
+
+AABB engine_checkMapArea(u8* collisions, AABB aabb) {
+    AABB res = {0};  // Инициализация всех полей нулями
+    s16 xMin = aabb.xTiles.max;   // Минимальные значения x и y тайлов
+    s16 yMin = aabb.yTiles.max;
+    s16 xMax = aabb.xTiles.min;   // Максимальные значения x и y тайлов
+    s16 yMax = aabb.yTiles.min;
+
+    // Проходим по каждому тайлу в заданной области
+    for (s16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
+        for (s16 currXTile = aabb.xTiles.min; currXTile < aabb.xTiles.max; currXTile++) {
+            // Проверяем, является ли тайл твердым (коллизия)
+            if (engine_isTileSolid(collisions, currXTile, currYTile)) {
+                // Определяем минимальные и максимальные координаты тайлов
+                if (currXTile < xMin) xMin = currXTile;
+                if (currYTile < yMin) yMin = currYTile;
+                if (currXTile > xMax) xMax = currXTile;
+                if (currYTile > yMax) yMax = currYTile;
+                
+                res.exists = true;
+            }
+        }
+    }
+
+    // Если найдены коллизии, вычисляем AABB
+    if (res.exists) {
+        res.xTiles.min = xMin;
+        res.yTiles.min = yMin;
+        res.xTiles.max = xMax;
+        res.yTiles.max = yMax;
+
+        // Переводим координаты из тайлов в пиксели
+        res.x.min = xMin << 3;  // Умножение на 8 с помощью сдвига
+        res.y.min = yMin << 3;
+        res.x.max = (xMax << 3) + 8;
+        res.y.max = (yMax << 3) + 8;
+    }
+
+    return res;
+
+    
+
+    /*
     AABB res;
     res.x.min = 0;
     res.y.min = 0;
@@ -133,7 +191,7 @@ AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles
     bool start = true;
     for (s16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
         for (s16 currXTile = aabb.xTiles.min; currXTile < aabb.xTiles.max; currXTile++) {
-            if (engine_isTileSolid(collisions, currXTile, currYTile, mapWTiles, mapHTiles)) {
+            if (engine_isTileSolid(collisions, currXTile, currYTile)) {
                 if (start) {
                     res.xTiles.min = currXTile;
                     res.yTiles.min = currYTile;
@@ -157,6 +215,46 @@ AABB engine_checkMapArea(u8* collisions, AABB aabb, u16 mapWTiles, u16 mapHTiles
         }
     }
     return res;
+    
+    AABB res = {0};  // Инициализация всех полей нулями
+    s16 xMin = aabb.xTiles.max;   // Минимальные значения x и y тайлов
+    s16 yMin = aabb.yTiles.max;
+    s16 xMax = aabb.xTiles.min;   // Максимальные значения x и y тайлов
+    s16 yMax = aabb.yTiles.min;
+
+    // Проходим по каждому тайлу в заданной области
+    for (s16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
+        for (s16 currXTile = aabb.xTiles.min; currXTile < aabb.xTiles.max; currXTile++) {
+            // Проверяем, является ли тайл твердым (коллизия)
+            if (engine_isTileSolid(collisions, currXTile, currYTile)) {
+                // Определяем минимальные и максимальные координаты тайлов
+                if (currXTile < xMin) xMin = currXTile;
+                if (currYTile < yMin) yMin = currYTile;
+                if (currXTile > xMax) xMax = currXTile;
+                if (currYTile > yMax) yMax = currYTile;
+                
+                res.exists = true;
+            }
+        }
+    }
+
+    // Если найдены коллизии, вычисляем AABB
+    if (res.exists) {
+        res.xTiles.min = xMin;
+        res.yTiles.min = yMin;
+        res.xTiles.max = xMax;
+        res.yTiles.max = yMax;
+
+        // Переводим координаты из тайлов в пиксели
+        res.x.min = xMin << 3;  // Умножение на 8 с помощью сдвига
+        res.y.min = yMin << 3;
+        res.x.max = (xMax << 3) + 8;
+        res.y.max = (yMax << 3) + 8;
+    }
+
+    return res;
+
+    */
 }
 
 bool engine_isOverlappingAxisLines(AxisLine_s16 line1, AxisLine_s16 line2) {
@@ -291,7 +389,7 @@ bool engine_isMultipleOfEight(int num) {
     Sprite* playerCursor;
 #endif
 
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 mapHTiles, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom) {
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom) {
     // Получаем AABB для проверки столкновений
     AABB aabbLeft   = engine_getLeftAABB(aabb);
     AABB aabbRight  = engine_getRightAABB(aabb);
@@ -299,11 +397,36 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, u16 mapWTiles, u16 map
     AABB aabbBottom = engine_getBottomAABB(aabb);
 
     // Отсеиваем среди найденных тайлов только те, что являются твердыми на карте. Данными тайлами считаются те, вплотную к которым или внутри которых находятся соответствующие стороны AABB персонажа
-    AABB aabbLeftObstacle   = engine_checkMapArea(collisionsMap, aabbLeft, mapWTiles, mapHTiles);
-    AABB aabbRightObstacle  = engine_checkMapArea(collisionsMap, aabbRight, mapWTiles, mapHTiles);
-    AABB aabbTopObstacle    = engine_checkMapArea(collisionsMap, aabbTop, mapWTiles, mapHTiles);
-    AABB aabbBottomObstacle = engine_checkMapArea(collisionsMap, aabbBottom, mapWTiles, mapHTiles);
+    AABB aabbLeftObstacle   = engine_checkMapArea(collisionsMap, aabbLeft);
+    AABB aabbRightObstacle  = engine_checkMapArea(collisionsMap, aabbRight);
+    AABB aabbTopObstacle    = engine_checkMapArea(collisionsMap, aabbTop);
+    AABB aabbBottomObstacle = engine_checkMapArea(collisionsMap, aabbBottom);
+    
+    s16 shift = 0;
+    shift = engine_getMovingTileShift(collisionsMap, aabbLeftObstacle.xTiles.min, aabbLeftObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    if (shift != 0) {
+        aabbLeftObstacle.x.min += shift;
+        aabbLeftObstacle.x.max += shift;
+    }
 
+    shift = engine_getMovingTileShift(collisionsMap, aabbRightObstacle.xTiles.min, aabbRightObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    if (shift != 0) {
+        aabbRightObstacle.x.min += shift;
+        aabbRightObstacle.x.max += shift;
+    }
+    
+    shift = engine_getMovingTileShift(collisionsMap, aabbTopObstacle.xTiles.min, aabbTopObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    if (shift != 0) {
+        aabbTopObstacle.x.min += shift;
+        aabbTopObstacle.x.max += shift;
+    }
+    
+    shift = engine_getMovingTileShift(collisionsMap, aabbBottomObstacle.xTiles.min, aabbBottomObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    if (shift != 0) {
+        aabbBottomObstacle.x.min += shift;
+        aabbBottomObstacle.x.max += shift;
+    }
+    
     // Рисуем тайлы с пересечениями для дебага
     #if (DEBUG_COLLISIONS)
         u8 tilesIR = 0;
@@ -489,11 +612,22 @@ void engine_showFPS(u16 asFloat, u16 x, u16 y) {
 
     if (asFloat) {
         fix32ToStr(SYS_getFPSAsFloat(), str, 1);
-        VDP_clearText(2, 1, 5);
+        VDP_clearText(x, y, 5);
     } else {
         uintToStr(SYS_getFPS(), str, 1);
-        VDP_clearText(2, 1, 2);
+        VDP_clearText(x, y, 2);
     }
 
+    VDP_drawText(str, x, y);
+}
+
+void engine_showCPULoad(u16 x, u16 y) {
+    char str[16];
+
+    uintToStr(SYS_getCPULoad(), str, 1);
+    strcat(str, "%");
+
+    VDP_clearText(x, y, 4);
+    // display FPS
     VDP_drawText(str, x, y);
 }

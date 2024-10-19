@@ -7,10 +7,11 @@ Player* allocPlayer() {
 void player_init(s16 startX, s16 startY) {
     // Спрайт
     player->sprite = SPR_addSpriteSafe(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, false, true));
+    SPR_setAlwaysOnTop(player->sprite);
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
     // Положение и перемещение
     player->globalAABB.x.min = startX;
-    player->globalAABB.y.min = startY + mapOverheight;
+    player->globalAABB.y.min = startY + mapMaxCameraPosY;
     player->globalAABB.x.max = player->globalAABB.x.min + PLAYER_WIDTH;
     player->globalAABB.y.max = player->globalAABB.y.min + PLAYER_WIDTH;
     engine_initAABBTileIndexes(&player->globalAABB);
@@ -18,6 +19,8 @@ void player_init(s16 startX, s16 startY) {
     player->posBuffer.y = intToFastFix32(player->globalAABB.y.min);
     player->velocity.x = FASTFIX32(0);
     player->velocity.y = FASTFIX32(0);
+    player->autoVelocity.x = FASTFIX32(0);
+    player->autoVelocity.y = FASTFIX32(0);
     // Состояние
     player->isJumping = false;
     player->isFalling = false;
@@ -29,31 +32,30 @@ void player_init(s16 startX, s16 startY) {
     player->screenPos.y = startY;
 }
 
+// Инициализирует свойства игрока на текущем кадре
 void player_update() {
     player->isJumping = !player->inLowerObstacle && player->velocity.y < FASTFIX32(0);
     player->isFalling = !player->inLowerObstacle && player->velocity.y > FASTFIX32(0);
     player->isMoving  = player->velocity.x != FASTFIX32(0) || player->velocity.y != FASTFIX32(0);
-
+    player->isAutoMoving  = player->autoVelocity.x != FASTFIX32(0) || player->autoVelocity.y != FASTFIX32(0);
+    // Инициализируем screenPos чтобы в купе с movedPixels это позволило camera_update() принять правильное решение о скроллинге
+    // В player_update() не следует обновлять screenPos (после расчета коллизий и положения персонажа), так как это ответственность камеры
     player->screenPos.x = SPR_getPositionX(player->sprite);
     player->screenPos.y = SPR_getPositionY(player->sprite);
 
     if (player->velocity.x > FASTFIX32(0)) {
         player->facingDirection.x = DIRECTION_RIGHT;
+
+        SPR_setHFlip(player->sprite, true); // Обновляем пространственную ориентацию спрайта
     } else if (player->velocity.x < FASTFIX32(0)) {
         player->facingDirection.x = DIRECTION_LEFT;
+
+        SPR_setHFlip(player->sprite, false); // Обновляем пространственную ориентацию спрайта
     }
     if (player->velocity.y > FASTFIX32(0)) {
         player->facingDirection.y = DIRECTION_DOWN;
     } else if (player->velocity.y < FASTFIX32(0)) {
         player->facingDirection.y = DIRECTION_UP;
-    }
-
-    // Обновляем пространственную ориентацию спрайта
-    if (player->facingDirection.x == DIRECTION_RIGHT) {
-        SPR_setHFlip(player->sprite, true);
-    }
-    if (player->facingDirection.x == DIRECTION_LEFT) {
-        SPR_setHFlip(player->sprite, false);
     }
 
     // Обновляем анимации на основе состояния персонажа
@@ -89,15 +91,11 @@ void player_update() {
     } else if (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME) { // Позволяем таймеру выйти за максимальный предел на единицу
         player->coyoteTimer++;
     }
-
-    #if (DEBUG_PLAYER)
-        player_debug();
-    #endif
 }
 
 void player_move() {
     // Не проверяем коллизии если персонаж стоит на месте
-    if (!player->isMoving) {
+    if (!player->isMoving && !player->isAutoMoving) {
         return;
     }
 
@@ -116,14 +114,6 @@ void player_move() {
     // Обрабатываем коллизии
 
     player_handleCollisions();
-
-    // Скроллим карту
-
-    camera_update();
-
-    // Обновляем позицию спрайта на экране
-        
-    SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
 }
 
 void player_calculateVelocity() {
@@ -131,22 +121,24 @@ void player_calculateVelocity() {
     // На каждой итерации прибавляем скорость к "буферному" положению персонажа
     // Затем проверяем: если у буферного целая часть изменилась, то к нормальному положению прибавляем количество пикселей на которое изменилось буферное положение
 
-    player->posBuffer.x += player->velocity.x;
-    player->posBuffer.y += player->velocity.y;
+    player->posBuffer.x += (player->velocity.x + player->autoVelocity.x);
+    player->posBuffer.y += (player->velocity.y + player->autoVelocity.y);
 
     s16 newPosX = fastFix32ToInt(fastFix32Int(player->posBuffer.x));
     s16 newPosY = fastFix32ToInt(fastFix32Int(player->posBuffer.y));
 
-    player->movedPixels.x = (newPosX >= player->globalAABB.x.min) ? (newPosX - player->globalAABB.x.min) : (player->globalAABB.x.min - newPosX);
-    player->movedPixels.x = player->velocity.x >= 0 ? player->movedPixels.x : -player->movedPixels.x;
-    player->movedPixels.y = (newPosY >= player->globalAABB.y.min) ? (newPosY - player->globalAABB.y.min) : (player->globalAABB.y.min - newPosY);
-    player->movedPixels.y = player->velocity.y >= 0 ? player->movedPixels.y : -player->movedPixels.y;
+    player->movedPixels.x = newPosX - player->globalAABB.x.min;
+    player->movedPixels.y = newPosY - player->globalAABB.y.min;
 }
 
 void player_handleCollisions() {
+    //if (player->facingDirection.y != DIRECTION_DOWN) {
+    //    return;
+    //}
+
     // Проверяем коллизии
 
-    engine_checkCollisions(player->globalAABB, collisionsMap, mapWTiles, mapHTiles, player->facingDirection,
+    engine_checkCollisions(player->globalAABB, collisionsMap, player->facingDirection,
         &player->inLeftObstacle,
         &player->inRightObstacle,
         &player->inUpperObstacle,
@@ -177,7 +169,7 @@ void player_handleCollisions() {
             engine_shiftAABB(&player->globalAABB, shift);
 
             // Заново рассчитываем коллизии
-            engine_checkCollisions(player->globalAABB, collisionsMap, mapWTiles, mapHTiles, player->facingDirection,
+            engine_checkCollisions(player->globalAABB, collisionsMap, player->facingDirection,
                 &player->inLeftObstacle,
                 &player->inRightObstacle,
                 &player->inUpperObstacle,
@@ -198,44 +190,4 @@ void player_handleCollisions() {
             player->velocity.y = FASTFIX32(0);
         }
     #endif
-}
-
-void player_debug() {
-    s16 i = 0; 
-    u16 x = 32;
-
-    engine_drawDebugInt("u", player->inUpperObstacle, x, i++);
-    engine_drawDebugInt("g", player->inLowerObstacle, x, i++);
-    engine_drawDebugInt("l", player->inLeftObstacle, x, i++);
-    engine_drawDebugInt("r", player->inRightObstacle, x, i++);
-    engine_drawDebugInt("j", player->isJumping, x, i++);
-    engine_drawDebugInt("f", player->isFalling, x, i++);
-    engine_drawDebugInt("m", player->isMoving, x, i++);
-    engine_drawDebugInt("ct", player->coyoteTimer, x, i++);
-    engine_drawDebugInt("jt", player->jumpTimer, x, i++);
-
-    engine_drawDebugInt("cx", cameraPosition.x, x, i++);
-    engine_drawDebugInt("cy", cameraPosition.y, x, i++);
-    engine_drawDebugUInt("bx", backPosition.x, x, i++);
-    engine_drawDebugUInt("by", backPosition.y, x, i++);
-
-    //engine_drawInt("gx1", player->globalAABB.x.min, 30, i++);
-    //engine_drawInt("gx2", player->globalAABB.x.max, 30, i++);
-    //engine_drawInt("gy1", player->globalAABB.y.min, 30, i++);
-    //engine_drawInt("gy2", player->globalAABB.y.max, 30, i++);
-
-    //engine_drawInt("sX", player->screenPos.x, 30, i++);
-    //engine_drawInt("sY", player->screenPos.y, 30, i++);
-
-    //engine_drawInt("dx", player->facingDirection.x, 30, i++);
-    //engine_drawInt("dy", player->facingDirection.y, 30, i++);
-
-    //engine_drawInt("vx", fastFix32ToInt(fastFix32Int(abs(player->velocity.x))), 30, i++);
-    //engine_drawInt("vy", fastFix32ToInt(fastFix32Int(abs(player->velocity.y))), 30, i++);
-
-    //engine_drawInt("cpX", cameraPosition.x, 30, i++);
-    //engine_drawInt("cpY", cameraPosition.y, 30, i++);
-
-    //engine_drawInt("mpX", player->movedPixels.x, 30, i++);
-    //engine_drawInt("mpY", player->movedPixels.y, 30, i++);
 }

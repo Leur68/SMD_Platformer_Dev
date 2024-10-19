@@ -7,6 +7,7 @@ extern const Image grass;
 extern const SpriteDefinition cursor_spr;
 extern const SpriteDefinition player_sprite;
 extern const SpriteDefinition smth_sprite;
+extern const SpriteDefinition m_sprite;
 extern const SpriteDefinition tile_cursor_l_r;
 extern const SpriteDefinition tile_cursor_r_r;
 extern const SpriteDefinition tile_cursor_t_r;

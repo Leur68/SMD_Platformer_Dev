@@ -1,7 +1,6 @@
 #include <genesis.h>
 
 void stateOptions_init();
-void stateOptions_release();
 void stateOptions_joyInit();
 void stateOptions_joyHandlerBefore();
 void stateOptions_joyHandlerAfter();

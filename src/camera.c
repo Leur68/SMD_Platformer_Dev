@@ -2,48 +2,62 @@
 
 void camera_init() {
     cameraPosition.x = 0;
-    cameraPosition.y = MAP_OVERHEIGHT;
+    cameraPosition.y = MAP_MAX_CAMERA_POS_Y;
 
     backPosition.x = 0;
-    backPosition.y = BACK_OVERHEIGHT;
+    backPosition.y = BACK_MAX_CAMERA_POS_Y;
 }
 
 void camera_update() {
-    bool isScrollX = (
-        player->movedPixels.x != 0 &&                                                                                                    // Скроллим карту только при движении персонажа
+    //  Если персонаж на текущем положении камеры находится в NOT_SCROLLABLE зоне
+    //      Если следующее положение камеры выходит за NOT_SCROLLABLE зону
+    //          Перемещаем камеру на запрошенное кол-во пикселей
+    //      Если следующее положение камеры НЕ выходит за NOT_SCROLLABLE зону
+    //          Не делаем ничего
+    //  Если персонаж НЕ находится в NOT_SCROLLABLE зоне
+    //      Не делаем ничего
 
-        (player->facingDirection.x == DIRECTION_RIGHT || (cameraPosition.x + player->movedPixels.x) >= 0) &&                             // Чтобы не смещать за левую границу
-        (player->facingDirection.x == DIRECTION_LEFT  || (cameraPosition.x + player->movedPixels.x) <= (mapW - SCREEN_WIDTH)) &&         // Чтобы не смещать за правую границу
-        
-        ((player->facingDirection.x == DIRECTION_LEFT && player->screenPos.x <= SCREEN_MIN_X) ||                                         // Чтобы смещать влево
-        (player->facingDirection.x == DIRECTION_RIGHT && (player->screenPos.x + PLAYER_WIDTH) >= SCREEN_MAX_X))                          // Чтобы смещать вправо
-    );
-    bool isScrollY = (
-        player->movedPixels.y != 0 &&                                                                                                    // Скроллим карту только при движении персонажа
+    scrolled = false;
 
-        (player->facingDirection.y == DIRECTION_DOWN || (cameraPosition.y + player->movedPixels.y) >= 0) &&                              // Чтобы не смещать за верхнюю границу
-        (player->facingDirection.y == DIRECTION_UP   || (cameraPosition.y + player->movedPixels.y) <= (mapH - SCREEN_HEIGHT)) &&         // Чтобы не смещать за нижнюю границу
-        
-        ((player->facingDirection.y == DIRECTION_UP && player->screenPos.y <= SCREEN_MIN_Y) ||                                           // Чтобы смещать вверх
-        (player->facingDirection.y == DIRECTION_DOWN && player->screenPos.y + PLAYER_HEIGHT >= SCREEN_MAX_Y))                            // Чтобы смещать вниз
-    );
+    if (player->movedPixels.x != 0) {
+        if (currScreenPosInScrollableX) {
+            if (nextScreenPosInNotScrollableX) {
+                scrolled = true;
 
-    // TODO Нужно что-то сделать с отрицательными значениями cameraPosition
-    s16 scrollX = isScrollX ? player->movedPixels.x : 0;
-    s16 scrollY = isScrollY ? player->movedPixels.y : 0;
+                cameraPosition.x += player->movedPixels.x;
 
-    if (scrollX != 0 || scrollY != 0) {
-        cameraPosition.x += scrollX;
-        cameraPosition.y += scrollY;
+                if (cameraPosition.x < 0) {
+                    cameraPosition.x = 0;
+                } else if (cameraPosition.x > mapMaxCameraPosX) {
+                    cameraPosition.x = mapMaxCameraPosX;
+                }
 
+                backPosition.x = cameraPosition.x * PARALLAX_RATIO_X;
+            }
+        }
+    }
+    
+    if (player->movedPixels.y != 0) {
+        if (currScreenPosInScrollableY) {
+            if (nextScreenPosInNotScrollableY) {
+                scrolled = true;
+
+                cameraPosition.y += player->movedPixels.y;
+
+                if (cameraPosition.y < 0) {
+                    cameraPosition.y = 0;
+                } else if (cameraPosition.y > mapMaxCameraPosY) {
+                    cameraPosition.y = mapMaxCameraPosY;
+                }
+
+                backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
+            }
+        }
+    }
+
+    if (scrolled) {
         MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
-        
-        //backPosition.x = divmodu(cameraPosition.x, 2);
-        //backPosition.y = divmodu(cameraPosition.y, 2);
-
-        backPosition.x = fix32ToInt(fix32Div(intToFix32(cameraPosition.x), intToFix32(6.0))); 
-        backPosition.y = fix32ToInt(fix32Div(intToFix32(cameraPosition.y - 40), intToFix32(3.3)));
-
         MAP_scrollTo(back, backPosition.x, backPosition.y);
     }
+
 }

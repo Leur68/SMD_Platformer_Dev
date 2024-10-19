@@ -8,7 +8,6 @@ typedef struct {
 } Option;
 
 void stateStart_init();
-void stateStart_release();
 void stateStart_joyHandler(u16 joy, u16 changed, u16 state);
 void stateStart_buttonStart();
 void stateStart_buttonUp();

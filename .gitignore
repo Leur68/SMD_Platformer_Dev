@@ -36,6 +36,12 @@ out/src/start/controller.d
 out/src/start/controller.o
 out/src/start/start.d
 out/src/start/start.o
+out/src/environment.d
+out/src/environment.o
+out/src/camera.o
+out/src/camera.d
+out/src/global.d
+out/src/global.o
 res/.DS_Store
 src/.DS_Store
 .DS_Store

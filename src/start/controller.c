@@ -24,5 +24,7 @@ void stateStart_process() {
         SYS_doVBlankProcess();
     }
 
-    stateStart_release();
+    // release all resources
+    JOY_setEventHandler(NULL);
+    VDP_init();
 }
