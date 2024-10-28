@@ -19,7 +19,7 @@ typedef struct {
     Vect2D_ff32 posBuffer; // Для расчета скорости
     Vect2D_ff32 velocity;  // Скорость движения. Используется для управления положением персонажа.
     Vect2D_ff32 autoVelocity;  // Скорость движения. Используется для управления положением персонажа.
-    Vect2D_s8 facingDirection;
+    u8 facingDirection;
     Vect2D_s16 movedPixels;
 
     bool isJumping;
@@ -35,6 +35,10 @@ typedef struct {
     u8 coyoteTimer;
     u8 jumpTimer;
 } Player;
+
+#define hasPlayerMovedByX (player->movedPixels.x != 0)
+#define hasPlayerMovedByY (player->movedPixels.y != 0)
+#define hasPlayerMoved (hasPlayerMovedByX || hasPlayerMovedByY)
 
 Player *allocPlayer();
 void player_init(s16 startX, s16 startY);

@@ -53,7 +53,7 @@ void environment_update() {
             currObject->screenPos.y = currObject->globalAABB.y.min - cameraPosition.y;
         }
         
-        if (IS_CURR_OBJECT_VISIBLE) {
+        if (isCurrObjectVisible) {
             // Если спрайт в зоне видимости, но ранее был скрыт, восстанавливаем
             if (currObject->visible == false) {
                 environment_initObjectSprite();
@@ -63,9 +63,9 @@ void environment_update() {
             //environment_onUpdateObjectInViewport();
             
             // Если произошло столкновение со спрайтом
-            if ((player->movedPixels.x != 0 || player->movedPixels.y != 0) && engine_isOverlappingAABBs(player->globalAABB, currObject->globalAABB)) {
+            if (hasPlayerMoved && hasCurrObjectCollidesWithPlayer) {
 
-                environment_onObjectCollidesWithCharacterInViewport();
+                environment_onObjectCollidesWithPlayerInViewport();
 
             }
 

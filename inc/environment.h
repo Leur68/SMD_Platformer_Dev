@@ -10,7 +10,8 @@ typedef struct {
     bool dir;
 } GameObject;
 
-#define IS_CURR_OBJECT_VISIBLE (((currObject->screenPos.x + currObject->sprite->definition->w) >= 0 && (currObject->screenPos.x) < (SCREEN_WIDTH)) && ((currObject->screenPos.y + currObject->sprite->definition->h) >= 0 && (currObject->screenPos.y) < (SCREEN_HEIGHT)))
+#define isCurrObjectVisible (((currObject->screenPos.x + currObject->sprite->definition->w) >= 0 && (currObject->screenPos.x) < (SCREEN_WIDTH)) && ((currObject->screenPos.y + currObject->sprite->definition->h) >= 0 && (currObject->screenPos.y) < (SCREEN_HEIGHT)))
+#define hasCurrObjectCollidesWithPlayer engine_isOverlappingAABBs(player->globalAABB, currObject->globalAABB)
 
 GameObject *allocGameObject();
 void environment_init(u8* collisions);

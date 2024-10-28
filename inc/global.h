@@ -19,9 +19,9 @@ extern u16 score;
 extern u8 lastLoadedObject;
 extern u8 currObjectIndex;
 extern GameObject* objects[];
-extern GameObject* currObject;
+extern GameObject* currObject; // объект который на текущем фрейме в данный момент обрабатывается (environment_update())
 extern void (*environment_initObject) (void);
 extern void (*environment_initObjectSprite) (void);
 extern void (*environment_onUpdateObject) (void);
 extern void (*environment_onUpdateObjectInViewport) (void);
-extern void (*environment_onObjectCollidesWithCharacterInViewport) (void);
+extern void (*environment_onObjectCollidesWithPlayerInViewport) (void);

@@ -19,37 +19,27 @@ void camera_update() {
 
     scrolled = false;
 
-    if (player->movedPixels.x != 0) {
+    if (hasPlayerMovedByX) {
         if (currScreenPosInScrollableX) {
             if (nextScreenPosInNotScrollableX) {
                 scrolled = true;
 
                 cameraPosition.x += player->movedPixels.x;
 
-                if (cameraPosition.x < 0) {
-                    cameraPosition.x = 0;
-                } else if (cameraPosition.x > mapMaxCameraPosX) {
-                    cameraPosition.x = mapMaxCameraPosX;
-                }
-
+                cameraPosition.x = clamp(cameraPosition.x, 0, mapMaxCameraPosX);
                 backPosition.x = cameraPosition.x * PARALLAX_RATIO_X;
             }
         }
     }
     
-    if (player->movedPixels.y != 0) {
+    if (hasPlayerMovedByY) {
         if (currScreenPosInScrollableY) {
             if (nextScreenPosInNotScrollableY) {
                 scrolled = true;
 
                 cameraPosition.y += player->movedPixels.y;
 
-                if (cameraPosition.y < 0) {
-                    cameraPosition.y = 0;
-                } else if (cameraPosition.y > mapMaxCameraPosY) {
-                    cameraPosition.y = mapMaxCameraPosY;
-                }
-
+                cameraPosition.y = clamp(cameraPosition.y, 0, mapMaxCameraPosY);
                 backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
             }
         }

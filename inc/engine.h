@@ -14,11 +14,15 @@
 #define NORMAL_FADE            30
 #define FAST_FADE              10
 
-#define DIRECTION_LEFT         -1
-#define DIRECTION_RIGHT        1
-#define DIRECTION_UP           -1
-#define DIRECTION_DOWN         1
-#define DIRECTION_NONE         0
+#define DIRECTION_NONE        0b00000000  // 0
+#define DIRECTION_LEFT        0b00000001  // 1
+#define DIRECTION_RIGHT       0b00000010  // 2
+#define DIRECTION_UP          0b00000100  // 4
+#define DIRECTION_DOWN        0b00001000  // 8
+#define DIRECTION_LEFT_UP     (DIRECTION_LEFT | DIRECTION_UP)   // 0b00000101 = 5
+#define DIRECTION_LEFT_DOWN   (DIRECTION_LEFT | DIRECTION_DOWN) // 0b00001001 = 9
+#define DIRECTION_RIGHT_UP    (DIRECTION_RIGHT | DIRECTION_UP)  // 0b00000110 = 6
+#define DIRECTION_RIGHT_DOWN  (DIRECTION_RIGHT | DIRECTION_DOWN)// 0b00001010 = 10
 
 #define MIN_CAMERA_POS_X       0
 #define MIN_CAMERA_POS_Y       0
@@ -27,6 +31,7 @@
 #define SOLID_TILE_INDEX       1
 #define BONUS_TILE_INDEX       2
 #define M_PLATFORM_TILE_INDEX  11 // оставляем пропуски для определения смещения на 8 пикселей в любую сторону по горизонтали
+#define STAIRS_TILE_INDEX      20
 
 #if (DEBUG_COLLISIONS)
     extern Sprite* tileCursorsR[12];
@@ -83,8 +88,8 @@ void engine_drawInt(s16 num, u16 x, u16 y, u16 len);
 void engine_drawFix32(const char* text, f32 num, u16 x, u16 y);
 
 u8 engine_getTileIndex(u8* collisions, s16 xTile, s16 yTile);
-bool engine_checkMovingTileIndex(s16 index, s16 middleIndex);
-s8 engine_getMovingTileShift(u8 *collisions, s16 xTile, s16 yTile, s16 middleIndex);
+bool engine_checkMovingTileIndex(u8 index, u8 middleIndex);
+s16 engine_getMovingTileShift(u8 *collisions, s16 xTile, s16 yTile, u8 middleIndex);
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile);
 
 AABB engine_checkMapArea(u8* collisions, AABB aabb);
@@ -100,7 +105,7 @@ void engine_setAABB(AABB* aabb, s16 x, s16 y);
 s16 engine_roundUpByEight(s16 x);
 s16 engine_roundDownByEight(s16 x);
 bool engine_isMultipleOfEight(int num);
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom);
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, u8 direction, u8* left, u8* right, u8* top, u8* bottom);
 u8 engine_getIntersectionLen(AxisLine_s16 a, AxisLine_s16 b);
 
 void engine_showFPS(u16 asFloat, u16 x, u16 y);

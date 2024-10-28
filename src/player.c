@@ -34,38 +34,10 @@ void player_init(s16 startX, s16 startY) {
 
 // Инициализирует свойства игрока на текущем кадре
 void player_update() {
-    player->isJumping = !player->inLowerObstacle && player->velocity.y < FASTFIX32(0);
-    player->isFalling = !player->inLowerObstacle && player->velocity.y > FASTFIX32(0);
-    player->isMoving  = player->velocity.x != FASTFIX32(0) || player->velocity.y != FASTFIX32(0);
-    player->isAutoMoving  = player->autoVelocity.x != FASTFIX32(0) || player->autoVelocity.y != FASTFIX32(0);
     // Инициализируем screenPos чтобы в купе с movedPixels это позволило camera_update() принять правильное решение о скроллинге
     // В player_update() не следует обновлять screenPos (после расчета коллизий и положения персонажа), так как это ответственность камеры
     player->screenPos.x = SPR_getPositionX(player->sprite);
     player->screenPos.y = SPR_getPositionY(player->sprite);
-
-    if (player->velocity.x > FASTFIX32(0)) {
-        player->facingDirection.x = DIRECTION_RIGHT;
-
-        SPR_setHFlip(player->sprite, true); // Обновляем пространственную ориентацию спрайта
-    } else if (player->velocity.x < FASTFIX32(0)) {
-        player->facingDirection.x = DIRECTION_LEFT;
-
-        SPR_setHFlip(player->sprite, false); // Обновляем пространственную ориентацию спрайта
-    }
-    if (player->velocity.y > FASTFIX32(0)) {
-        player->facingDirection.y = DIRECTION_DOWN;
-    } else if (player->velocity.y < FASTFIX32(0)) {
-        player->facingDirection.y = DIRECTION_UP;
-    }
-
-    // Обновляем анимации на основе состояния персонажа
-    if (player->isFalling) {
-        SPR_setAnim(player->sprite, ANIM_STAND);
-    } else if (player->inLowerObstacle && player->isMoving) {
-        SPR_setAnim(player->sprite, ANIM_WALK);
-    } else {
-        SPR_setAnim(player->sprite, ANIM_STAND);
-    }
 
     // Добавляем гравитацию
     #if (!DEBUG_COLLISIONS)
@@ -79,6 +51,24 @@ void player_update() {
         }
     #endif
 
+    // Обновляем направление
+    player->facingDirection = DIRECTION_NONE;
+    if (player->velocity.x < FASTFIX32(0)) {
+        player->facingDirection |= DIRECTION_LEFT;
+
+        SPR_setHFlip(player->sprite, false); // Обновляем пространственную ориентацию спрайта
+    } else if (player->velocity.x > FASTFIX32(0)) {
+        player->facingDirection |= DIRECTION_RIGHT;
+
+        SPR_setHFlip(player->sprite, true); // Обновляем пространственную ориентацию спрайта
+    }
+    if (player->velocity.y < FASTFIX32(0)) {
+        player->facingDirection |= DIRECTION_UP;
+    }
+    if (!player->isJumping) {
+        player->facingDirection |= DIRECTION_DOWN;
+    }
+
     u8 lastLower = player->inLowerObstacle;
 
     // Обрабатываем коллизии и перемещаем персонажа
@@ -91,10 +81,26 @@ void player_update() {
     } else if (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME) { // Позволяем таймеру выйти за максимальный предел на единицу
         player->coyoteTimer++;
     }
+
+    // Эти значения следует рассчитывать именно здесь (после обработки коллизий)
+    player->isMoving  = player->velocity.x != FASTFIX32(0) || player->velocity.y != FASTFIX32(0);
+    player->isAutoMoving  = player->autoVelocity.x != FASTFIX32(0) || player->autoVelocity.y != FASTFIX32(0);
+    player->isJumping = !player->inLowerObstacle && player->velocity.y < FASTFIX32(0);
+    player->isFalling = !player->inLowerObstacle && player->velocity.y > FASTFIX32(0);
+
+    // Обновляем анимации на основе состояния персонажа
+    if (player->isFalling) {
+        SPR_setAnim(player->sprite, ANIM_STAND);
+    } else if (player->inLowerObstacle && player->isMoving) {
+        SPR_setAnim(player->sprite, ANIM_WALK);
+    } else {
+        SPR_setAnim(player->sprite, ANIM_STAND);
+    }
 }
 
 void player_move() {
     // Не проверяем коллизии если персонаж стоит на месте
+    
     if (!player->isMoving && !player->isAutoMoving) {
         return;
     }
@@ -148,19 +154,16 @@ void player_handleCollisions() {
         // Выталкиваем персонажа в нужную сторону если он застрял в препятствии (такое случается только при скорости больше 1)
         // Вычисляем величину выталкивания по двум осям
 
-        Vect2D_s16 shift;
-        shift.x = 0;
-        shift.y = 0;
+        Vect2D_s16 shift = {0, 0};
+    
         if (player->inLeftObstacle > 1) {
             shift.x = player->inLeftObstacle - 1;
-        }
-        if (player->inRightObstacle > 1) {
+        } else if (player->inRightObstacle > 1) {
             shift.x = -(player->inRightObstacle - 1);
         }
         if (player->inUpperObstacle > 1) {
             shift.y = player->inUpperObstacle - 1;
-        }
-        if (player->inLowerObstacle > 1) {
+        } else if (player->inLowerObstacle > 1) {
             shift.y = -(player->inLowerObstacle - 1);
         }
 
@@ -168,18 +171,18 @@ void player_handleCollisions() {
             // Выталкиваем
             engine_shiftAABB(&player->globalAABB, shift);
 
+            // Корректируем переменные
+            player->posBuffer.x += FASTFIX32(shift.x);
+            player->posBuffer.y += FASTFIX32(shift.y);
+            player->movedPixels.x += shift.x;
+            player->movedPixels.y += shift.y;
+
             // Заново рассчитываем коллизии
             engine_checkCollisions(player->globalAABB, collisionsMap, player->facingDirection,
                 &player->inLeftObstacle,
                 &player->inRightObstacle,
                 &player->inUpperObstacle,
                 &player->inLowerObstacle);
-
-            // Корректируем переменные
-            player->posBuffer.x += FASTFIX32(shift.x);
-            player->posBuffer.y += FASTFIX32(shift.y);
-            player->movedPixels.x += shift.x;
-            player->movedPixels.y += shift.y;
         }
 
         // Останавливаем скорость по соответствующей оси при столкновении с препятствием

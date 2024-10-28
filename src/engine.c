@@ -119,15 +119,15 @@ u8 engine_getTileIndex(u8* collisions, s16 xTile, s16 yTile) {
 }
 
 bool engine_isTileSolid(u8* collisions, s16 xTile, s16 yTile) {
-    s16 index = engine_getTileIndex(collisions, xTile, yTile);
+    u8 index = engine_getTileIndex(collisions, xTile, yTile);
     return index == SOLID_TILE_INDEX || engine_checkMovingTileIndex(index, M_PLATFORM_TILE_INDEX);
 }
 
-bool engine_checkMovingTileIndex(s16 index, s16 middleIndex) {
+bool engine_checkMovingTileIndex(u8 index, u8 middleIndex) {
     return index >= middleIndex - 8 && index <= middleIndex + 8;
 }
 
-s8 engine_getMovingTileShift(u8 *collisions, s16 xTile, s16 yTile, s16 middleIndex) {
+s16 engine_getMovingTileShift(u8 *collisions, s16 xTile, s16 yTile, u8 middleIndex) {
     u8 index = engine_getTileIndex(collisions, xTile, yTile);
     if (!engine_checkMovingTileIndex(index, middleIndex)) {
         return 0;
@@ -389,7 +389,9 @@ bool engine_isMultipleOfEight(int num) {
     Sprite* playerCursor;
 #endif
 
-void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u8* left, u8* right, u8* top, u8* bottom) {
+void engine_checkCollisions(AABB aabb, u8* collisionsMap, u8 direction, u8* left, u8* right, u8* top, u8* bottom) {
+    *left = *right = *top = *bottom = 0;
+
     // Получаем AABB для проверки столкновений
     AABB aabbLeft   = engine_getLeftAABB(aabb);
     AABB aabbRight  = engine_getRightAABB(aabb);
@@ -467,38 +469,32 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u
         }
     #endif
 
-    // Вычисляем длины пересечения
-    *left   = 0;
-    *right  = 0;
-    *top    = 0;
-    *bottom = 0;
-
     // Двигаемся только влево
-    if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_NONE) {
+    if (direction == DIRECTION_LEFT) {
         if (aabbLeftObstacle.exists) {
             *left = aabbLeftObstacle.x.max - aabb.x.min + 1;
         }
     } else 
     // Двигаемся только вправо
-    if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_NONE) {
+    if (direction == DIRECTION_RIGHT) {
         if (aabbRightObstacle.exists) {
             *right = aabb.x.max - aabbRightObstacle.x.min + 1;
         }
     } else 
     // Двигаемся только вверх
-    if (direction.x == DIRECTION_NONE && direction.y == DIRECTION_UP) {
+    if (direction == DIRECTION_UP) {
         if (aabbTopObstacle.exists) {
             *top = aabbTopObstacle.y.max - aabb.y.min + 1;
         }
     } else 
     // Двигаемся только вниз
-    if (direction.x == DIRECTION_NONE && direction.y == DIRECTION_DOWN) {
+    if (direction == DIRECTION_DOWN) {
         if (aabbBottomObstacle.exists) {
             *bottom = aabb.y.max - aabbBottomObstacle.y.min + 1;
         }
     } else
     // Двигаемся влево вверх
-    if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_UP) {
+    if (direction == DIRECTION_LEFT_UP) {
         if (aabbLeftObstacle.exists) {
             u8 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
             u8 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
@@ -523,7 +519,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u
         }
     } else
     // Двигаемся вправо вверх
-    if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_UP) {
+    if (direction == DIRECTION_RIGHT_UP) {
         if (aabbRightObstacle.exists) {
             u8 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
             u8 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
@@ -548,7 +544,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u
         }
     } else 
     // Двигаемся влево вниз
-    if (direction.x == DIRECTION_LEFT && direction.y == DIRECTION_DOWN) {
+    if (direction == DIRECTION_LEFT_DOWN) {
         if (aabbLeftObstacle.exists) {
             u8 h = engine_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
             u8 v = engine_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
@@ -573,7 +569,7 @@ void engine_checkCollisions(AABB aabb, u8* collisionsMap, Vect2D_s8 direction, u
         }
     } else 
     // Двигаемся вправо вниз
-    if (direction.x == DIRECTION_RIGHT && direction.y == DIRECTION_DOWN) {
+    if (direction == DIRECTION_RIGHT_DOWN) {
         if (aabbRightObstacle.exists) {
             u8 h = engine_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
             u8 v = engine_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;

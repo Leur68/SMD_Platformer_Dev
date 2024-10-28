@@ -23,4 +23,4 @@ void (*environment_initObject) (void);
 void (*environment_initObjectSprite) (void);
 void (*environment_onUpdateObject) (void);
 void (*environment_onUpdateObjectInViewport) (void);
-void (*environment_onObjectCollidesWithCharacterInViewport) (void);
+void (*environment_onObjectCollidesWithPlayerInViewport) (void);

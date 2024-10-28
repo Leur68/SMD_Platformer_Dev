@@ -54,7 +54,7 @@ void stateLevel1_initObject();
 void stateLevel1_initObjectSprite();
 void stateLevel1_onUpdateObject();
 void stateLevel1_onUpdateObjectInViewport();
-void stateLevel1_onObjectCollidesWithCharacterInViewport();
+void stateLevel1_onObjectCollidesWithPlayerInViewport();
 
 void stateLevel1_scroll();
 void stateLevel1_tooglePause();
