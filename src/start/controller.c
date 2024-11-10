@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 // Joy
 
@@ -21,10 +21,12 @@ void stateStart_process() {
         stateStart_update();
         
         SPR_update();
+        SPR_defragVRAM();
         SYS_doVBlankProcess();
     }
 
     // release all resources
     JOY_setEventHandler(NULL);
+    stateStart_release();
     VDP_init();
 }

@@ -1,4 +1,7 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
+
+bool paused = false;
+bool xyzButtons = false;
 
 Player* player;
 Map* map;
@@ -11,8 +14,8 @@ u16 mapMaxCameraPosX;
 u16 mapMaxCameraPosY;
 u16 backMaxCameraPosX;
 u16 backMaxCameraPosY;
-Vect2D_s16 cameraPosition;
-Vect2D_s16 backPosition;
+Vect2D_u16 cameraPosition;
+Vect2D_u16 backPosition;
 bool scrolled;
 u8* collisionsMap;
 u16 score;

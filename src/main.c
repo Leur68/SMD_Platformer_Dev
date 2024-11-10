@@ -1,9 +1,9 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 int main(resetType) {
-    engine_disableSoftReset(resetType);
-    states_setLevel1State();
-	engine_init();
+    disableSoftReset(resetType);
+    states_setIntroState();
+	global_init();
     
     while(true) {
         switch(currentState) {
@@ -15,8 +15,8 @@ int main(resetType) {
                 stateStart_process();
                 break;
             }
-            case STATE_PLAY_1 : {
-                stateLevel1_process();
+            case STATE_GAME : {
+                stateGame_process();
                 break;
             }
             case STATE_OPTIONS : {
@@ -47,9 +47,9 @@ int main(resetType) {
 #include "../inc/game.h"
 
 int main(resetType) {
-    engine_disableSoftReset(resetType);
-    states_setLevel1State();
-	engine_init();
+    disableSoftReset(resetType);
+    states_setGameState();
+	global_init();
     
     while(true) {
         switch(currentState) {
@@ -61,8 +61,8 @@ int main(resetType) {
                 stateStart_process();
                 break;
             }
-            case STATE_PLAY_1 : {
-                stateLevel1_process();
+            case STATE_GAME : {
+                stateGame_process();
                 break;
             }
             case STATE_OPTIONS : {

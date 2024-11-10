@@ -1,4 +1,4 @@
-#include <genesis.h>
+#include <global.h>
 
 void stateOptions_init();
 void stateOptions_joyInit();
@@ -15,3 +15,4 @@ void stateOptions_buttonB();
 void stateOptions_buttonC();
 void stateOptions_process();
 void stateOptions_update();
+void stateOptions_release();

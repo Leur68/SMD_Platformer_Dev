@@ -4,10 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/toolchains/SGDK-200",
-                "/opt/toolchains/SGDK-200/inc",
-                "/opt/toolchains/SGDK-200/res",
-                "/opt/toolchains/SGDK-200/src"
+                "/Users/stepantaskinov/Desktop/etc/SEGA/Other SEGA Projects/SGDK/SGDK/inc",
+                "/Users/stepantaskinov/Desktop/etc/SEGA/Other SEGA Projects/SGDK/SGDK/src"
             ],
             "defines": [],
             "macFrameworkPath": [

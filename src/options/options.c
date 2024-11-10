@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 void stateOptions_update() {
 
@@ -6,6 +6,10 @@ void stateOptions_update() {
 
 void stateOptions_init() {
     stateOptions_joyInit();
+
+}
+
+void stateOptions_release() {
 
 }
 

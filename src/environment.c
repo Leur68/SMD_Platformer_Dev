@@ -1,18 +1,20 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 GameObject* allocGameObject() {
     return (GameObject*) MEM_alloc(sizeof(GameObject));
 }
 
 void environment_init(u8* collisions) {
-    for (s16 x = 0; x < mapWTiles; x++) {
-        for (s16 y = 0; y < mapHTiles; y++) {
-            u8 objType = masPointer2(collisions, y, x);
+    collisionsMap = collisions;
+
+    for (u16 x = 0; x < mapWTiles; x++) {
+        for (u16 y = 0; y < mapHTiles; y++) {
+            u8 objType = masPointer2(collisionsMap, y, x);
             if (objType > 1) {
                 currObject = allocGameObject();
 
-                s16 globalPosX = (x << 3);
-                s16 globalPosY = (y << 3);
+                u16 globalPosX = (x << 3);
+                u16 globalPosY = (y << 3);
 
                 currObject->objType = objType;
                 currObject->visible = true;

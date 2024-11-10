@@ -1,7 +1,7 @@
 IMAGE sgdk "images/sgdk_logo.png" 0
 IMAGE grass "images/grass.png" 0
 
-SPRITE cursor_spr                    "sprites/cursor.bmp"            1 1 NONE 0
+SPRITE cursor_spr                    "sprites/cursor.bmp"            1 1 NONE 0 NONE NONE FAST TRUE
 SPRITE player_sprite                 "sprites/player.png"            3 3 BEST 5 NONE NONE FAST TRUE
 SPRITE smth_sprite                   "sprites/smth.png"              1 1 BEST 0 NONE NONE FAST TRUE
 SPRITE m_sprite                      "sprites/moving_platform.png"   3 1 BEST 0 NONE NONE FAST TRUE

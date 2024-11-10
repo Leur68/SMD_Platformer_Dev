@@ -1,4 +1,10 @@
-#include <genesis.h>
+#include <global.h>
+
+#define NONE_TILE_INDEX        0
+#define SOLID_TILE_INDEX       1
+#define BONUS_TILE_INDEX       2
+#define M_PLATFORM_TILE_INDEX  11 // оставляем пропуски для определения смещения на 8 пикселей в любую сторону по горизонтали
+#define STAIRS_TILE_INDEX      20
 
 typedef struct {
     u8 objType;
@@ -11,7 +17,7 @@ typedef struct {
 } GameObject;
 
 #define isCurrObjectVisible (((currObject->screenPos.x + currObject->sprite->definition->w) >= 0 && (currObject->screenPos.x) < (SCREEN_WIDTH)) && ((currObject->screenPos.y + currObject->sprite->definition->h) >= 0 && (currObject->screenPos.y) < (SCREEN_HEIGHT)))
-#define hasCurrObjectCollidesWithPlayer engine_isOverlappingAABBs(player->globalAABB, currObject->globalAABB)
+#define hasCurrObjectCollidesWithPlayer aabb_intersects(player->globalAABB, currObject->globalAABB)
 
 GameObject *allocGameObject();
 void environment_init(u8* collisions);

@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 void camera_init() {
     cameraPosition.x = 0;
@@ -24,9 +24,14 @@ void camera_update() {
             if (nextScreenPosInNotScrollableX) {
                 scrolled = true;
 
-                cameraPosition.x += player->movedPixels.x;
+                s16 posTemp = cameraPosition.x + player->movedPixels.x;
+                if (posTemp < 0) {
+                    posTemp = 0;
+                } else if (posTemp > mapMaxCameraPosX) {
+                    posTemp = mapMaxCameraPosX;
+                }
+                cameraPosition.x = posTemp;
 
-                cameraPosition.x = clamp(cameraPosition.x, 0, mapMaxCameraPosX);
                 backPosition.x = cameraPosition.x * PARALLAX_RATIO_X;
             }
         }
@@ -37,9 +42,14 @@ void camera_update() {
             if (nextScreenPosInNotScrollableY) {
                 scrolled = true;
 
-                cameraPosition.y += player->movedPixels.y;
+                s16 posTemp = cameraPosition.y + player->movedPixels.y;
+                if (posTemp < 0) {
+                    posTemp = 0;
+                } else if (posTemp > mapMaxCameraPosY) {
+                    posTemp = mapMaxCameraPosY;
+                }
+                cameraPosition.y = posTemp;
 
-                cameraPosition.y = clamp(cameraPosition.y, 0, mapMaxCameraPosY);
                 backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
             }
         }

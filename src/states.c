@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 GAME_STATE currentState;
 
@@ -10,8 +10,8 @@ void states_setStartState() {
     currentState = STATE_START;
 }
 
-void states_setLevel1State() {
-    currentState = STATE_PLAY_1;
+void states_setGameState() {
+    currentState = STATE_GAME;
 }
 
 void states_setOptionsState() {

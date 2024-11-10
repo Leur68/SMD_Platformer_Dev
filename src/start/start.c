@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 u8 cursorIndex;
 Sprite *cursor;
@@ -50,6 +50,11 @@ void stateStart_update() {
     
 }
 
+void stateStart_release() {
+    MEM_free(cursor);
+    cursor = NULL;
+}
+
 void stateStart_setCursorIndexUp() {
     if (cursorIndex > 0) {
         cursorIndex--;
@@ -74,7 +79,7 @@ void stateStart_select(u16 option) {
     switch (option) {
     case 0 : {
         // Start
-        states_setLevel1State();
+        states_setGameState();
         break;
     }
     case 1 : {

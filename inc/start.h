@@ -1,4 +1,4 @@
-#include <genesis.h>
+#include <global.h>
 
 #define NUM_OPTIONS 2
 typedef struct {
@@ -18,3 +18,4 @@ void stateStart_updateCursorPosition();
 void stateStart_setCursorIndexUp();
 void stateStart_setCursorIndexDown();
 void stateStart_select(u16 option);
+void stateStart_release();

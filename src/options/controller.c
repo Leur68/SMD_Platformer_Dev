@@ -1,4 +1,4 @@
-#include "../inc/game.h"
+#include "../inc/global.h"
 
 // Joy
 
@@ -50,10 +50,12 @@ void stateOptions_process() {
         stateOptions_update();
 
         SPR_update();
+        SPR_defragVRAM();
         SYS_doVBlankProcess();
     }
     
     // release all resources
     JOY_setEventHandler(NULL);
     VDP_init();
+    stateOptions_release();
 }

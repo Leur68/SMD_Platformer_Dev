@@ -7,7 +7,7 @@
           "type": "cppdbg",
           "program": "/Users/stepantaskinov/Desktop/My tutorial/3. SGDKHelloWorld Velocity/out/rom.out",
           "sourceFileMap": {
-              "d:\\apps\\sgdk\\src\\": "/opt/toolchains/old/mars/m68k-elf/src",
+              
           },
           "args": [],
           "stopAtEntry": true,

@@ -1,4 +1,4 @@
-#include <genesis.h>
+#include <global.h>
 
 #define PLAYER_WIDTH              24
 #define PLAYER_HEIGHT             24
@@ -15,7 +15,7 @@
 typedef struct {
     Sprite *sprite; // Спрайт игрока
     AABB globalAABB;
-    Vect2D_s16 screenPos;
+    Vect2D_u16 screenPos;
     Vect2D_ff32 posBuffer; // Для расчета скорости
     Vect2D_ff32 velocity;  // Скорость движения. Используется для управления положением персонажа.
     Vect2D_ff32 autoVelocity;  // Скорость движения. Используется для управления положением персонажа.
@@ -41,7 +41,7 @@ typedef struct {
 #define hasPlayerMoved (hasPlayerMovedByX || hasPlayerMovedByY)
 
 Player *allocPlayer();
-void player_init(s16 startX, s16 startY);
+void player_init(u16 startX, u16 startY);
 void player_update();
 void player_move();
 void player_handleCollisions();

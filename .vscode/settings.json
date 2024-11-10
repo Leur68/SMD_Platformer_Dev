@@ -25,6 +25,16 @@
         "sprite_eng.h": "c",
         "environment.h": "c",
         "variant": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "engine.h": "c",
+        "global.h": "c",
+        "aabb.h": "c",
+        "collision.h": "c",
+        "debug.h": "c",
+        "state.h": "c",
+        "intro.h": "c",
+        "player.h": "c",
+        "cstdio": "c",
+        "__verbose_abort": "c"
     }
 }
