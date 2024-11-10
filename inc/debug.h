@@ -21,6 +21,6 @@
     extern Sprite* playerCursor;
 #endif
 
-void engine_drawDebugInt(s32 num, u16 x, u16 y, u16 len);
-void engine_drawDebugFix(f32 num, u16 x, u16 y, u16 len);
+void debug_drawInt(s32 num, u16 x, u16 y, u16 len);
+void debug_drawFix(f32 num, u16 x, u16 y, u16 len);
 void debug();

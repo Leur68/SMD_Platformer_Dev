@@ -9,13 +9,13 @@
     Sprite* playerCursor;
 #endif
 
-void engine_drawDebugInt(s32 num, u16 x, u16 y, u16 len) {
+void debug_drawInt(s32 num, u16 x, u16 y, u16 len) {
     char result[len + 1];
     intToStr(num, result, 1);
     VDP_drawTextFill(result, x, y, len);
 }
 
-void engine_drawDebugFix(f32 num, u16 x, u16 y, u16 len) {
+void debug_drawFix(f32 num, u16 x, u16 y, u16 len) {
     char result[len + 1];
     fix32ToStr(num, result, 1);
     VDP_drawTextFill(result, x, y, len);
@@ -82,44 +82,44 @@ void debug() {
     x = 36;
 
     #if (DEBUG_WINDOW_PLAYER_POS)
-        engine_drawDebugInt(player->globalAABB.x.min, x, i++, len);
-        engine_drawDebugInt(player->globalAABB.x.max, x, i++, len);
-        engine_drawDebugInt(player->globalAABB.y.min, x, i++, len);
-        engine_drawDebugInt(player->globalAABB.y.max, x, i++, len); 
-        engine_drawDebugInt(player->screenPos.x, x, i++, len);
-        engine_drawDebugInt(player->screenPos.y, x, i++, len);  
+        debug_drawInt(player->globalAABB.x.min, x, i++, len);
+        debug_drawInt(player->globalAABB.x.max, x, i++, len);
+        debug_drawInt(player->globalAABB.y.min, x, i++, len);
+        debug_drawInt(player->globalAABB.y.max, x, i++, len); 
+        debug_drawInt(player->screenPos.x, x, i++, len);
+        debug_drawInt(player->screenPos.y, x, i++, len);  
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_MOVE)
-        engine_drawDebugInt(player->velocity.x != FASTFIX32(0), x, i++, len);
-        engine_drawDebugInt(player->velocity.y != FASTFIX32(0), x, i++, len);
-        engine_drawDebugInt(player->movedPixels.x, x, i++, len);
-        engine_drawDebugInt(player->movedPixels.y, x, i++, len);
+        debug_drawInt(player->velocity.x != FASTFIX32(0), x, i++, len);
+        debug_drawInt(player->velocity.y != FASTFIX32(0), x, i++, len);
+        debug_drawInt(player->movedPixels.x, x, i++, len);
+        debug_drawInt(player->movedPixels.y, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OBSTACLES)
-        engine_drawDebugInt(player->inUpperObstacle, x, i++, len);
-        engine_drawDebugInt(player->inLowerObstacle, x, i++, len);
-        engine_drawDebugInt(player->inLeftObstacle, x, i++, len);
-        engine_drawDebugInt(player->inRightObstacle, x, i++, len);
+        debug_drawInt(player->inUpperObstacle, x, i++, len);
+        debug_drawInt(player->inLowerObstacle, x, i++, len);
+        debug_drawInt(player->inLeftObstacle, x, i++, len);
+        debug_drawInt(player->inRightObstacle, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OTHER_BOOLS)
-        engine_drawDebugInt(player->isJumping, x, i++, len);
-        engine_drawDebugInt(player->isFalling, x, i++, len);
-        engine_drawDebugInt(player->isMoving, x, i++, len);
+        debug_drawInt(player->isJumping, x, i++, len);
+        debug_drawInt(player->isFalling, x, i++, len);
+        debug_drawInt(player->isMoving, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OTHER_INTS)
-        engine_drawDebugInt(player->coyoteTimer, x, i++, len);
-        engine_drawDebugInt(player->jumpTimer, x, i++, len);
-        engine_drawDebugInt(player->facingDirection, x, i++, len);
+        debug_drawInt(player->coyoteTimer, x, i++, len);
+        debug_drawInt(player->jumpTimer, x, i++, len);
+        debug_drawInt(player->facingDirection, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_CAMERA)
-        engine_drawDebugInt(cameraPosition.x, x, i++, len);
-        engine_drawDebugInt(cameraPosition.y, x, i++, len);
-        engine_drawDebugInt(backPosition.x, x, i++, len);
-        engine_drawDebugInt(backPosition.y, x, i++, len);
+        debug_drawInt(cameraPosition.x, x, i++, len);
+        debug_drawInt(cameraPosition.y, x, i++, len);
+        debug_drawInt(backPosition.x, x, i++, len);
+        debug_drawInt(backPosition.y, x, i++, len);
     #endif
 }
