@@ -2,7 +2,11 @@
 
 int main(resetType) {
     disableSoftReset(resetType);
-    states_setIntroState();
+    if (DISABLE_INTROS) {
+        states_setGameState();
+    } else {
+        states_setIntroState();
+    }
 	global_init();
     
     while(true) {

@@ -59,6 +59,8 @@ void debug() {
             VDP_drawText("j", x, i++);
             VDP_drawText("f", x, i++);
             VDP_drawText("m", x, i++);
+            VDP_drawText("am", x, i++);
+            VDP_drawText("d", x, i++);
         #endif
 
         #if (DEBUG_WINDOW_PLAYER_OTHER_INTS)
@@ -108,6 +110,8 @@ void debug() {
         debug_drawInt(player->isJumping, x, i++, len);
         debug_drawInt(player->isFalling, x, i++, len);
         debug_drawInt(player->isMoving, x, i++, len);
+        debug_drawInt(player->isAutoMoving, x, i++, len);
+        debug_drawInt(player->decelerating, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OTHER_INTS)

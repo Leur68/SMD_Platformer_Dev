@@ -410,15 +410,11 @@ void stateGame_buttonDownRelease() {
 }
 
 void stateGame_buttonLeftRelease() {
-    if (player->velocity.x < FASTFIX32(0)) {
-        player->velocity.x = FASTFIX32(0);
-    }
+    player->decelerating = true;
 }
 
 void stateGame_buttonRightRelease() {
-    if (player->velocity.x > FASTFIX32(0)) {
-        player->velocity.x = FASTFIX32(0);
-    }
+    player->decelerating = true;
 }
 
 void stateGame_buttonStart() {

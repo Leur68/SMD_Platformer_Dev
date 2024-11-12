@@ -34,6 +34,7 @@ void player_init(u16 startX, u16 startY) {
     player->isAutoMoving = false;
     player->isJumping = false;
     player->isFalling = false;
+    player->decelerating = false;
 
     // Коллизии
     player->inUpperObstacle = false;
@@ -48,6 +49,26 @@ void player_update() {
     // В player_update() не следует обновлять screenPos (после расчета коллизий и положения персонажа), так как это ответственность камеры
     player->screenPos.x = SPR_getPositionX(player->sprite);
     player->screenPos.y = SPR_getPositionY(player->sprite);
+
+    // Обрабатываем замедление при отпускании клавиш движения
+    // TODO сделать мгновенную смену направления движения в воздухе
+    if (player->decelerating) {
+        if (player->velocity.x < FASTFIX32(0)) { // left
+            player->velocity.x += FASTFIX32(DECELERATION);
+            if (player->velocity.x > FASTFIX32(0)) {
+                player->velocity.x = FASTFIX32(0);
+            }
+         } else if (player->velocity.x > FASTFIX32(0)) { // right
+            player->velocity.x -= FASTFIX32(DECELERATION);
+            if (player->velocity.x < FASTFIX32(0)) {
+                player->velocity.x = FASTFIX32(0);
+            }
+        }
+        
+        if (player->velocity.x == FASTFIX32(0)) {
+            player->decelerating = false;
+        }
+    }
 
     // Добавляем гравитацию
     #if (!DEBUG_COLLISIONS)

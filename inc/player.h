@@ -26,6 +26,7 @@ typedef struct {
     bool isFalling;
     bool isMoving;
     bool isAutoMoving;
+    bool decelerating;
 
     u8 inLeftObstacle;
     u8 inRightObstacle;
