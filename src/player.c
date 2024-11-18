@@ -52,21 +52,28 @@ void player_update() {
 
     // Обрабатываем замедление при отпускании клавиш движения
     // TODO сделать мгновенную смену направления движения в воздухе
-    if (player->decelerating && player->inLowerObstacle) {
-        if (player->velocity.x < FASTFIX32(0)) { // left
-            player->velocity.x += FASTFIX32(DECELERATION);
-            if (player->velocity.x > FASTFIX32(0)) {
-                player->velocity.x = FASTFIX32(0);
+    if (player->decelerating) {
+        if (player->inLowerObstacle) {
+            if (player->velocity.x < FASTFIX32(0)) { // left
+                player->velocity.x += FASTFIX32(DECELERATION);
+                if (player->velocity.x > FASTFIX32(0)) {
+                    player->velocity.x = FASTFIX32(0);
+                }
+            } else if (player->velocity.x > FASTFIX32(0)) { // right
+                player->velocity.x -= FASTFIX32(DECELERATION);
+                if (player->velocity.x < FASTFIX32(0)) {
+                    player->velocity.x = FASTFIX32(0);
+                }
             }
-         } else if (player->velocity.x > FASTFIX32(0)) { // right
-            player->velocity.x -= FASTFIX32(DECELERATION);
-            if (player->velocity.x < FASTFIX32(0)) {
-                player->velocity.x = FASTFIX32(0);
+            
+            if (player->velocity.x == FASTFIX32(0)) {
+                player->decelerating = false;
             }
-        }
-        
-        if (player->velocity.x == FASTFIX32(0)) {
+        } else {
             player->decelerating = false;
+            if (player->velocity.x != FASTFIX32(0)) {
+                player->velocity.x = FASTFIX32(0);
+            }
         }
     }
 
