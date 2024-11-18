@@ -1,6 +1,6 @@
 #include <global.h>
 
-AABB collision_checkMapArea(AABB aabb);
+bool collision_checkMapArea(AABB aabb, AABB* result);
 u8 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b);
 u8 collision_getTileIndex(u16 xTile, u16 yTile);
 bool collision_isTileSolid(u16 xTile, u16 yTile);

@@ -5,7 +5,6 @@ typedef struct {
     AxisLine_u16 y;
     AxisLine_u16 xTiles;
     AxisLine_u16 yTiles;
-    bool exists;
 } AABB;
 
 bool aabb_intersects(AABB aabb1, AABB aabb2);

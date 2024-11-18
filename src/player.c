@@ -71,9 +71,7 @@ void player_update() {
             }
         } else {
             player->decelerating = false;
-            if (player->velocity.x != FASTFIX32(0)) {
-                player->velocity.x = FASTFIX32(0);
-            }
+            player->velocity.x = FASTFIX32(0);
         }
     }
 
@@ -216,12 +214,12 @@ void player_handleCollisions() {
         if (player->inLeftObstacle > 1) {
             shift.x = player->inLeftObstacle - 1;
         } else if (player->inRightObstacle > 1) {
-            shift.x = -(player->inRightObstacle - 1);
+            shift.x = (1 - player->inRightObstacle);
         }
         if (player->inUpperObstacle > 1) {
             shift.y = player->inUpperObstacle - 1;
         } else if (player->inLowerObstacle > 1) {
-            shift.y = -(player->inLowerObstacle - 1);
+            shift.y = (1 - player->inLowerObstacle);
         }
 
         if (shift.x != 0 || shift.y != 0) {

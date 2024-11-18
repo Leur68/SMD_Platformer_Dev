@@ -25,12 +25,12 @@ s16 collision_getMovingTileShift(u16 xTile, u16 yTile, u8 middleIndex) {
     }
 }
 
-AABB collision_checkMapArea(AABB aabb) {
-    AABB res = {0};  // Инициализация всех полей нулями
-    u16 xMin = aabb.xTiles.max;   // Минимальные значения x и y тайлов
-    u16 yMin = aabb.yTiles.max;
-    u16 xMax = aabb.xTiles.min;   // Максимальные значения x и y тайлов
-    u16 yMax = aabb.yTiles.min;
+bool collision_checkMapArea(AABB aabb, AABB* result) {
+    u16  xMin   = aabb.xTiles.max;   // Минимальные значения x и y тайлов
+    u16  yMin   = aabb.yTiles.max;
+    u16  xMax   = aabb.xTiles.min;   // Максимальные значения x и y тайлов
+    u16  yMax   = aabb.yTiles.min;
+    bool exists = false;
 
     // Проходим по каждому тайлу в заданной области
     for (u16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
@@ -43,26 +43,26 @@ AABB collision_checkMapArea(AABB aabb) {
                 if (currXTile > xMax) xMax = currXTile;
                 if (currYTile > yMax) yMax = currYTile;
                 
-                res.exists = true;
+                exists = true;
             }
         }
     }
 
     // Если найдены коллизии, вычисляем AABB
-    if (res.exists) {
-        res.xTiles.min = xMin;
-        res.yTiles.min = yMin;
-        res.xTiles.max = xMax;
-        res.yTiles.max = yMax;
+    if (exists) {
+        result->xTiles.min = xMin;
+        result->yTiles.min = yMin;
+        result->xTiles.max = xMax;
+        result->yTiles.max = yMax;
 
         // Переводим координаты из тайлов в пиксели
-        res.x.min = xMin << 3;  // Умножение на 8 с помощью сдвига
-        res.y.min = yMin << 3;
-        res.x.max = (xMax << 3) + 8;
-        res.y.max = (yMax << 3) + 8;
+        result->x.min = xMin << 3;  // Умножение на 8 с помощью сдвига
+        result->y.min = yMin << 3;
+        result->x.max = (xMax << 3) + 8;
+        result->y.max = (yMax << 3) + 8;
     }
 
-    return res;
+    return exists;
 
     
 
@@ -150,16 +150,12 @@ void collision_check(AABB aabb, u8 direction, u8* left, u8* right, u8* top, u8* 
     *left = *right = *top = *bottom = 0;
 
     // Получаем AABB для проверки столкновений, после этого отсеиваем среди найденных тайлов только те, что являются твердыми на карте. Данными тайлами считаются те, вплотную к которым или внутри которых находятся соответствующие стороны AABB персонажа
-    AABB aabbLeft           = aabb_getLeftAABB(aabb);
-    AABB aabbTop            = aabb_getTopAABB(aabb);
-    AABB aabbRight          = aabb_getRightAABB(aabb);
-    AABB aabbBottom         = aabb_getBottomAABB(aabb);
+    AABB aabbLeft;
+    AABB aabbTop;
+    AABB aabbRight;
+    AABB aabbBottom;
     
-    AABB aabbLeftObstacle   = collision_checkMapArea(aabbLeft);
-    AABB aabbTopObstacle    = collision_checkMapArea(aabbTop);
-    AABB aabbRightObstacle  = collision_checkMapArea(aabbRight);
-    AABB aabbBottomObstacle = collision_checkMapArea(aabbBottom);
-    
+    /*
     s16 shift = 0;
     shift = collision_getMovingTileShift(aabbLeftObstacle.xTiles.min, aabbLeftObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
     if (shift != 0) {
@@ -184,6 +180,7 @@ void collision_check(AABB aabb, u8 direction, u8* left, u8* right, u8* top, u8* 
         aabbBottomObstacle.x.min += shift;
         aabbBottomObstacle.x.max += shift;
     }
+    */
     
     // Рисуем тайлы с пересечениями для дебага
     #if (DEBUG_COLLISIONS)
@@ -225,129 +222,150 @@ void collision_check(AABB aabb, u8 direction, u8* left, u8* right, u8* top, u8* 
         }
     #endif
 
-    // Двигаемся только влево
-    if (direction == DIRECTION_LEFT) {
-        if (aabbLeftObstacle.exists) {
-            *left = aabbLeftObstacle.x.max - aabb.x.min + 1;
-        }
-    } else 
-    // Двигаемся только вправо
-    if (direction == DIRECTION_RIGHT) {
-        if (aabbRightObstacle.exists) {
-            *right = aabb.x.max - aabbRightObstacle.x.min + 1;
-        }
-    } else 
-    // Двигаемся только вверх
-    if (direction == DIRECTION_UP) {
-        if (aabbTopObstacle.exists) {
-            *top = aabbTopObstacle.y.max - aabb.y.min + 1;
-        }
-    } else 
-    // Двигаемся только вниз
-    if (direction == DIRECTION_DOWN) {
-        if (aabbBottomObstacle.exists) {
-            *bottom = aabb.y.max - aabbBottomObstacle.y.min + 1;
-        }
-    } else
-    // Двигаемся влево вверх
-    if (direction == DIRECTION_LEFT_UP) {
-        if (aabbLeftObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
+    switch (direction) {
+        // Двигаемся только влево
+        case DIRECTION_LEFT: 
+            aabbLeft = aabb_getLeftAABB(aabb);
 
-            if (v > h) {
-                *left = h;
-            } else if (v == h) {
-                *left = h;
-                *top = v;
+            if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
+                *left = aabbLeft.x.max - aabb.x.min + 1;
             }
-        }
-        if (aabbTopObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
+            break;
+        // Двигаемся только вправо
+        case DIRECTION_RIGHT:
+            aabbRight = aabb_getRightAABB(aabb);
 
-            if (h > v) {
-                *top = v;
-            } else if (v == h) {
-                *left = h;
-                *top = v;
+            if (collision_checkMapArea(aabbRight, &aabbRight)) {
+                *right = aabb.x.max - aabbRight.x.min + 1;
             }
-        }
-    } else
-    // Двигаемся вправо вверх
-    if (direction == DIRECTION_RIGHT_UP) {
-        if (aabbRightObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
+            break;
+        // Двигаемся только вверх
+        case DIRECTION_UP:
+            aabbTop = aabb_getTopAABB(aabb);
 
-            if (v > h) {
-                *right = h;
-            } if (v == h) {
-                *right = h;
-                *top = v;
+            if (collision_checkMapArea(aabbTop, &aabbTop)) {
+                *top = aabbTop.y.max - aabb.y.min + 1;
             }
-        }
-        if (aabbTopObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbTopObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbTopObstacle.y, aabb.y) + 1;
+            break;
+        // Двигаемся только вниз
+        case DIRECTION_DOWN:
+            aabbBottom = aabb_getBottomAABB(aabb);
 
-            if (h > v) {
-                *top = v;
-            } if (v == h) {
-                *right = h;
-                *top = v;
+            if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
+                *bottom = aabb.y.max - aabbBottom.y.min + 1;
             }
-        }
-    } else 
-    // Двигаемся влево вниз
-    if (direction == DIRECTION_LEFT_DOWN) {
-        if (aabbLeftObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbLeftObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbLeftObstacle.y, aabb.y) + 1;
-        
-            if (v > h) {
-                *left = h;
-            } else if (v == h) {
-                *left = h;
-                *bottom = v;
-            }
-        }
-        if (aabbBottomObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
-        
-            if (h > v) {
-                *bottom = v;
-            } else if (v == h) {
-                *left = h;
-                *bottom = v;
-            }
-        }
-    } else 
-    // Двигаемся вправо вниз
-    if (direction == DIRECTION_RIGHT_DOWN) {
-        if (aabbRightObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbRightObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbRightObstacle.y, aabb.y) + 1;
+            break;
+        // Двигаемся влево вверх
+        case DIRECTION_LEFT_UP:
+            aabbLeft = aabb_getLeftAABB(aabb);
+            aabbTop = aabb_getTopAABB(aabb);
 
-            if (v > h) {
-                *right = h;
-            } else if (v == h) {
-                *right = h;
-                *bottom = v;
-            }
-        }
-        if (aabbBottomObstacle.exists) {
-            u8 h = collision_getIntersectionLen(aabbBottomObstacle.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbBottomObstacle.y, aabb.y) + 1;
+            if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
+                u8 h = collision_getIntersectionLen(aabbLeft.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbLeft.y, aabb.y) + 1;
 
-            if (h > v) {
-                *bottom = v;
-            } else if (v == h) {
-                *right = h;
-                *bottom = v;
+                if (v > h) {
+                    *left = h;
+                } else if (v == h) {
+                    *left = h;
+                    *top = v;
+                }
             }
-        }
+            if (collision_checkMapArea(aabbTop, &aabbTop)) {
+                u8 h = collision_getIntersectionLen(aabbTop.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbTop.y, aabb.y) + 1;
+
+                if (h > v) {
+                    *top = v;
+                } else if (v == h) {
+                    *left = h;
+                    *top = v;
+                }
+            }
+            break;
+        // Двигаемся вправо вверх
+        case DIRECTION_RIGHT_UP:
+            aabbRight = aabb_getRightAABB(aabb);
+            aabbTop = aabb_getTopAABB(aabb);
+
+            if (collision_checkMapArea(aabbRight, &aabbRight)) {
+                u8 h = collision_getIntersectionLen(aabbRight.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbRight.y, aabb.y) + 1;
+
+                if (v > h) {
+                    *right = h;
+                } if (v == h) {
+                    *right = h;
+                    *top = v;
+                }
+            }
+            if (collision_checkMapArea(aabbTop, &aabbTop)) {
+                u8 h = collision_getIntersectionLen(aabbTop.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbTop.y, aabb.y) + 1;
+
+                if (h > v) {
+                    *top = v;
+                } if (v == h) {
+                    *right = h;
+                    *top = v;
+                }
+            }
+            break;
+        // Двигаемся влево вниз
+        case DIRECTION_LEFT_DOWN:
+            aabbLeft = aabb_getLeftAABB(aabb);
+            aabbBottom = aabb_getBottomAABB(aabb);
+
+            if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
+                u8 h = collision_getIntersectionLen(aabbLeft.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbLeft.y, aabb.y) + 1;
+            
+                if (v > h) {
+                    *left = h;
+                } else if (v == h) {
+                    *left = h;
+                    *bottom = v;
+                }
+            }
+            if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
+                u8 h = collision_getIntersectionLen(aabbBottom.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbBottom.y, aabb.y) + 1;
+            
+                if (h > v) {
+                    *bottom = v;
+                } else if (v == h) {
+                    *left = h;
+                    *bottom = v;
+                }
+            }
+            break;
+        // Двигаемся вправо вниз
+        case DIRECTION_RIGHT_DOWN:
+            aabbRight = aabb_getRightAABB(aabb);
+            aabbBottom = aabb_getBottomAABB(aabb);
+
+            if (collision_checkMapArea(aabbRight, &aabbRight)) {
+                u8 h = collision_getIntersectionLen(aabbRight.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbRight.y, aabb.y) + 1;
+
+                if (v > h) {
+                    *right = h;
+                } else if (v == h) {
+                    *right = h;
+                    *bottom = v;
+                }
+            }
+            if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
+                u8 h = collision_getIntersectionLen(aabbBottom.x, aabb.x) + 1;
+                u8 v = collision_getIntersectionLen(aabbBottom.y, aabb.y) + 1;
+
+                if (h > v) {
+                    *bottom = v;
+                } else if (v == h) {
+                    *right = h;
+                    *bottom = v;
+                }
+            }
     }
 }
 
