@@ -410,11 +410,23 @@ void stateGame_buttonDownRelease() {
 }
 
 void stateGame_buttonLeftRelease() {
-    player->decelerating = true;
+    if (player->inLowerObstacle) {
+        player->decelerating = true;
+    } else {
+        if (player->velocity.x < FASTFIX32(0)) {
+            player->velocity.x = FASTFIX32(0);
+        }
+    }
 }
 
 void stateGame_buttonRightRelease() {
-    player->decelerating = true;
+    if (player->inLowerObstacle) {
+        player->decelerating = true;
+    } else {
+        if (player->velocity.x > FASTFIX32(0)) {
+            player->velocity.x = FASTFIX32(0);
+        }
+    }
 }
 
 void stateGame_buttonStart() {
