@@ -9,7 +9,7 @@ void aabb_shift(AABB* aabb, Vect2D_s16 shift) {
     aabb->x.max = aabb->x.max + shift.x;
     aabb->y.min = aabb->y.min + shift.y;
     aabb->y.max = aabb->y.max + shift.y;
-    aabb_initTileIndexes(aabb);
+    aabb_updateTiles(aabb);
 }
 
 void aabb_set(AABB* aabb, Vect2D_u16 pos) {
@@ -17,28 +17,28 @@ void aabb_set(AABB* aabb, Vect2D_u16 pos) {
     aabb->x.max = pos.x + PLAYER_WIDTH;
     aabb->y.min = pos.y;
     aabb->y.max = pos.y + PLAYER_HEIGHT;
-    aabb_initTileIndexes(aabb);
+    aabb_updateTiles(aabb);
 }
 
 AABB aabb_getTopAABB(AABB aabb) {
     AABB aabbTop;
     aabbTop.x = aabb.x;
-    aabbTop.xTiles = aabb.xTiles;
+    aabbTop.tileX = aabb.tileX;
 
     aabbTop.y.min = aabb.y.min - 8;
     aabbTop.y.max = aabb.y.min;
 
-    aabbTop.yTiles.min = aabbTop.y.min >> 3;
-    aabbTop.yTiles.max = aabb.yTiles.min;
+    aabbTop.tileY.min = aabbTop.y.min >> 3;
+    aabbTop.tileY.max = aabb.tileY.min;
 
     if (!math_isMultipleOfEight(aabbTop.y.min)) {
-        aabbTop.yTiles.min += 1;
+        aabbTop.tileY.min += 1;
     }
     if (!math_isMultipleOfEight(aabbTop.y.max)) {
-        aabbTop.yTiles.max += 1;
+        aabbTop.tileY.max += 1;
     }
     if (!math_isMultipleOfEight(aabbTop.x.max)) {
-        aabbTop.xTiles.max += 1;
+        aabbTop.tileX.max += 1;
     }
 
     return aabbTop;
@@ -47,16 +47,16 @@ AABB aabb_getTopAABB(AABB aabb) {
 AABB aabb_getBottomAABB(AABB aabb) {
     AABB aabbBottom;
     aabbBottom.x = aabb.x;
-    aabbBottom.xTiles = aabb.xTiles;
+    aabbBottom.tileX = aabb.tileX;
 
     aabbBottom.y.min = aabb.y.max;
     aabbBottom.y.max = aabb.y.max + 8;
     
-    aabbBottom.yTiles.min = aabb.yTiles.max;
-    aabbBottom.yTiles.max = aabbBottom.y.max >> 3;
+    aabbBottom.tileY.min = aabb.tileY.max;
+    aabbBottom.tileY.max = aabbBottom.y.max >> 3;
 
     if (!math_isMultipleOfEight(aabbBottom.x.max)) {
-        aabbBottom.xTiles.max += 1;
+        aabbBottom.tileX.max += 1;
     }
 
     return aabbBottom;
@@ -65,22 +65,22 @@ AABB aabb_getBottomAABB(AABB aabb) {
 AABB aabb_getLeftAABB(AABB aabb) {
     AABB aabbLeft;
     aabbLeft.y = aabb.y;
-    aabbLeft.yTiles = aabb.yTiles;
+    aabbLeft.tileY = aabb.tileY;
 
     aabbLeft.x.min = aabb.x.min - 8;
     aabbLeft.x.max = aabb.x.min;
     
-    aabbLeft.xTiles.min = aabbLeft.x.min >> 3;
-    aabbLeft.xTiles.max = aabb.xTiles.min;
+    aabbLeft.tileX.min = aabbLeft.x.min >> 3;
+    aabbLeft.tileX.max = aabb.tileX.min;
 
     if (!math_isMultipleOfEight(aabbLeft.x.min)) {
-        aabbLeft.xTiles.min += 1;
+        aabbLeft.tileX.min += 1;
     }
     if (!math_isMultipleOfEight(aabbLeft.x.max)) {
-        aabbLeft.xTiles.max += 1;
+        aabbLeft.tileX.max += 1;
     }
     if (!math_isMultipleOfEight(aabbLeft.y.max)) {
-        aabbLeft.yTiles.max += 1;
+        aabbLeft.tileY.max += 1;
     }
 
     return aabbLeft;
@@ -89,24 +89,24 @@ AABB aabb_getLeftAABB(AABB aabb) {
 AABB aabb_getRightAABB(AABB aabb) {
     AABB aabbRight;
     aabbRight.y = aabb.y;
-    aabbRight.yTiles = aabb.yTiles;
+    aabbRight.tileY = aabb.tileY;
 
     aabbRight.x.min = aabb.x.max;
     aabbRight.x.max = aabb.x.max + 8;
     
-    aabbRight.xTiles.min = aabb.xTiles.max;
-    aabbRight.xTiles.max = aabbRight.x.max >> 3;
+    aabbRight.tileX.min = aabb.tileX.max;
+    aabbRight.tileX.max = aabbRight.x.max >> 3;
 
     if (!math_isMultipleOfEight(aabbRight.y.max)) {
-        aabbRight.yTiles.max += 1;
+        aabbRight.tileY.max += 1;
     }
 
     return aabbRight;
 }
 
-void aabb_initTileIndexes(AABB* aabb) {
-    aabb->xTiles.min = aabb->x.min >> 3;
-    aabb->xTiles.max = aabb->x.max >> 3;
-    aabb->yTiles.min = aabb->y.min >> 3;
-    aabb->yTiles.max = aabb->y.max >> 3;
+void aabb_updateTiles(AABB* aabb) {
+    aabb->tileX.min = aabb->x.min >> 3;
+    aabb->tileX.max = aabb->x.max >> 3;
+    aabb->tileY.min = aabb->y.min >> 3;
+    aabb->tileY.max = aabb->y.max >> 3;
 }

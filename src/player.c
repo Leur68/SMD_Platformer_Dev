@@ -5,41 +5,33 @@ Player* allocPlayer() {
 }
 
 void player_init(u16 startX, u16 startY) {
-    // Спрайт
+    // Sprite
     player->sprite = SPR_addSpriteSafe(&player_sprite, startX, startY, TILE_ATTR(PLAYER_PALETTE, 0, false, true));
     SPR_setAlwaysOnTop(player->sprite);
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
     
-    // Позиция
-    player->globalAABB.x.min = startX;
-    player->globalAABB.y.min = startY + mapMaxCameraPosY;
-    player->globalAABB.x.max = player->globalAABB.x.min + PLAYER_WIDTH;
-    player->globalAABB.y.max = player->globalAABB.y.min + PLAYER_WIDTH;
-    aabb_initTileIndexes(&player->globalAABB);
-    player->screenPos.x = startX;
-    player->screenPos.y = startY;
-    player->posBuffer.x = intToFastFix32(player->globalAABB.x.min);
-    player->posBuffer.y = intToFastFix32(player->globalAABB.y.min);
+    // Position
+    aabb_set(&player->globalAABB, (Vect2D_u16){ startX, startY + mapMaxCameraPosY });
+    player->screenPos       = (Vect2D_u16){ startX, startY };
+    player->posBuffer       = (Vect2D_ff32) { intToFastFix32(player->globalAABB.x.min), intToFastFix32(player->globalAABB.y.min) };
 
-    // Движение
-    player->velocity.x = FASTFIX32(0);
-    player->velocity.y = FASTFIX32(0);
-    player->autoVelocity.x = FASTFIX32(0);
-    player->autoVelocity.y = FASTFIX32(0);
-    player->movedPixels.x = 0;
-    player->movedPixels.y = 0;
+    // Moving
+    player->velocity        = (Vect2D_ff32){ FASTFIX32(0), FASTFIX32(0) };
+    player->autoVelocity    = (Vect2D_ff32){ FASTFIX32(0), FASTFIX32(0) };
+    player->movedPixels     = { 0, 0 };
+
     player->facingDirection = DIRECTION_NONE;
-    player->coyoteTimer = 0;
-    player->isMoving = false;
-    player->isAutoMoving = false;
-    player->isJumping = false;
-    player->isFalling = false;
-    player->decelerating = false;
+    player->coyoteTimer     = 0;
+    player->isMoving        = false;
+    player->isAutoMoving    = false;
+    player->isJumping       = false;
+    player->isFalling       = false;
+    player->decelerating    = false;
 
-    // Коллизии
+    // Collisions
     player->inUpperObstacle = false;
     player->inLowerObstacle = false;
-    player->inLeftObstacle = false;
+    player->inLeftObstacle  = false;
     player->inRightObstacle = false;
 }
 

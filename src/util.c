@@ -36,28 +36,3 @@ void fadeInScreen(u16 numFrame) {
 void fadeOutScreen(u16 numFrame) {
     PAL_fadeOut(0, 63, numFrame, false);                    // Производим эффект FadeOut для всего экрана. async = false, чтобы не происходил преждевременный переход к следующей сцене
 }
-
-void showFPS(u16 asFloat, u16 x, u16 y) {
-    char str[16];
-
-    if (asFloat) {
-        fix32ToStr(SYS_getFPSAsFloat(), str, 1);
-        VDP_clearText(x, y, 5);
-    } else {
-        uintToStr(SYS_getFPS(), str, 1);
-        VDP_clearText(x, y, 2);
-    }
-
-    VDP_drawText(str, x, y);
-}
-
-void showCPULoad(u16 x, u16 y) {
-    char str[16];
-
-    uintToStr(SYS_getCPULoad(), str, 1);
-    strcat(str, "%");
-
-    VDP_clearText(x, y, 4);
-    // display FPS
-    VDP_drawText(str, x, y);
-}

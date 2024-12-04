@@ -127,3 +127,78 @@ void debug() {
         debug_drawInt(backPosition.y, x, i++, len);
     #endif
 }
+
+//char* mystrcat(char* dest, char* src) {
+//    while (*dest) dest++;
+//    while (*dest++ = *src++);
+//    return --dest;
+//}
+
+void kdebug() {
+    static char str[500];
+    static char tmp[16];
+    str[0] = '\n';
+    str[1] = '\0';
+
+    char* p = str;
+    
+    while (*p) p++;
+    
+    char* s;
+
+    #define mystrcat() \
+        while (*p++ = *s++); \
+        --p;
+
+    #define concU(t, v) \
+        s = t; \
+        mystrcat(); \
+        uintToStr(v, tmp, 1); \
+        s = tmp; \
+        mystrcat(); \
+        s = "\n"; \
+        mystrcat();
+
+    #define concS(t, v) \
+        s = t; \
+        mystrcat(); \
+        intToStr(v, tmp, 1); \
+        s = tmp; \
+        mystrcat(); \
+        s = "\n"; \
+        mystrcat();
+
+    concU("x1  ", player->globalAABB.x.min)
+    concU("x2  ", player->globalAABB.x.max)
+    concU("y1  ", player->globalAABB.y.min)
+    concU("y2  ", player->globalAABB.y.max)
+    concU("sx  ", player->screenPos.x)
+    concU("xy  ", player->screenPos.y)
+
+    concU("vxb ", player->velocity.x != FASTFIX32(0))
+    concU("vyb ", player->velocity.y != FASTFIX32(0))
+    concS("mX  ", player->movedPixels.x)
+    concS("mY  ", player->movedPixels.y)
+
+    concU("u   ", player->inUpperObstacle)
+    concU("g   ", player->inLowerObstacle)
+    concU("l   ", player->inLeftObstacle)
+    concU("r   ", player->inRightObstacle)
+
+    concU("j   ", player->isJumping)
+    concU("f   ", player->isFalling)
+    concU("m   ", player->isMoving)
+    concU("am  ", player->isAutoMoving)
+    concU("d   ", player->decelerating)
+
+    concU("ct  ", player->coyoteTimer)
+    concU("jt  ", player->jumpTimer)
+    concU("f   ", player->facingDirection)
+
+    concU("cx  ", cameraPosition.x)
+    concU("cy  ", cameraPosition.y)
+    concU("bx  ", backPosition.x)
+    concU("by  ", backPosition.y)
+
+    KDebug_Alert(str);
+}

@@ -216,8 +216,8 @@ void stateGame_init() {
     stateGame_joyInit();
 
     camera_init();
-
-    VDP_setWindowVPos(false, 1); // верхняя панель с информацией
+    
+    VDP_setWindowOnTop(1); // верхняя панель с информацией
 
     VDP_setTextPlane(TEXT_PLANE);
     VDP_setTextPalette(TEXT_PALETTE);
@@ -307,6 +307,9 @@ void stateGame_update() {
     #if (DEBUG_WINDOW)
         debug();
     #endif
+    #if (DEBUG_KDEBUG)
+        kdebug();
+    #endif
 }
 
 void stateGame_updateScore(u16 newScore) {
@@ -351,6 +354,9 @@ void stateGame_buttonLeftHold() {
     #if (!DEBUG_COLLISIONS)
     if (!player->inLeftObstacle) { // Без этого условия при упирании в стену и зажатии кнопки нагрузка на ЦП будет высокой
     #endif
+        if (player->inLowerObstacle && player->decelerating) {
+            player->decelerating = false;
+        }
         if (player->velocity.x != FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.x -= FASTFIX32(ACCELERATION);
         }
@@ -366,6 +372,9 @@ void stateGame_buttonRightHold() {
     #if (!DEBUG_COLLISIONS)
     if (!player->inRightObstacle) { // Без этого условия при упирании в стену и зажатии кнопки нагрузка на ЦП будет высокой
     #endif
+        if (player->inLowerObstacle && player->decelerating) {
+            player->decelerating = false;
+        }
         if (player->velocity.x != FASTFIX32(MAX_VELOCITY)) {
             player->velocity.x += FASTFIX32(ACCELERATION);
         }

@@ -35,6 +35,8 @@
         "intro.h": "c",
         "player.h": "c",
         "cstdio": "c",
-        "__verbose_abort": "c"
+        "__verbose_abort": "c",
+        "tools.h": "c",
+        "object.h": "c"
     }
 }

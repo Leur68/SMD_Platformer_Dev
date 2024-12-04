@@ -26,15 +26,15 @@ s16 collision_getMovingTileShift(u16 xTile, u16 yTile, u8 middleIndex) {
 }
 
 bool collision_checkMapArea(AABB aabb, AABB* result) {
-    u16  xMin   = aabb.xTiles.max;   // Минимальные значения x и y тайлов
-    u16  yMin   = aabb.yTiles.max;
-    u16  xMax   = aabb.xTiles.min;   // Максимальные значения x и y тайлов
-    u16  yMax   = aabb.yTiles.min;
+    u16  xMin   = aabb.tileX.max;   // Минимальные значения x и y тайлов
+    u16  yMin   = aabb.tileY.max;
+    u16  xMax   = aabb.tileX.min;   // Максимальные значения x и y тайлов
+    u16  yMax   = aabb.tileY.min;
     bool exists = false;
 
     // Проходим по каждому тайлу в заданной области
-    for (u16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
-        for (u16 currXTile = aabb.xTiles.min; currXTile < aabb.xTiles.max; currXTile++) {
+    for (u16 currYTile = aabb.tileY.min; currYTile < aabb.tileY.max; currYTile++) {
+        for (u16 currXTile = aabb.tileX.min; currXTile < aabb.tileX.max; currXTile++) {
             // Проверяем, является ли тайл твердым (коллизия)
             if (collision_isTileSolid(currXTile, currYTile)) {
                 // Определяем минимальные и максимальные координаты тайлов
@@ -50,10 +50,10 @@ bool collision_checkMapArea(AABB aabb, AABB* result) {
 
     // Если найдены коллизии, вычисляем AABB
     if (exists) {
-        result->xTiles.min = xMin;
-        result->yTiles.min = yMin;
-        result->xTiles.max = xMax;
-        result->yTiles.max = yMax;
+        result->tileX.min = xMin;
+        result->tileY.min = yMin;
+        result->tileX.max = xMax;
+        result->tileY.max = yMax;
 
         // Переводим координаты из тайлов в пиксели
         result->x.min = xMin << 3;  // Умножение на 8 с помощью сдвига
@@ -72,25 +72,25 @@ bool collision_checkMapArea(AABB aabb, AABB* result) {
     res.y.min = 0;
     res.x.max = 0;
     res.y.max = 0;
-    res.xTiles.min = 0;
-    res.yTiles.min = 0;
-    res.xTiles.max = 0;
-    res.yTiles.max = 0;
+    res.tileX.min = 0;
+    res.tileY.min = 0;
+    res.tileX.max = 0;
+    res.tileY.max = 0;
     res.exists = false;
     bool start = true;
-    for (s16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
-        for (s16 currXTile = aabb.xTiles.min; currXTile < aabb.xTiles.max; currXTile++) {
+    for (s16 currYTile = aabb.tileY.min; currYTile < aabb.tileY.max; currYTile++) {
+        for (s16 currXTile = aabb.tileX.min; currXTile < aabb.tileX.max; currXTile++) {
             if (collision_isTileSolid(collisions, currXTile, currYTile)) {
                 if (start) {
-                    res.xTiles.min = currXTile;
-                    res.yTiles.min = currYTile;
-                    res.x.min = res.xTiles.min << 3;
-                    res.y.min = res.yTiles.min << 3;
+                    res.tileX.min = currXTile;
+                    res.tileY.min = currYTile;
+                    res.x.min = res.tileX.min << 3;
+                    res.y.min = res.tileY.min << 3;
                 }
-                res.xTiles.max = currXTile;
-                res.yTiles.max = currYTile;
-                res.x.max = res.xTiles.max << 3;
-                res.y.max = res.yTiles.max << 3;
+                res.tileX.max = currXTile;
+                res.tileY.max = currYTile;
+                res.x.max = res.tileX.max << 3;
+                res.y.max = res.tileY.max << 3;
                 // Если AABB шириной в один тайл, без корректировок ниже он будет шириной в 0 пикселей, что неверно
                 if (res.y.max == res.y.min) {
                     res.y.max += 8;
@@ -106,14 +106,14 @@ bool collision_checkMapArea(AABB aabb, AABB* result) {
     return res;
     
     AABB res = {0};  // Инициализация всех полей нулями
-    s16 xMin = aabb.xTiles.max;   // Минимальные значения x и y тайлов
-    s16 yMin = aabb.yTiles.max;
-    s16 xMax = aabb.xTiles.min;   // Максимальные значения x и y тайлов
-    s16 yMax = aabb.yTiles.min;
+    s16 xMin = aabb.tileX.max;   // Минимальные значения x и y тайлов
+    s16 yMin = aabb.tileY.max;
+    s16 xMax = aabb.tileX.min;   // Максимальные значения x и y тайлов
+    s16 yMax = aabb.tileY.min;
 
     // Проходим по каждому тайлу в заданной области
-    for (s16 currYTile = aabb.yTiles.min; currYTile < aabb.yTiles.max; currYTile++) {
-        for (s16 currXTile = aabb.xTiles.min; currXTile < aabb.xTiles.max; currXTile++) {
+    for (s16 currYTile = aabb.tileY.min; currYTile < aabb.tileY.max; currYTile++) {
+        for (s16 currXTile = aabb.tileX.min; currXTile < aabb.tileX.max; currXTile++) {
             // Проверяем, является ли тайл твердым (коллизия)
             if (collision_isTileSolid(collisions, currXTile, currYTile)) {
                 // Определяем минимальные и максимальные координаты тайлов
@@ -129,10 +129,10 @@ bool collision_checkMapArea(AABB aabb, AABB* result) {
 
     // Если найдены коллизии, вычисляем AABB
     if (res.exists) {
-        res.xTiles.min = xMin;
-        res.yTiles.min = yMin;
-        res.xTiles.max = xMax;
-        res.yTiles.max = yMax;
+        res.tileX.min = xMin;
+        res.tileY.min = yMin;
+        res.tileX.max = xMax;
+        res.tileY.max = yMax;
 
         // Переводим координаты из тайлов в пиксели
         res.x.min = xMin << 3;  // Умножение на 8 с помощью сдвига
@@ -157,25 +157,25 @@ void collision_check(AABB aabb, u8 direction, u8* left, u8* right, u8* top, u8* 
     
     /*
     s16 shift = 0;
-    shift = collision_getMovingTileShift(aabbLeftObstacle.xTiles.min, aabbLeftObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    shift = collision_getMovingTileShift(aabbLeftObstacle.tileX.min, aabbLeftObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
     if (shift != 0) {
         aabbLeftObstacle.x.min += shift;
         aabbLeftObstacle.x.max += shift;
     }
 
-    shift = collision_getMovingTileShift(aabbRightObstacle.xTiles.min, aabbRightObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    shift = collision_getMovingTileShift(aabbRightObstacle.tileX.min, aabbRightObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
     if (shift != 0) {
         aabbRightObstacle.x.min += shift;
         aabbRightObstacle.x.max += shift;
     }
     
-    shift = collision_getMovingTileShift(aabbTopObstacle.xTiles.min, aabbTopObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    shift = collision_getMovingTileShift(aabbTopObstacle.tileX.min, aabbTopObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
     if (shift != 0) {
         aabbTopObstacle.x.min += shift;
         aabbTopObstacle.x.max += shift;
     }
     
-    shift = collision_getMovingTileShift(aabbBottomObstacle.xTiles.min, aabbBottomObstacle.yTiles.min, M_PLATFORM_TILE_INDEX);
+    shift = collision_getMovingTileShift(aabbBottomObstacle.tileX.min, aabbBottomObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
     if (shift != 0) {
         aabbBottomObstacle.x.min += shift;
         aabbBottomObstacle.x.max += shift;
