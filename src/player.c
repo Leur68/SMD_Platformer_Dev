@@ -18,7 +18,7 @@ void player_init(u16 startX, u16 startY) {
     // Moving
     player->velocity        = (Vect2D_ff32){ FASTFIX32(0), FASTFIX32(0) };
     player->autoVelocity    = (Vect2D_ff32){ FASTFIX32(0), FASTFIX32(0) };
-    player->movedPixels     = { 0, 0 };
+    player->movedPixels     = (Vect2D_s16){ 0, 0 };
 
     player->facingDirection = DIRECTION_NONE;
     player->coyoteTimer     = 0;
