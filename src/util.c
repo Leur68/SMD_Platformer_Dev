@@ -2,11 +2,10 @@
 
 void global_init() {
     VDP_setScreenWidth320();
-	// JOY_init(); // Automatically called at SGDK initialization, no need to call it manually
 	SPR_init();
     if (!SYS_isChecksumOk()) {
         while (1)
-            VDP_init();
+            VDP_init(); // haha
     }
 }
 
@@ -35,4 +34,16 @@ void fadeInScreen(u16 numFrame) {
 
 void fadeOutScreen(u16 numFrame) {
     PAL_fadeOut(0, 63, numFrame, false);                    // Производим эффект FadeOut для всего экрана. async = false, чтобы не происходил преждевременный переход к следующей сцене
+}
+
+void drawInt(s32 num, u16 x, u16 y, u16 len) {
+    char result[len + 1];
+    intToStr(num, result, 1);
+    VDP_drawTextFill(result, x, y, len);
+}
+
+void drawFix(f32 num, u16 x, u16 y, u16 len) {
+    char result[len + 1];
+    fix32ToStr(num, result, 1);
+    VDP_drawTextFill(result, x, y, len);
 }

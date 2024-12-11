@@ -4,25 +4,12 @@ u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     // Проверяем границы карты
     if (xTile < 0 || yTile < 0 || xTile >= mapWTiles || yTile >= mapHTiles) return true;
     // Возвращаем состояние тайла
-    return masPointer2(collisionsMap, yTile, xTile);
+    return mapPointerGet(collisionsMap, xTile, yTile);
 }
 
 bool collision_isTileSolid(u16 xTile, u16 yTile) {
     u8 index = collision_getTileIndex(xTile, yTile);
-    return index == SOLID_TILE_INDEX || collision_checkMovingTileIndex(index, M_PLATFORM_TILE_INDEX);
-}
-
-bool collision_checkMovingTileIndex(u8 index, u8 middleIndex) {
-    return index >= middleIndex - 8 && index <= middleIndex + 8;
-}
-
-s16 collision_getMovingTileShift(u16 xTile, u16 yTile, u8 middleIndex) {
-    u8 index = collision_getTileIndex(xTile, yTile);
-    if (!collision_checkMovingTileIndex(index, middleIndex)) {
-        return 0;
-    } else {
-        return index - middleIndex;
-    }
+    return index == SOLID_TILE_INDEX || index == M_PLATFORM_TILE_INDEX;
 }
 
 bool collision_checkMapArea(AABB aabb, AABB* result) {
@@ -154,73 +141,6 @@ void collision_check(AABB aabb, u8 direction, u8* left, u8* right, u8* top, u8* 
     AABB aabbTop;
     AABB aabbRight;
     AABB aabbBottom;
-    
-    /*
-    s16 shift = 0;
-    shift = collision_getMovingTileShift(aabbLeftObstacle.tileX.min, aabbLeftObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
-    if (shift != 0) {
-        aabbLeftObstacle.x.min += shift;
-        aabbLeftObstacle.x.max += shift;
-    }
-
-    shift = collision_getMovingTileShift(aabbRightObstacle.tileX.min, aabbRightObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
-    if (shift != 0) {
-        aabbRightObstacle.x.min += shift;
-        aabbRightObstacle.x.max += shift;
-    }
-    
-    shift = collision_getMovingTileShift(aabbTopObstacle.tileX.min, aabbTopObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
-    if (shift != 0) {
-        aabbTopObstacle.x.min += shift;
-        aabbTopObstacle.x.max += shift;
-    }
-    
-    shift = collision_getMovingTileShift(aabbBottomObstacle.tileX.min, aabbBottomObstacle.tileY.min, M_PLATFORM_TILE_INDEX);
-    if (shift != 0) {
-        aabbBottomObstacle.x.min += shift;
-        aabbBottomObstacle.x.max += shift;
-    }
-    */
-    
-    // Рисуем тайлы с пересечениями для дебага
-    #if (DEBUG_COLLISIONS)
-        u8 tilesIR = 0;
-        for (s16 x = aabbLeftObstacle.x.min; x < aabbLeftObstacle.x.max; x += 8) {    
-            for (s16 y = aabbLeftObstacle.y.min; y < aabbLeftObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
-            }
-        }
-        for (u8 i = tilesIR; i < 3; i++) {
-            SPR_setPosition(tileCursorsR[i], -8, -8);
-        }
-        tilesIR = 3;
-        for (s16 x = aabbRightObstacle.x.min; x < aabbRightObstacle.x.max; x += 8) {    
-            for (s16 y = aabbRightObstacle.y.min; y < aabbRightObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
-            }
-        }
-        for (u8 i = tilesIR; i < 6; i++) {
-            SPR_setPosition(tileCursorsR[i], -8, -8);
-        }
-        tilesIR = 6;
-        for (s16 x = aabbTopObstacle.x.min; x < aabbTopObstacle.x.max; x += 8) {    
-            for (s16 y = aabbTopObstacle.y.min; y < aabbTopObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
-            }
-        }
-        for (u8 i = tilesIR; i < 9; i++) {
-            SPR_setPosition(tileCursorsR[i], -8, -8);
-        }
-        tilesIR = 9;
-        for (s16 x = aabbBottomObstacle.x.min; x < aabbBottomObstacle.x.max; x += 8) {    
-            for (s16 y = aabbBottomObstacle.y.min; y < aabbBottomObstacle.y.max; y += 8) {
-                SPR_setPosition(tileCursorsR[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
-            }
-        }
-        for (u8 i = tilesIR; i < 12; i++) {
-            SPR_setPosition(tileCursorsR[i], -8, -8);
-        }
-    #endif
 
     switch (direction) {
         // Двигаемся только влево
@@ -367,6 +287,54 @@ void collision_check(AABB aabb, u8 direction, u8* left, u8* right, u8* top, u8* 
                 }
             }
     }
+    
+    // Рисуем тайлы с пересечениями для дебага
+    #if (DEBUG_COLLISIONS)
+        u8 tilesIR = 0;
+        if (*left) {
+            for (u16 x = aabbLeft.x.min; x < aabbLeft.x.max; x += 8) {    
+                for (u16 y = aabbLeft.y.min; y < aabbLeft.y.max; y += 8) {
+                    SPR_setPosition(collisionCursors[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
+                }
+            }
+        }
+        for (u8 i = tilesIR; i < 3; i++) {
+            SPR_setPosition(collisionCursors[i], -8, -8);
+        }
+        tilesIR = 3;
+        if (*right) {
+            for (u16 x = aabbRight.x.min; x < aabbRight.x.max; x += 8) {    
+                for (u16 y = aabbRight.y.min; y < aabbRight.y.max; y += 8) {
+                    SPR_setPosition(collisionCursors[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
+                }
+            }
+        }
+        for (u8 i = tilesIR; i < 6; i++) {
+            SPR_setPosition(collisionCursors[i], -8, -8);
+        }
+        tilesIR = 6;
+        if (*top) {
+            for (u16 x = aabbTop.x.min; x < aabbTop.x.max; x += 8) {    
+                for (u16 y = aabbTop.y.min; y < aabbTop.y.max; y += 8) {
+                    SPR_setPosition(collisionCursors[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
+                }
+            }
+        }
+        for (u8 i = tilesIR; i < 9; i++) {
+            SPR_setPosition(collisionCursors[i], -8, -8);
+        }
+        tilesIR = 9;
+        if (*bottom) {
+            for (u16 x = aabbBottom.x.min; x < aabbBottom.x.max; x += 8) {    
+                for (u16 y = aabbBottom.y.min; y < aabbBottom.y.max; y += 8) {
+                    SPR_setPosition(collisionCursors[tilesIR++], x - cameraPosition.x, y - cameraPosition.y);
+                }
+            }
+        }
+        for (u8 i = tilesIR; i < 12; i++) {
+            SPR_setPosition(collisionCursors[i], -8, -8);
+        }
+    #endif
 }
 
 u8 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b) {

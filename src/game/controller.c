@@ -139,8 +139,12 @@ void stateGame_process() {
 
             stateGame_update();
         
-            VDP_showFPS(true, 0, 0);
-            VDP_showCPULoad(5, 0);
+            #if DEBUG_SHOW_FPS
+                VDP_showFPS(true, 0, 0);
+            #endif
+            #if DEBUG_SHOW_CPU
+                VDP_showCPULoad(5, 0);
+            #endif
 
             SPR_update();
             SPR_defragVRAM();

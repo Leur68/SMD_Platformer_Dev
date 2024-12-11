@@ -22,7 +22,7 @@
 #define BACKGROUND_PALETTE        PAL1
 #define GROUND_PALETTE            PAL2
 #define PLAYER_PALETTE            PAL3
-#define DEBUG_PALETTE             PAL3
+#define DEBUG_PALETTE             PAL0
 
 // Плейны
 #define GROUND_PLANE              BG_A
@@ -33,7 +33,6 @@
 #include "aabb.h"
 #include "collision.h"
 #include "debug.h"
-#include "state.h"
 #include "environment.h"
 #include "util.h"
 
@@ -46,6 +45,16 @@
 #include "camera.h"
 
 #include "../res/resources.h"
+
+typedef enum {
+    STATE_INTRO,   // Ряд заставок, отображаемых при запуске игры
+    STATE_START,   // Экран запуска игры и настроек
+    STATE_GAME,  // Игра
+    STATE_OPTIONS, // Настройки
+    STATE_CREDITS, // Титры
+} GameState;
+
+extern GameState currentState;
 
 extern bool paused;
 extern bool xyzButtons;

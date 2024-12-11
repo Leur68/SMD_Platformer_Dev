@@ -25,5 +25,5 @@ void stateIntro_update() {
         }
     }
     fadeOutScreen(NORMAL_FADE);
-    states_setStartState();
+    currentState = STATE_START;
 }

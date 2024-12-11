@@ -3,9 +3,9 @@
 int main(resetType) {
     disableSoftReset(resetType);
     if (DISABLE_INTROS) {
-        states_setGameState();
+        currentState = STATE_GAME;
     } else {
-        states_setIntroState();
+        currentState = STATE_INTRO;
     }
 	global_init();
     

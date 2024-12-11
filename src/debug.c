@@ -5,23 +5,11 @@
 #endif
 
 #if (DEBUG_COLLISIONS)
-    Sprite* tileCursorsR[12] = {};
+    Sprite* collisionCursors[12] = {};
     Sprite* playerCursor;
 #endif
 
-void debug_drawInt(s32 num, u16 x, u16 y, u16 len) {
-    char result[len + 1];
-    intToStr(num, result, 1);
-    VDP_drawTextFill(result, x, y, len);
-}
-
-void debug_drawFix(f32 num, u16 x, u16 y, u16 len) {
-    char result[len + 1];
-    fix32ToStr(num, result, 1);
-    VDP_drawTextFill(result, x, y, len);
-}
-
-void debug() {
+void debug_print() {
     static bool debugInited = false;
     static u16 len = 4;
     u16 i = 0; 
@@ -84,57 +72,51 @@ void debug() {
     x = 36;
 
     #if (DEBUG_WINDOW_PLAYER_POS)
-        debug_drawInt(player->globalAABB.x.min, x, i++, len);
-        debug_drawInt(player->globalAABB.x.max, x, i++, len);
-        debug_drawInt(player->globalAABB.y.min, x, i++, len);
-        debug_drawInt(player->globalAABB.y.max, x, i++, len); 
-        debug_drawInt(player->screenPos.x, x, i++, len);
-        debug_drawInt(player->screenPos.y, x, i++, len);  
+        drawInt(player->globalAABB.x.min, x, i++, len);
+        drawInt(player->globalAABB.x.max, x, i++, len);
+        drawInt(player->globalAABB.y.min, x, i++, len);
+        drawInt(player->globalAABB.y.max, x, i++, len); 
+        drawInt(player->screenPos.x, x, i++, len);
+        drawInt(player->screenPos.y, x, i++, len);  
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_MOVE)
-        debug_drawInt(player->velocity.x != FASTFIX32(0), x, i++, len);
-        debug_drawInt(player->velocity.y != FASTFIX32(0), x, i++, len);
-        debug_drawInt(player->movedPixels.x, x, i++, len);
-        debug_drawInt(player->movedPixels.y, x, i++, len);
+        drawInt(player->velocity.x != FASTFIX32(0), x, i++, len);
+        drawInt(player->velocity.y != FASTFIX32(0), x, i++, len);
+        drawInt(player->movedPixels.x, x, i++, len);
+        drawInt(player->movedPixels.y, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OBSTACLES)
-        debug_drawInt(player->inUpperObstacle, x, i++, len);
-        debug_drawInt(player->inLowerObstacle, x, i++, len);
-        debug_drawInt(player->inLeftObstacle, x, i++, len);
-        debug_drawInt(player->inRightObstacle, x, i++, len);
+        drawInt(player->inUpperObstacle, x, i++, len);
+        drawInt(player->inLowerObstacle, x, i++, len);
+        drawInt(player->inLeftObstacle, x, i++, len);
+        drawInt(player->inRightObstacle, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OTHER_BOOLS)
-        debug_drawInt(player->isJumping, x, i++, len);
-        debug_drawInt(player->isFalling, x, i++, len);
-        debug_drawInt(player->isMoving, x, i++, len);
-        debug_drawInt(player->isAutoMoving, x, i++, len);
-        debug_drawInt(player->decelerating, x, i++, len);
+        drawInt(player->isJumping, x, i++, len);
+        drawInt(player->isFalling, x, i++, len);
+        drawInt(player->isMoving, x, i++, len);
+        drawInt(player->isAutoMoving, x, i++, len);
+        drawInt(player->decelerating, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_OTHER_INTS)
-        debug_drawInt(player->coyoteTimer, x, i++, len);
-        debug_drawInt(player->jumpTimer, x, i++, len);
-        debug_drawInt(player->facingDirection, x, i++, len);
+        drawInt(player->coyoteTimer, x, i++, len);
+        drawInt(player->jumpTimer, x, i++, len);
+        drawInt(player->facingDirection, x, i++, len);
     #endif
 
     #if (DEBUG_WINDOW_PLAYER_CAMERA)
-        debug_drawInt(cameraPosition.x, x, i++, len);
-        debug_drawInt(cameraPosition.y, x, i++, len);
-        debug_drawInt(backPosition.x, x, i++, len);
-        debug_drawInt(backPosition.y, x, i++, len);
+        drawInt(cameraPosition.x, x, i++, len);
+        drawInt(cameraPosition.y, x, i++, len);
+        drawInt(backPosition.x, x, i++, len);
+        drawInt(backPosition.y, x, i++, len);
     #endif
 }
 
-//char* mystrcat(char* dest, char* src) {
-//    while (*dest) dest++;
-//    while (*dest++ = *src++);
-//    return --dest;
-//}
-
-void kdebug() {
+void kdebug_print() {
     static char str[500];
     static char tmp[16];
     str[0] = '\n';

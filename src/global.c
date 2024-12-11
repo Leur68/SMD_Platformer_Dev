@@ -1,5 +1,7 @@
 #include "../inc/global.h"
 
+GameState currentState;
+
 bool paused = false;
 bool xyzButtons = false;
 

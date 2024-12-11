@@ -3,8 +3,8 @@
 #define NONE_TILE_INDEX        0
 #define SOLID_TILE_INDEX       1
 #define BONUS_TILE_INDEX       2
-#define M_PLATFORM_TILE_INDEX  11 // оставляем пропуски для определения смещения на 8 пикселей в любую сторону по горизонтали
-#define STAIRS_TILE_INDEX      20
+#define M_PLATFORM_TILE_INDEX  3 // оставляем пропуски для определения смещения на 8 пикселей в любую сторону по горизонтали
+#define STAIRS_TILE_INDEX      4
 
 typedef struct {
     u8 objType;

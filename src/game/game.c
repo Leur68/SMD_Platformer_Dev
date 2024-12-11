@@ -77,7 +77,7 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-  {1, 1, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -143,30 +143,23 @@ void stateGame_onUpdateObject() {
                 currObject->shift = 1; // На первой итерации должно быть 1
             }
 
-            s16 shift = 0;
             if (currObject->dir) {
                 currObject->globalAABB.x.min++;
                 currObject->globalAABB.x.max++;
-
-                // Вычисляем доп. смещение в пределах одного тайла, которое происходит при движении платформы, чтобы плавно, а не потайлово расчитывать коллизию персонажа с этим объектом
-                shift = currObject->globalAABB.x.min - math_roundDownByEight(currObject->globalAABB.x.min);
             } else {
                 currObject->globalAABB.x.min--;
                 currObject->globalAABB.x.max--;
-
-                // Вычисляем доп. смещение в пределах одного тайла, которое происходит при движении платформы, чтобы плавно, а не потайлово расчитывать коллизию персонажа с этим объектом
-                shift =  currObject->globalAABB.x.min - math_roundUpByEight(currObject->globalAABB.x.min);
             }
 
             u16 x = currObject->globalAABB.x.min >> 3;
             u16 y = currObject->globalAABB.y.min >> 3;
             for (u8 j = 0; j < 3; j++) {
-                collisions1[y][x + j] = M_PLATFORM_TILE_INDEX + shift;
+                mapPointerSet(collisionsMap, x + j, y, M_PLATFORM_TILE_INDEX);
             }
             if (currObject->dir) {
-                collisions1[y][x - 1] = 0;
+                mapPointerSet(collisionsMap, x - 1, y, 0);
             } else {
-                collisions1[y][x + 3] = 0;
+                mapPointerSet(collisionsMap, x + 3, y, 0);
             }
     }
 }
@@ -258,25 +251,25 @@ void stateGame_init() {
         while (i < 3) {
             Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_l_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
             PAL_setPalette(DEBUG_PALETTE, tile_cursor_l_r.palette->data, DMA);
-            tileCursorsR[i] = tileCursor;
+            collisionCursors[i] = tileCursor;
             i++;
         }
         while (i < 6) {
             Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_r_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
             PAL_setPalette(DEBUG_PALETTE, tile_cursor_r_r.palette->data, DMA);
-            tileCursorsR[i] = tileCursor;
+            collisionCursors[i] = tileCursor;
             i++;
         }
         while (i < 9) {
             Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_t_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
             PAL_setPalette(DEBUG_PALETTE, tile_cursor_t_r.palette->data, DMA);
-            tileCursorsR[i] = tileCursor;
+            collisionCursors[i] = tileCursor;
             i++;
         }
         while (i < 12) {
             Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_b_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
             PAL_setPalette(DEBUG_PALETTE, tile_cursor_b_r.palette->data, DMA);
-            tileCursorsR[i] = tileCursor;
+            collisionCursors[i] = tileCursor;
             i++;
         }
     #endif
@@ -305,10 +298,10 @@ void stateGame_update() {
         }
     #endif
     #if (DEBUG_WINDOW)
-        debug();
+        debug_print();
     #endif
     #if (DEBUG_KDEBUG)
-        kdebug();
+        kdebug_print();
     #endif
 }
 

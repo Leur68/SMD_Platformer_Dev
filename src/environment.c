@@ -9,7 +9,7 @@ void environment_init(u8* collisions) {
 
     for (u16 x = 0; x < mapWTiles; x++) {
         for (u16 y = 0; y < mapHTiles; y++) {
-            u8 objType = masPointer2(collisionsMap, y, x);
+            u8 objType = mapPointerGet(collisionsMap, x, y);
             if (objType > 1) {
                 currObject = allocGameObject();
 

@@ -79,12 +79,12 @@ void stateStart_select(u16 option) {
     switch (option) {
     case 0 : {
         // Start
-        states_setGameState();
+        currentState = STATE_GAME;
         break;
     }
     case 1 : {
         // Options
-        states_setOptionsState();
+        currentState = STATE_OPTIONS;
         break;
     }
     default:

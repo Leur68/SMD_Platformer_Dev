@@ -1,7 +1,6 @@
 #ifndef _RES_RESOURCES_H_
 #define _RES_RESOURCES_H_
 
-extern const u8 player_cursor_animation1_frame1_tileset_data[0];
 extern const Image sgdk;
 extern const Image grass;
 extern const SpriteDefinition cursor_spr;
