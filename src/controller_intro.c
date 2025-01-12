@@ -1,15 +1,13 @@
 #include "../inc/global.h"
 
-// Joy
-
+// Joy handler
 void stateIntro_joyHandler(u16 joy, u16 changed, u16 state) {
     if (changed & state & BUTTON_START) {
         stateIntro_buttonStart();
     }
 }
 
-// Process
-
+// Process stage
 void stateIntro_process() {
     stateIntro_init();
 

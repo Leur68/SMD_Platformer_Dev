@@ -1,7 +1,6 @@
 #include "../inc/global.h"
 
-// Joy
-
+// Joy init
 void stateOptions_joyInit() {
     u16 joy;
     if (JOY_getPortType(PORT_1) == PORT_TYPE_PAD) {
@@ -9,10 +8,11 @@ void stateOptions_joyInit() {
     } else if (JOY_getPortType(PORT_2) == PORT_TYPE_PAD) {
         joy = JOY_2;
     }
-    JOY_setEventHandler(&stateOptions_joyHandler3);
+    JOY_setEventHandler(&stateOptions_joyHandler);
 }
 
-void stateOptions_joyHandler3(u16 joy, u16 changed, u16 state) {
+// Joy handler
+void stateOptions_joyHandler(u16 joy, u16 changed, u16 state) {
     if(state & BUTTON_START) {
         stateOptions_buttonStart();
     }
@@ -41,8 +41,7 @@ void stateOptions_joyHandler3(u16 joy, u16 changed, u16 state) {
     stateOptions_joyHandlerAfter();
 }
 
-// Process
-
+// Process stage
 void stateOptions_process() {
     stateOptions_init();
 

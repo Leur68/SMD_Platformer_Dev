@@ -1,11 +1,11 @@
 #include "../inc/global.h"
 
-// Joy
-
+// Joy init
 void stateGame_joyInit() {
     JOY_setEventHandler(&stateGame_joyHandler6);
 }
 
+// DPad handler
 void stateGame_updateDPad() {
     u16 state = JOY_readJoypad(JOY_1);
     if (state & BUTTON_UP) {
@@ -22,6 +22,7 @@ void stateGame_updateDPad() {
     }
 }
 
+// Joy3 handler
 void stateGame_joyHandler3(u16 joy, u16 changed, u16 state) {
     if(state & BUTTON_START) {
         stateGame_buttonStart();
@@ -69,6 +70,7 @@ void stateGame_joyHandler3(u16 joy, u16 changed, u16 state) {
     stateGame_joyHandlerAfter();
 }
 
+// Joy6 handler
 void stateGame_joyHandler6(u16 joy, u16 changed, u16 state) {
     if(state & BUTTON_START) {
         stateGame_buttonStart();
@@ -128,8 +130,7 @@ void stateGame_joyHandler6(u16 joy, u16 changed, u16 state) {
     stateGame_joyHandlerAfter();
 }
 
-// Process
-
+// Process state
 void stateGame_process() {
     stateGame_init();
 
