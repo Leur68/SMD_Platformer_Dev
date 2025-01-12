@@ -1,5 +1,7 @@
 #include <global.h>
 
+#define RELEASE                            0
+
 #define DEBUG_SHOW_FPS                     1
 #define DEBUG_SHOW_CPU                     1
 
