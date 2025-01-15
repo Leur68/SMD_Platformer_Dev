@@ -150,32 +150,41 @@ void kdebug_print() {
         s = "\n"; \
         mystrcat();
 
+    #define conc_() \
+        s = "\n"; \
+        mystrcat();
+
     concU("x1  ", player->globalAABB.x.min)
     concU("x2  ", player->globalAABB.x.max)
     concU("y1  ", player->globalAABB.y.min)
     concU("y2  ", player->globalAABB.y.max)
     concU("sx  ", player->screenPos.x)
     concU("xy  ", player->screenPos.y)
+    conc_()
 
     concU("vxb ", player->velocity.x != FASTFIX32(0))
     concU("vyb ", player->velocity.y != FASTFIX32(0))
-    concS("mX  ", player->movedPixels.x)
-    concS("mY  ", player->movedPixels.y)
+    concS("mpX ", player->movedPixels.x)
+    concS("mpY ", player->movedPixels.y)
+    conc_()
 
     concU("u   ", player->inUpperObstacle)
     concU("g   ", player->inLowerObstacle)
     concU("l   ", player->inLeftObstacle)
     concU("r   ", player->inRightObstacle)
+    conc_()
 
-    concU("j   ", player->isJumping)
-    concU("f   ", player->isFalling)
-    concU("m   ", player->isMoving)
-    concU("am  ", player->isAutoMoving)
-    concU("d   ", player->decelerating)
+    concU("ju  ", player->isJumping)
+    concU("fa  ", player->isFalling)
+    concU("mo  ", player->isMoving)
+    concU("amo ", player->isAutoMoving)
+    concU("de  ", player->decelerating)
+    conc_()
 
-    concU("ct  ", player->coyoteTimer)
-    concU("jt  ", player->jumpTimer)
-    concU("f   ", player->facingDirection)
+    concU("cot ", player->coyoteTimer)
+    concU("jut ", player->jumpTimer)
+    concU("fd  ", player->facingDirection)
+    conc_()
 
     concU("cx  ", cameraPosition.x)
     concU("cy  ", cameraPosition.y)

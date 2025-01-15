@@ -77,6 +77,7 @@ extern u8* collisionsMap;
 extern u16 score;
 extern u8 lastLoadedObject;
 extern u8 currObjectIndex;
+extern GameObject* сollidedObject;
 extern GameObject* objects[];
 extern GameObject* currObject; // объект который на текущем фрейме в данный момент обрабатывается (environment_update())
 extern void (*environment_initObject) (void);

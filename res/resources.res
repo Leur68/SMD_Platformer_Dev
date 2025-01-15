@@ -4,7 +4,7 @@ IMAGE grass "images/grass.png" 0
 SPRITE cursor_spr                    "sprites/cursor.bmp"            1 1 NONE 0 NONE NONE FAST TRUE
 SPRITE player_sprite                 "sprites/player.png"            3 3 BEST 5 NONE NONE FAST TRUE
 SPRITE smth_sprite                   "sprites/smth.png"              1 1 BEST 0 NONE NONE FAST TRUE
-SPRITE m_sprite                      "sprites/moving_platform.png"   3 1 BEST 0 NONE NONE FAST TRUE
+SPRITE m_sprite                      "sprites/moving_platform.png"   3 2 BEST 0 NONE NONE FAST TRUE
 
 SPRITE tile_cursor_l_r               "images/tile_cursor_l_r.png"    1 1 FAST 5
 SPRITE tile_cursor_r_r               "images/tile_cursor_r_r.png"    1 1 FAST 5

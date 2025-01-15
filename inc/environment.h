@@ -13,7 +13,7 @@ typedef struct {
     Vect2D_s16 screenPos;
     bool visible;
     u8 shift;
-    bool dir;
+    u8 facingDirection;
 } GameObject;
 
 #define isCurrObjectVisible (((currObject->screenPos.x + currObject->sprite->definition->w) >= 0 && (currObject->screenPos.x) < (SCREEN_WIDTH)) && ((currObject->screenPos.y + currObject->sprite->definition->h) >= 0 && (currObject->screenPos.y) < (SCREEN_HEIGHT)))

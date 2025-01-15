@@ -62,10 +62,10 @@ void environment_update() {
                 currObject->visible = true;
             }
 
-            //environment_onUpdateObjectInViewport();
+            environment_onUpdateObjectInViewport();
             
             // Если произошло столкновение со спрайтом
-            if (hasPlayerMoved && hasCurrObjectCollidesWithPlayer) {
+            if (hasCurrObjectCollidesWithPlayer) {
 
                 environment_onObjectCollidesWithPlayerInViewport();
 
@@ -84,10 +84,6 @@ void environment_update() {
                 currObject->visible = false;
             }
         }
-    }
-
-    if (!player->inLowerObstacle) {
-        player->autoVelocity.x = FASTFIX32(0); // Логично, что автоскорость должна отсутствовать, когда нет контакта с землей, так как земля заставляет персонажа принудительно двигаться
     }
 }
 

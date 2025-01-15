@@ -94,7 +94,7 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-  {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+  {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
@@ -116,7 +116,7 @@ void stateGame_initObject() {
             break;
         case M_PLATFORM_TILE_INDEX:
             currObject->shift = 0;
-            currObject->dir = true;
+            currObject->facingDirection = DIRECTION_RIGHT;
     }
 }
 
@@ -139,27 +139,24 @@ void stateGame_onUpdateObject() {
             if (currObject->shift < 96) {
                 currObject->shift++;
             } else {
-                currObject->dir = !currObject->dir;
+                switch (currObject->facingDirection) {
+                    case DIRECTION_RIGHT:
+                        currObject->facingDirection = DIRECTION_LEFT;
+                        break;
+                    case DIRECTION_LEFT:
+                        currObject->facingDirection = DIRECTION_RIGHT;
+                }
                 currObject->shift = 1; // На первой итерации должно быть 1
             }
 
-            if (currObject->dir) {
-                currObject->globalAABB.x.min++;
-                currObject->globalAABB.x.max++;
-            } else {
-                currObject->globalAABB.x.min--;
-                currObject->globalAABB.x.max--;
-            }
-
-            u16 x = currObject->globalAABB.x.min >> 3;
-            u16 y = currObject->globalAABB.y.min >> 3;
-            for (u8 j = 0; j < 3; j++) {
-                mapPointerSet(collisionsMap, x + j, y, M_PLATFORM_TILE_INDEX);
-            }
-            if (currObject->dir) {
-                mapPointerSet(collisionsMap, x - 1, y, 0);
-            } else {
-                mapPointerSet(collisionsMap, x + 3, y, 0);
+            switch (currObject->facingDirection) {
+                case DIRECTION_RIGHT:
+                    currObject->globalAABB.x.min++;
+                    currObject->globalAABB.x.max++;
+                    break;
+                case DIRECTION_LEFT:
+                    currObject->globalAABB.x.min--;
+                    currObject->globalAABB.x.max--;
             }
     }
 }
@@ -183,14 +180,7 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
             stateGame_updateScore(score + 1);
             break;
         case M_PLATFORM_TILE_INDEX:
-            if (player->inLowerObstacle) {
-                if (currObject->dir) {
-                    player->autoVelocity.x = FASTFIX32(1.0);
-                }
-                if (!currObject->dir) {
-                    player->autoVelocity.x = FASTFIX32(-1.0);
-                }
-            }
+            сollidedObject = currObject;
     }
 }
 
@@ -280,12 +270,13 @@ void stateGame_release() {
 }
 
 void stateGame_update() {
+    сollidedObject = NULL;
+
+    environment_update();
 
     player_update();
 
     camera_update();
-
-    environment_update();
 
     SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
         
