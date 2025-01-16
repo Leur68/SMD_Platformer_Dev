@@ -1,0 +1,8 @@
+out/rom_head.bin
+*.txt
+.DS_Store
+*.o
+*.d
+*.out
+*.json
+.vscode/*
