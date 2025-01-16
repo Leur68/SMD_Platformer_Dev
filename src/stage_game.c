@@ -210,11 +210,11 @@ void stateGame_init() {
 
     VDP_setScrollingMode(HSCROLL_LINE, VSCROLL_PLANE);
 
-	VDP_loadTileSet(&level1_tileset, TILE_USER_INDEX, DMA);
-	VDP_loadTileSet(&level1_back_tileset, TILE_USER_INDEX + level1_tileset.numTile, DMA);
+    VDP_loadTileSet(&level1_tileset, TILE_USER_INDEX, DMA);
+    VDP_loadTileSet(&level1_back_tileset, TILE_USER_INDEX + level1_tileset.numTile, DMA);
 
-	map = MAP_create(&level1_map, GROUND_PLANE, TILE_ATTR_FULL(GROUND_PALETTE, false, false, false, TILE_USER_INDEX));
-	back = MAP_create(&level1_back_map, BACKGROUND_PLANE, TILE_ATTR_FULL(BACKGROUND_PALETTE, false, false, false, TILE_USER_INDEX + level1_tileset.numTile));
+    map = MAP_create(&level1_map, GROUND_PLANE, TILE_ATTR_FULL(GROUND_PALETTE, false, false, false, TILE_USER_INDEX));
+    back = MAP_create(&level1_back_map, BACKGROUND_PLANE, TILE_ATTR_FULL(BACKGROUND_PALETTE, false, false, false, TILE_USER_INDEX + level1_tileset.numTile));
 
     MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
     MAP_scrollTo(back, backPosition.x, backPosition.y);

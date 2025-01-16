@@ -7,7 +7,7 @@ int main(resetType) {
     } else {
         currentState = STATE_INTRO;
     }
-	global_init();
+    global_init();
     
     while(true) {
         switch(currentState) {

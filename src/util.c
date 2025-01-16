@@ -2,7 +2,7 @@
 
 void global_init() {
     VDP_setScreenWidth320();
-	SPR_init();
+    SPR_init();
     if (!SYS_isChecksumOk() && RELEASE) {
         while (1)
             VDP_init(); // haha
