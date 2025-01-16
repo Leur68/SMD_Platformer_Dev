@@ -52,8 +52,7 @@ void stateGame_tooglePause();
 void stateGame_joyHandlerBefore();
 void stateGame_joyHandlerAfter();
 
-void stateGame_joyHandler3(u16 joy, u16 changed, u16 state);
-void stateGame_joyHandler6(u16 joy, u16 changed, u16 state);
+void stateGame_joyHandler(u16 joy, u16 changed, u16 state);
 
 void stateGame_buttonUpHold();
 void stateGame_buttonDownHold();

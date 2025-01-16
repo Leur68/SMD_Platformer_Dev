@@ -2,7 +2,7 @@
 
 // Joy init
 void stateGame_joyInit() {
-    JOY_setEventHandler(&stateGame_joyHandler6);
+    JOY_setEventHandler(&stateGame_joyHandler);
 }
 
 // DPad handler
@@ -22,56 +22,8 @@ void stateGame_updateDPad() {
     }
 }
 
-// Joy3 handler
-void stateGame_joyHandler3(u16 joy, u16 changed, u16 state) {
-    if(state & BUTTON_START) {
-        stateGame_buttonStart();
-    }
-    if (paused) {
-        return;
-    }
-    stateGame_joyHandlerBefore();
-
-    if (state & BUTTON_UP) {
-        stateGame_buttonUpPress();
-    }
-    if (state & BUTTON_DOWN) {
-        stateGame_buttonDownPress();
-    }
-    if (state & BUTTON_LEFT) {
-        stateGame_buttonLeftPress();
-    }
-    if (state & BUTTON_RIGHT) {
-        stateGame_buttonRightPress();
-    }
-
-    if (!(state & BUTTON_UP) && (changed & BUTTON_UP)) {
-        stateGame_buttonUpRelease();
-    }
-    if (!(state & BUTTON_DOWN) && (changed & BUTTON_DOWN)) {
-        stateGame_buttonDownRelease();
-    }
-    if (!(state & BUTTON_LEFT) && (changed & BUTTON_LEFT)) {
-        stateGame_buttonLeftRelease();
-    }
-    if (!(state & BUTTON_RIGHT) && (changed & BUTTON_RIGHT)) {
-        stateGame_buttonRightRelease();
-    }
-
-    if (state & BUTTON_A) {
-        stateGame_buttonA();
-    }
-    if (state & BUTTON_B) {
-        stateGame_buttonB();
-    }
-    if (state & BUTTON_C) {
-        stateGame_buttonC();
-    }
-    stateGame_joyHandlerAfter();
-}
-
 // Joy6 handler
-void stateGame_joyHandler6(u16 joy, u16 changed, u16 state) {
+void stateGame_joyHandler(u16 joy, u16 changed, u16 state) {
     if(state & BUTTON_START) {
         stateGame_buttonStart();
     }
