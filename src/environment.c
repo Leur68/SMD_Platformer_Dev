@@ -39,6 +39,8 @@ void environment_init(u8* collisions) {
 }
 
 void environment_update() {
+    сollidedObject = NULL;
+    
     for (currObjectIndex = 0; currObjectIndex < lastLoadedObject; currObjectIndex++) {
         currObject = objects[currObjectIndex];
 
@@ -66,9 +68,11 @@ void environment_update() {
             
             // Если произошло столкновение со спрайтом
             if (hasCurrObjectCollidesWithPlayer) {
+                if (currObject->objType == M_PLATFORM_TILE_INDEX) {
+                    сollidedObject = currObject;
+                }
 
                 environment_onObjectCollidesWithPlayerInViewport();
-
             }
 
             if (changedPos) {

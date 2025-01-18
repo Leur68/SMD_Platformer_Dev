@@ -180,7 +180,6 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
             stateGame_updateScore(score + 1);
             break;
         case M_PLATFORM_TILE_INDEX:
-            сollidedObject = currObject;
     }
 }
 
@@ -270,7 +269,6 @@ void stateGame_release() {
 }
 
 void stateGame_update() {
-    сollidedObject = NULL;
 
     environment_update();
 
