@@ -7,48 +7,48 @@ void stateGame_joyInit() {
 
 // Joy changed handler
 void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
-    if(state & BUTTON_START) {
+    if (state & changed & BUTTON_START) {
         stateGame_buttonStartPress();
     }
     if (!(state & BUTTON_START) && (changed & BUTTON_START)) {
-        stateGame_buttonStartPress();
+        stateGame_buttonStartRelease();
     }
     if (paused) {
         return;
     }
     stateGame_joyHandlerBefore();
 
-    if (state & BUTTON_UP) {
+    if (state & changed & BUTTON_UP) {
         stateGame_buttonUpPress();
     }
-    if (state & BUTTON_DOWN) {
+    if (state & changed & BUTTON_DOWN) {
         stateGame_buttonDownPress();
     }
-    if (state & BUTTON_LEFT) {
+    if (state & changed & BUTTON_LEFT) {
         stateGame_buttonLeftPress();
     }
-    if (state & BUTTON_RIGHT) {
+    if (state & changed & BUTTON_RIGHT) {
         stateGame_buttonRightPress();
     }
-    if (state & BUTTON_X) {
+    if (state & changed & BUTTON_X) {
         stateGame_buttonXPress();
     }
-    if (state & BUTTON_Y) {
+    if (state & changed & BUTTON_Y) {
         stateGame_buttonYPress();
     }
-    if (state & BUTTON_Z) {
+    if (state & changed & BUTTON_Z) {
         stateGame_buttonZPress();
     }
-    if (state & BUTTON_A) {
+    if (state & changed & BUTTON_A) {
         stateGame_buttonAPress();
     }
-    if (state & BUTTON_B) {
+    if (state & changed & BUTTON_B) {
         stateGame_buttonBPress();
     }
-    if (state & BUTTON_C) {
+    if (state & changed & BUTTON_C) {
         stateGame_buttonCPress();
     }
-    if (state & BUTTON_MODE) {
+    if (state & changed & BUTTON_MODE) {
         stateGame_buttonModePress();
     }
 
@@ -93,7 +93,7 @@ void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
 void stateGame_joyHoldingHandler() {
     u16 state = JOY_readJoypad(JOY_ALL);
 
-    if(state & BUTTON_START) {
+    if (state & BUTTON_START) {
         stateGame_buttonStartHold();
     }
     

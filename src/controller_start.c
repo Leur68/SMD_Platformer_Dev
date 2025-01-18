@@ -4,9 +4,9 @@
 void stateStart_joyHandler(u16 joy, u16 changed, u16 state) {
     if (changed & state & BUTTON_UP) {
         stateStart_buttonUp();
-    } else if(changed & state & BUTTON_DOWN) {
+    } else if (changed & state & BUTTON_DOWN) {
         stateStart_buttonDown();
-    } else if(changed & state & BUTTON_START) {
+    } else if (changed & state & BUTTON_START) {
         stateStart_buttonStart();
     }
 }
