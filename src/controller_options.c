@@ -2,12 +2,6 @@
 
 // Joy init
 void stateOptions_joyInit() {
-    u16 joy;
-    if (JOY_getPortType(PORT_1) == PORT_TYPE_PAD) {
-        joy = JOY_1;
-    } else if (JOY_getPortType(PORT_2) == PORT_TYPE_PAD) {
-        joy = JOY_2;
-    }
     JOY_setEventHandler(&stateOptions_joyHandler);
 }
 

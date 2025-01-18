@@ -91,7 +91,7 @@ void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
 
 // Joy holding handler
 void stateGame_joyHoldingHandler() {
-    u16 state = JOY_readJoypad(JOY_1);
+    u16 state = JOY_readJoypad(JOY_ALL);
 
     if(state & BUTTON_START) {
         stateGame_buttonStartHold();
