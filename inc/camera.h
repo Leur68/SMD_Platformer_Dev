@@ -11,3 +11,5 @@
 
 void camera_init();
 void camera_update();
+void camera_mustScrollByX(s16 v);
+void camera_mustScrollByY(s16 v);

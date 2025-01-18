@@ -2,30 +2,16 @@
 
 // Joy init
 void stateGame_joyInit() {
-    JOY_setEventHandler(&stateGame_joyHandler);
+    JOY_setEventHandler(&stateGame_joyChangedHandler);
 }
 
-// DPad handler
-void stateGame_updateDPad() {
-    u16 state = JOY_readJoypad(JOY_1);
-    if (state & BUTTON_UP) {
-        stateGame_buttonUpHold();
-    }
-    if (state & BUTTON_DOWN) {
-        stateGame_buttonDownHold();
-    }
-    if (state & BUTTON_LEFT) {
-        stateGame_buttonLeftHold();
-    }
-    if (state & BUTTON_RIGHT) {
-        stateGame_buttonRightHold();
-    }
-}
-
-// Joy6 handler
-void stateGame_joyHandler(u16 joy, u16 changed, u16 state) {
+// Joy changed handler
+void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
     if(state & BUTTON_START) {
-        stateGame_buttonStart();
+        stateGame_buttonStartPress();
+    }
+    if (!(state & BUTTON_START) && (changed & BUTTON_START)) {
+        stateGame_buttonStartPress();
     }
     if (paused) {
         return;
@@ -44,6 +30,27 @@ void stateGame_joyHandler(u16 joy, u16 changed, u16 state) {
     if (state & BUTTON_RIGHT) {
         stateGame_buttonRightPress();
     }
+    if (state & BUTTON_X) {
+        stateGame_buttonXPress();
+    }
+    if (state & BUTTON_Y) {
+        stateGame_buttonYPress();
+    }
+    if (state & BUTTON_Z) {
+        stateGame_buttonZPress();
+    }
+    if (state & BUTTON_A) {
+        stateGame_buttonAPress();
+    }
+    if (state & BUTTON_B) {
+        stateGame_buttonBPress();
+    }
+    if (state & BUTTON_C) {
+        stateGame_buttonCPress();
+    }
+    if (state & BUTTON_MODE) {
+        stateGame_buttonModePress();
+    }
 
     if (!(state & BUTTON_UP) && (changed & BUTTON_UP)) {
         stateGame_buttonUpRelease();
@@ -57,27 +64,73 @@ void stateGame_joyHandler(u16 joy, u16 changed, u16 state) {
     if (!(state & BUTTON_RIGHT) && (changed & BUTTON_RIGHT)) {
         stateGame_buttonRightRelease();
     }
+    if (!(state & BUTTON_X) && (changed & BUTTON_X)) {
+        stateGame_buttonXRelease();
+    }
+    if (!(state & BUTTON_Y) && (changed & BUTTON_Y)) {
+        stateGame_buttonYRelease();
+    }
+    if (!(state & BUTTON_Z) && (changed & BUTTON_Z)) {
+        stateGame_buttonZRelease();
+    }
+    if (!(state & BUTTON_A) && (changed & BUTTON_A)) {
+        stateGame_buttonARelease();
+    }
+    if (!(state & BUTTON_B) && (changed & BUTTON_B)) {
+        stateGame_buttonBRelease();
+    }
+    if (!(state & BUTTON_C) && (changed & BUTTON_C)) {
+        stateGame_buttonCRelease();
+    }
+    if (!(state & BUTTON_MODE) && (changed & BUTTON_MODE)) {
+        stateGame_buttonModeRelease();
+    }
 
+    stateGame_joyHandlerAfter();
+}
+
+// Joy holding handler
+void stateGame_joyHoldingHandler() {
+    u16 state = JOY_readJoypad(JOY_1);
+
+    if(state & BUTTON_START) {
+        stateGame_buttonStartHold();
+    }
+    
+    stateGame_joyHandlerBefore();
+
+    if (state & BUTTON_UP) {
+        stateGame_buttonUpHold();
+    }
+    if (state & BUTTON_DOWN) {
+        stateGame_buttonDownHold();
+    }
+    if (state & BUTTON_LEFT) {
+        stateGame_buttonLeftHold();
+    }
+    if (state & BUTTON_RIGHT) {
+        stateGame_buttonRightHold();
+    }
     if (state & BUTTON_X) {
-        stateGame_buttonX();
+        stateGame_buttonXHold();
     }
     if (state & BUTTON_Y) {
-        stateGame_buttonY();
+        stateGame_buttonYHold();
     }
     if (state & BUTTON_Z) {
-        stateGame_buttonZ();
+        stateGame_buttonZHold();
     }
     if (state & BUTTON_A) {
-        stateGame_buttonA();
+        stateGame_buttonAHold();
     }
     if (state & BUTTON_B) {
-        stateGame_buttonB();
+        stateGame_buttonBHold();
     }
     if (state & BUTTON_C) {
-        stateGame_buttonC();
+        stateGame_buttonCHold();
     }
     if (state & BUTTON_MODE) {
-        stateGame_buttonMode();
+        stateGame_buttonModeHold();
     }
     stateGame_joyHandlerAfter();
 }
@@ -88,7 +141,8 @@ void stateGame_process() {
 
     while(currentState == STATE_GAME) {
         if (!paused) {
-            stateGame_updateDPad();
+
+            stateGame_joyHoldingHandler();
 
             stateGame_update();
         

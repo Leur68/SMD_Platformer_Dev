@@ -184,6 +184,7 @@ void kdebug_print() {
     concU("cot ", player->coyoteTimer)
     concU("jut ", player->jumpTimer)
     concU("fd  ", player->facingDirection)
+    concU("s   ", scrolled)
     conc_()
 
     concU("cx  ", cameraPosition.x)

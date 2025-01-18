@@ -52,33 +52,44 @@ void stateGame_tooglePause();
 void stateGame_joyHandlerBefore();
 void stateGame_joyHandlerAfter();
 
-void stateGame_joyHandler(u16 joy, u16 changed, u16 state);
+void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state);
+void stateGame_joyHoldingHandler();
 
 void stateGame_buttonUpHold();
 void stateGame_buttonDownHold();
 void stateGame_buttonLeftHold();
 void stateGame_buttonRightHold();
+void stateGame_buttonXHold();
+void stateGame_buttonYHold();
+void stateGame_buttonZHold();
+void stateGame_buttonAHold();
+void stateGame_buttonBHold();
+void stateGame_buttonCHold();
+void stateGame_buttonStartHold();
+void stateGame_buttonModeHold();
 
 void stateGame_buttonUpPress();
 void stateGame_buttonDownPress();
 void stateGame_buttonLeftPress();
 void stateGame_buttonRightPress();
+void stateGame_buttonXPress();
+void stateGame_buttonYPress();
+void stateGame_buttonZPress();
+void stateGame_buttonAPress();
+void stateGame_buttonBPress();
+void stateGame_buttonCPress();
+void stateGame_buttonStartPress();
+void stateGame_buttonModePress();
 
 void stateGame_buttonUpRelease();
 void stateGame_buttonDownRelease();
 void stateGame_buttonLeftRelease();
 void stateGame_buttonRightRelease();
-
-void stateGame_buttonStart();
-void stateGame_buttonMode();
-
-void stateGame_buttonX();
-void stateGame_buttonY();
-void stateGame_buttonZ();
-void stateGame_buttonA();
-void stateGame_buttonB();
-void stateGame_buttonC();
-
-// 8 bit do controller
-void stateGame_buttonL();
-void stateGame_buttonR();
+void stateGame_buttonXRelease();
+void stateGame_buttonYRelease();
+void stateGame_buttonZRelease();
+void stateGame_buttonARelease();
+void stateGame_buttonBRelease();
+void stateGame_buttonCRelease();
+void stateGame_buttonStartRelease();
+void stateGame_buttonModeRelease();

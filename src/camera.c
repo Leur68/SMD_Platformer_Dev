@@ -59,5 +59,32 @@ void camera_update() {
         MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
         MAP_scrollTo(back, backPosition.x, backPosition.y);
     }
+}
 
+void camera_mustScrollByX(s16 v) {
+    s16 posTemp = cameraPosition.x + v;
+    if (posTemp < 0) {
+        posTemp = 0;
+    } else if (posTemp > mapMaxCameraPosX) {
+        posTemp = mapMaxCameraPosX;
+    }
+    cameraPosition.x = posTemp;
+    backPosition.x = cameraPosition.x * PARALLAX_RATIO_X;
+    scrolled = true; // for condition in environment_update()
+    MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
+    MAP_scrollTo(back, backPosition.x, backPosition.y);
+}
+
+void camera_mustScrollByY(s16 v) {
+    s16 posTemp = cameraPosition.y + v;
+    if (posTemp < 0) {
+        posTemp = 0;
+    } else if (posTemp > mapMaxCameraPosY) {
+        posTemp = mapMaxCameraPosY;
+    }
+    cameraPosition.y = posTemp;
+    backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
+    scrolled = true; // for condition in environment_update()
+    MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
+    MAP_scrollTo(back, backPosition.x, backPosition.y);
 }

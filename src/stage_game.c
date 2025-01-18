@@ -368,6 +368,43 @@ void stateGame_buttonRightHold() {
     #endif
 }
 
+void stateGame_buttonXHold() {
+
+}
+
+void stateGame_buttonYHold() {
+
+}
+
+void stateGame_buttonZHold() {
+    if (!player->isMoving) {
+        camera_mustScrollByX(-1);
+    }
+}
+
+void stateGame_buttonAHold() {
+    
+}
+
+void stateGame_buttonBHold() {
+
+}
+
+void stateGame_buttonCHold() {
+    if (!player->isMoving) {
+        camera_mustScrollByX(1);
+    }
+}
+
+void stateGame_buttonStartHold() {
+
+}
+
+void stateGame_buttonModeHold() {
+
+}
+
+
 void stateGame_buttonUpPress() {
     
 }
@@ -382,6 +419,43 @@ void stateGame_buttonLeftPress() {
 
 void stateGame_buttonRightPress() {
     
+}
+
+void stateGame_buttonXPress() {
+    
+}
+
+void stateGame_buttonYPress() {
+    
+}
+
+void stateGame_buttonZPress() {
+    
+}
+
+void stateGame_buttonAPress() {
+    
+}
+
+void stateGame_buttonBPress() {
+    if (player->inLowerObstacle || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
+        player->velocity.y = FASTFIX32(-JUMP);
+        player->inLowerObstacle = 0;
+    }
+}
+
+void stateGame_buttonCPress() {
+    
+}
+
+void stateGame_buttonStartPress() {
+    stateGame_tooglePause();
+}
+
+void stateGame_buttonModePress() {
+    #if (SLOW_MODE)
+        hasSlowModeEnabled = !hasSlowModeEnabled;
+    #endif
 }
 
 void stateGame_buttonUpRelease() {
@@ -420,39 +494,34 @@ void stateGame_buttonRightRelease() {
     }
 }
 
-void stateGame_buttonStart() {
-    stateGame_tooglePause();
-}
-
-void stateGame_buttonX() {
+void stateGame_buttonXRelease() {
     
 }
 
-void stateGame_buttonY() {
+void stateGame_buttonYRelease() {
     
 }
 
-void stateGame_buttonZ() {
+void stateGame_buttonZRelease() {
     
 }
 
-void stateGame_buttonA() {
+void stateGame_buttonARelease() {
     
 }
 
-void stateGame_buttonB() {
+void stateGame_buttonBRelease() {
     
 }
 
-void stateGame_buttonC() {
-    if (player->inLowerObstacle || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
-        player->velocity.y = FASTFIX32(-JUMP);
-        player->inLowerObstacle = 0;
-    }
+void stateGame_buttonCRelease() {
+    
 }
 
-void stateGame_buttonMode() {
-    #if (SLOW_MODE)
-        hasSlowModeEnabled = !hasSlowModeEnabled;
-    #endif
+void stateGame_buttonStartRelease() {
+    
+}
+
+void stateGame_buttonModeRelease() {
+    
 }
