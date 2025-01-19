@@ -2,7 +2,7 @@
 
 int main(resetType) {
     disableSoftReset(resetType);
-    if (DISABLE_INTROS) {
+    if (DEBUG_DISABLE_INTROS) {
         currentState = STATE_GAME;
     } else {
         currentState = STATE_INTRO;

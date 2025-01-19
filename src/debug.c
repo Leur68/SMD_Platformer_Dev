@@ -1,12 +1,7 @@
 #include "../inc/global.h"
 
-#if (SLOW_MODE)
+#if (DEBUG_SLOW_MODE)
     bool hasSlowModeEnabled = false;
-#endif
-
-#if (DEBUG_COLLISIONS)
-    Sprite* collisionCursors[12] = {};
-    Sprite* playerCursor;
 #endif
 
 void debug_print() {
@@ -43,7 +38,7 @@ void debug_print() {
             VDP_drawText("r", x, i++);
         #endif
 
-        #if (DEBUG_WINDOW_PLAYER_OTHER_BOOLS)
+        #if (DEBUG_WINDOW_PLAYER_BOOLS)
             VDP_drawText("j", x, i++);
             VDP_drawText("f", x, i++);
             VDP_drawText("m", x, i++);
@@ -51,7 +46,7 @@ void debug_print() {
             VDP_drawText("d", x, i++);
         #endif
 
-        #if (DEBUG_WINDOW_PLAYER_OTHER_INTS)
+        #if (DEBUG_WINDOW_PLAYER_INTS)
             VDP_drawText("ct", x, i++);
             VDP_drawText("jt", x, i++);
             VDP_drawText("f", x, i++);
@@ -94,7 +89,7 @@ void debug_print() {
         drawInt(player->inRightObstacle, x, i++, len);
     #endif
 
-    #if (DEBUG_WINDOW_PLAYER_OTHER_BOOLS)
+    #if (DEBUG_WINDOW_PLAYER_BOOLS)
         drawInt(player->isJumping, x, i++, len);
         drawInt(player->isFalling, x, i++, len);
         drawInt(player->isMoving, x, i++, len);
@@ -102,7 +97,7 @@ void debug_print() {
         drawInt(player->decelerating, x, i++, len);
     #endif
 
-    #if (DEBUG_WINDOW_PLAYER_OTHER_INTS)
+    #if (DEBUG_WINDOW_PLAYER_INTS)
         drawInt(player->coyoteTimer, x, i++, len);
         drawInt(player->jumpTimer, x, i++, len);
         drawInt(player->facingDirection, x, i++, len);

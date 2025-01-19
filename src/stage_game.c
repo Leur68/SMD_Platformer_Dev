@@ -231,37 +231,6 @@ void stateGame_init() {
     VDP_drawText("Score: ", 10, 0);
 
     stateGame_updateScore(0);
-
-    #if (DEBUG_COLLISIONS)
-        playerCursor = SPR_addSpriteSafe(&player_cursor, -24, -24, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
-        PAL_setPalette(DEBUG_PALETTE, player_cursor.palette->data, DMA);
-
-        u8 i = 0;
-        while (i < 3) {
-            Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_l_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
-            PAL_setPalette(DEBUG_PALETTE, tile_cursor_l_r.palette->data, DMA);
-            collisionCursors[i] = tileCursor;
-            i++;
-        }
-        while (i < 6) {
-            Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_r_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
-            PAL_setPalette(DEBUG_PALETTE, tile_cursor_r_r.palette->data, DMA);
-            collisionCursors[i] = tileCursor;
-            i++;
-        }
-        while (i < 9) {
-            Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_t_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
-            PAL_setPalette(DEBUG_PALETTE, tile_cursor_t_r.palette->data, DMA);
-            collisionCursors[i] = tileCursor;
-            i++;
-        }
-        while (i < 12) {
-            Sprite* tileCursor = SPR_addSpriteSafe(&tile_cursor_b_r, -8, -8, TILE_ATTR(DEBUG_PALETTE, 0, false, false));
-            PAL_setPalette(DEBUG_PALETTE, tile_cursor_b_r.palette->data, DMA);
-            collisionCursors[i] = tileCursor;
-            i++;
-        }
-    #endif
 }
 
 void stateGame_release() {
@@ -278,10 +247,7 @@ void stateGame_update() {
 
     SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
         
-    #if (DEBUG_COLLISIONS)
-        SPR_setPosition(playerCursor, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
-    #endif
-    #if (SLOW_MODE)
+    #if (DEBUG_SLOW_MODE)
         if (hasSlowModeEnabled) {
             waitMs(500);
         }
@@ -313,7 +279,7 @@ void stateGame_joyHandlerAfter() {
 }
 
 void stateGame_buttonUpHold() {
-    #if (DEBUG_COLLISIONS)
+    #if (DEBUG_FREE_MOVE_MODE)
         if (player->velocity.y != FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.y -= FASTFIX32(ACCELERATION);
         } else if (player->velocity.y < FASTFIX32(-MAX_VELOCITY)) {
@@ -323,7 +289,7 @@ void stateGame_buttonUpHold() {
 }
 
 void stateGame_buttonDownHold() {
-    #if (DEBUG_COLLISIONS)
+    #if (DEBUG_FREE_MOVE_MODE)
         if (player->velocity.y != FASTFIX32(MAX_VELOCITY)) {
             player->velocity.y += FASTFIX32(ACCELERATION);
         } else if (player->velocity.y > FASTFIX32(MAX_VELOCITY)) {
@@ -333,7 +299,7 @@ void stateGame_buttonDownHold() {
 }
 
 void stateGame_buttonLeftHold() {
-    #if (!DEBUG_COLLISIONS)
+    #if (!DEBUG_FREE_MOVE_MODE)
     if (!player->inLeftObstacle) { // Без этого условия при упирании в стену и зажатии кнопки нагрузка на ЦП будет высокой
     #endif
         if (player->inLowerObstacle && player->decelerating) {
@@ -345,13 +311,13 @@ void stateGame_buttonLeftHold() {
         if (player->velocity.x < FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.x = FASTFIX32(-MAX_VELOCITY);
         }
-    #if (!DEBUG_COLLISIONS)
+    #if (!DEBUG_FREE_MOVE_MODE)
     }
     #endif
 }
 
 void stateGame_buttonRightHold() {
-    #if (!DEBUG_COLLISIONS)
+    #if (!DEBUG_FREE_MOVE_MODE)
     if (!player->inRightObstacle) { // Без этого условия при упирании в стену и зажатии кнопки нагрузка на ЦП будет высокой
     #endif
         if (player->inLowerObstacle && player->decelerating) {
@@ -363,7 +329,7 @@ void stateGame_buttonRightHold() {
         if (player->velocity.x > FASTFIX32(MAX_VELOCITY)) {
             player->velocity.x = FASTFIX32(MAX_VELOCITY);
         }
-    #if (!DEBUG_COLLISIONS)
+    #if (!DEBUG_FREE_MOVE_MODE)
     }
     #endif
 }
@@ -453,13 +419,13 @@ void stateGame_buttonStartPress() {
 }
 
 void stateGame_buttonModePress() {
-    #if (SLOW_MODE)
+    #if (DEBUG_SLOW_MODE)
         hasSlowModeEnabled = !hasSlowModeEnabled;
     #endif
 }
 
 void stateGame_buttonUpRelease() {
-    #if (DEBUG_COLLISIONS)
+    #if (DEBUG_FREE_MOVE_MODE)
         if (player->velocity.y < FASTFIX32(0)) {
             player->velocity.y = FASTFIX32(0);
         }
@@ -467,7 +433,7 @@ void stateGame_buttonUpRelease() {
 }
 
 void stateGame_buttonDownRelease() {
-    #if (DEBUG_COLLISIONS)
+    #if (DEBUG_FREE_MOVE_MODE)
         if (player->velocity.y > FASTFIX32(0)) {
             player->velocity.y = FASTFIX32(0);
         }

@@ -68,7 +68,7 @@ void player_update() {
     }
 
     // Добавляем гравитацию
-    #if (!DEBUG_COLLISIONS)
+    #if (!DEBUG_FREE_MOVE_MODE)
         if (!player->inLowerObstacle) {
             if (player->velocity.y < FASTFIX32(GRAVITY)) {
                 player->velocity.y += FASTFIX32(GRAVITY_ACCELERATION);
@@ -189,7 +189,7 @@ void player_handleCollision() {
         &player->inUpperObstacle,
         &player->inLowerObstacle);
 
-    #if (!DEBUG_COLLISIONS)
+    #if (!DEBUG_FREE_MOVE_MODE)
         bool overlapped = (player->inLeftObstacle + player->inRightObstacle + player->inUpperObstacle + player->inLowerObstacle) != 0;
         if (overlapped) {
 
@@ -227,26 +227,24 @@ void player_handleCollision() {
                     &player->inLowerObstacle);
             }
 
-            #if (!DEBUG_COLLISIONS)
-                // Останавливаем скорость по соответствующей оси при столкновении с препятствием
-                if (player->inLeftObstacle || player->inRightObstacle) {
-                    player->velocity.x = FASTFIX32(0);
-                    player->autoVelocity.x = FASTFIX32(0);
+            // Останавливаем скорость по соответствующей оси при столкновении с препятствием
+            if (player->inLeftObstacle || player->inRightObstacle) {
+                player->velocity.x = FASTFIX32(0);
+                player->autoVelocity.x = FASTFIX32(0);
+            }
+            if (player->inUpperObstacle || player->inLowerObstacle) {
+                player->velocity.y = FASTFIX32(0);
+                player->autoVelocity.y = FASTFIX32(0);
+            }
+            if (сollidedObject != NULL && player->inLowerObstacle) {
+                switch (сollidedObject->facingDirection) {
+                    case DIRECTION_RIGHT:
+                        player->autoVelocity.x = FASTFIX32(1.0);
+                        break;
+                    case DIRECTION_LEFT:
+                        player->autoVelocity.x = FASTFIX32(-1.0);
                 }
-                if (player->inUpperObstacle || player->inLowerObstacle) {
-                    player->velocity.y = FASTFIX32(0);
-                    player->autoVelocity.y = FASTFIX32(0);
-                }
-                if (сollidedObject != NULL && player->inLowerObstacle) {
-                    switch (сollidedObject->facingDirection) {
-                        case DIRECTION_RIGHT:
-                            player->autoVelocity.x = FASTFIX32(1.0);
-                            break;
-                        case DIRECTION_LEFT:
-                            player->autoVelocity.x = FASTFIX32(-1.0);
-                    }
-                }
-            #endif
+            }
         }
     #endif
 }
