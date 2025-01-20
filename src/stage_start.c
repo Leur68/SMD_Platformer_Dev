@@ -8,8 +8,6 @@ Option options[NUM_OPTIONS] = {
     { 8, 9, "Options" },
 };
 
-// Init
-
 void stateStart_init() {
     JOY_setEventHandler(&stateStart_joyHandler);
 
@@ -28,8 +26,6 @@ void stateStart_init() {
     //fadeInScreen(NORMAL_FADE);
 }
 
-// Joy
-
 void stateStart_buttonUp() {
     stateStart_setCursorIndexUp();
     stateStart_updateCursorPosition();
@@ -43,8 +39,6 @@ void stateStart_buttonDown() {
 void stateStart_buttonStart() {
     stateStart_select(cursorIndex);
 }
-
-// Process
 
 void stateStart_update() {
     

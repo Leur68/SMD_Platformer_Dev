@@ -146,7 +146,7 @@ void stateGame_onUpdateObject() {
                     case DIRECTION_LEFT:
                         currObject->facingDirection = DIRECTION_RIGHT;
                 }
-                currObject->shift = 1; // На первой итерации должно быть 1
+                currObject->shift = 1; // On the first iteration, it must be 1
             }
 
             switch (currObject->facingDirection) {
@@ -175,7 +175,7 @@ void stateGame_onUpdateObjectInViewport() {
 void stateGame_onObjectCollidesWithPlayerInViewport() {
     switch (currObject->objType) {
         case BONUS_TILE_INDEX:
-            // Удаляем объект безвозвратно и инкрементим игровой счет
+            // Permanently delete the object and increment the game score
             environment_objectDelete();
             stateGame_updateScore(score + 1);
             break;
@@ -199,7 +199,7 @@ void stateGame_init() {
 
     camera_init();
     
-    VDP_setWindowOnTop(1); // верхняя панель с информацией
+    VDP_setWindowOnTop(1); // Top panel with information
 
     VDP_setTextPlane(TEXT_PLANE);
     VDP_setTextPalette(TEXT_PALETTE);
@@ -300,7 +300,7 @@ void stateGame_buttonDownHold() {
 
 void stateGame_buttonLeftHold() {
     #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inLeftObstacle) { // Без этого условия при упирании в стену и зажатии кнопки нагрузка на ЦП будет высокой
+    if (!player->inLeftObstacle) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
     #endif
         if (player->inLowerObstacle && player->decelerating) {
             player->decelerating = false;
@@ -318,7 +318,7 @@ void stateGame_buttonLeftHold() {
 
 void stateGame_buttonRightHold() {
     #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inRightObstacle) { // Без этого условия при упирании в стену и зажатии кнопки нагрузка на ЦП будет высокой
+    if (!player->inRightObstacle) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
     #endif
         if (player->inLowerObstacle && player->decelerating) {
             player->decelerating = false;

@@ -39,7 +39,7 @@ void environment_init(u8* collisions) {
 }
 
 void environment_update() {
-    сollidedObject = NULL;
+    collidedObject = NULL;
     
     for (currObjectIndex = 0; currObjectIndex < lastLoadedObject; currObjectIndex++) {
         currObject = objects[currObjectIndex];
@@ -58,7 +58,7 @@ void environment_update() {
         }
         
         if (isCurrObjectVisible) {
-            // Если спрайт в зоне видимости, но ранее был скрыт, восстанавливаем
+            // If the sprite is within the visible area but was previously hidden, restore it
             if (currObject->visible == false) {
                 environment_initObjectSprite();
                 currObject->visible = true;
@@ -66,23 +66,23 @@ void environment_update() {
 
             environment_onUpdateObjectInViewport();
             
-            // Если произошло столкновение со спрайтом
+            // If there was a collision with the sprite
             if (hasCurrObjectCollidesWithPlayer) {
                 if (currObject->objType == M_PLATFORM_TILE_INDEX) {
-                    сollidedObject = currObject;
+                    collidedObject = currObject;
                 }
 
                 environment_onObjectCollidesWithPlayerInViewport();
             }
 
             if (changedPos) {
-                // Если объект не был удален, обновляем позицию спрайта на экране
-                if (objects[currObjectIndex] != NULL) {
+                // If the object was not deleted, update the sprite's position on the screen
+                if (objects[currObjectIndex] != NULL) { // The object might be deleted during callbacks
                     SPR_setPosition(currObject->sprite, currObject->screenPos.x, currObject->screenPos.y); 
                 }
             }
         } else {
-            // Если спрайт вышел за пределы экрана, временно удаляем его из памяти
+            // If the sprite goes out of the screen boundaries, temporarily remove it from memory
             if (currObject->visible == true) {
                 SPR_releaseSprite(currObject->sprite);
                 currObject->visible = false;

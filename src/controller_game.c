@@ -1,11 +1,9 @@
 #include "../inc/global.h"
 
-// Joy init
 void stateGame_joyInit() {
     JOY_setEventHandler(&stateGame_joyChangedHandler);
 }
 
-// Joy changed handler
 void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
     if (state & changed & BUTTON_START) {
         stateGame_buttonStartPress();
@@ -89,7 +87,6 @@ void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
     stateGame_joyHandlerAfter();
 }
 
-// Joy holding handler
 void stateGame_joyHoldingHandler() {
     u16 state = JOY_readJoypad(JOY_ALL);
 
@@ -135,7 +132,6 @@ void stateGame_joyHoldingHandler() {
     stateGame_joyHandlerAfter();
 }
 
-// Process state
 void stateGame_process() {
     stateGame_init();
 

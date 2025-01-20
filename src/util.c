@@ -9,31 +9,30 @@ void global_init() {
     }
 }
 
-// resetType это параметр главной функции игры
 void disableSoftReset(bool resetType) {
     if (!resetType)
         SYS_hardReset();
 }
 
 void fadeInImage(Image img, u16 numFrame) {
-    PAL_setColors(0, palette_black, 64, DMA);               // Устанавливаем чёрный экран
-    PAL_fadeIn(0, 63, img.palette->data, numFrame, true);   // Производим эффект FadeIn для нужной палитры
+    PAL_setColors(0, palette_black, 64, DMA);               // Set the screen to black
+    PAL_fadeIn(0, 63, img.palette->data, numFrame, true);   // Perform a fade-in effect for the desired palette
 }
 
 void fadeInPalette(const u16* pal, u16 numFrame) {
-    PAL_setColors(0, palette_black, 64, DMA);               // Устанавливаем чёрный экран
-    PAL_fadeIn(0, 63, pal, numFrame, true);                 // Производим эффект FadeIn для нужной палитры
+    PAL_setColors(0, palette_black, 64, DMA);               // Set the screen to black
+    PAL_fadeIn(0, 63, pal, numFrame, true);                 // Perform a fade-in effect for the desired palette
 }
 
 void fadeInScreen(u16 numFrame) {
-    u16 palette_full[64];                                   // Буфер для хранения содержимого CRAM
-    PAL_getColors(0, palette_full, 64);                     // Копируем в буфер содержимое CRAM (перед следующим вызовом, т.к. иначе скопировать не получится)
-    PAL_setColors(0, palette_black, 64, DMA);               // Устанавливаем чёрный экран
-    PAL_fadeIn(0, 63, palette_full, numFrame, true);        // Производим эффект FadeIn для нужной палитры
+    u16 palette_full[64];                                   // Buffer to store the contents of CRAM
+    PAL_getColors(0, palette_full, 64);                     // Copy the contents of CRAM into the buffer (this must be done before the next call, otherwise it won't be possible to copy)
+    PAL_setColors(0, palette_black, 64, DMA);               // Set the screen to black
+    PAL_fadeIn(0, 63, palette_full, numFrame, true);        // Perform a fade-in effect for the current palette
 }
 
 void fadeOutScreen(u16 numFrame) {
-    PAL_fadeOut(0, 63, numFrame, false);                    // Производим эффект FadeOut для всего экрана. async = false, чтобы не происходил преждевременный переход к следующей сцене
+    PAL_fadeOut(0, 63, numFrame, false);                    // Perform a fade-out effect for the entire screen. async = false to prevent an early transition to the next scene
 }
 
 void drawInt(s32 num, u16 x, u16 y, u16 len) {

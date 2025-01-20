@@ -1,11 +1,9 @@
 #include "../inc/global.h"
 
-// Joy init
 void stateOptions_joyInit() {
     JOY_setEventHandler(&stateOptions_joyHandler);
 }
 
-// Joy handler
 void stateOptions_joyHandler(u16 joy, u16 changed, u16 state) {
     if (state & changed & BUTTON_START) {
         stateOptions_buttonStart();
@@ -35,7 +33,6 @@ void stateOptions_joyHandler(u16 joy, u16 changed, u16 state) {
     stateOptions_joyHandlerAfter();
 }
 
-// Process stage
 void stateOptions_process() {
     stateOptions_init();
 

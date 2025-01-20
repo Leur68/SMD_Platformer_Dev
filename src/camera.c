@@ -9,13 +9,13 @@ void camera_init() {
 }
 
 void camera_update() {
-    //  Если персонаж на текущем положении камеры находится в NOT_SCROLLABLE зоне
-    //      Если следующее положение камеры выходит за NOT_SCROLLABLE зону
-    //          Перемещаем камеру на запрошенное кол-во пикселей
-    //      Если следующее положение камеры НЕ выходит за NOT_SCROLLABLE зону
-    //          Не делаем ничего
-    //  Если персонаж НЕ находится в NOT_SCROLLABLE зоне
-    //      Не делаем ничего
+    //  If the player is currently within a NOT_SCROLLABLE zone of the camera:
+    //      If the next camera position goes beyond the NOT_SCROLLABLE zone:
+    //          Move the camera by the requested number of pixels
+    //      If the next camera position does NOT go beyond the NOT_SCROLLABLE zone:
+    //          Do nothing
+    //  If the player is NOT within a NOT_SCROLLABLE zone:
+    //      Do nothing
 
     scrolled = false;
 

@@ -1,10 +1,7 @@
 #include "../inc/global.h"
 
 GameState currentState;
-
 bool paused = false;
-bool xyzButtons = false;
-
 Player* player;
 Map* map;
 Map* back;
@@ -24,7 +21,7 @@ u16 score;
 u8 lastLoadedObject = 0;
 u8 currObjectIndex = 0;
 GameObject* currObject;
-GameObject* сollidedObject;
+GameObject* collidedObject;
 void (*environment_initObject) (void);
 void (*environment_initObjectSprite) (void);
 void (*environment_onUpdateObject) (void);

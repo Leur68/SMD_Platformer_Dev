@@ -10,19 +10,19 @@
 
 #define JUMP                      5
 
-#define MAP_WIDTH_TILES           100  // Ширина карты в тайлах
-#define MAP_HEIGHT_TILES          100  // Высота карты в тайлах
-#define MAP_WIDTH                 (MAP_WIDTH_TILES * 8)  // Ширина карты в пикселях
-#define MAP_HEIGHT                (MAP_HEIGHT_TILES * 8)  // Высота карты в пикселях
+#define MAP_WIDTH_TILES           100  // Map width in tiles
+#define MAP_HEIGHT_TILES          100  // Map height in tiles
+#define MAP_WIDTH                 (MAP_WIDTH_TILES * 8)  // Map width in pixels
+#define MAP_HEIGHT                (MAP_HEIGHT_TILES * 8)  // Map height in pixels
 #define MAP_MAX_CAMERA_POS_X      (MAP_WIDTH - SCREEN_WIDTH)
 #define MAP_MAX_CAMERA_POS_Y      (MAP_HEIGHT - SCREEN_HEIGHT)
 
-#define BACK_WIDTH_TILES          50  // Ширина фона в тайлах
-#define BACK_HEIGHT_TILES         50  // Высота фона в тайлах
-#define BACK_WIDTH                (BACK_WIDTH_TILES * 8)  // Ширина фона в пикселях
-#define BACK_HEIGHT               (BACK_HEIGHT_TILES * 8)  // Высота фона в пикселях
-#define BACK_MAX_CAMERA_POS_X     (BACK_WIDTH - SCREEN_WIDTH)  // 
-#define BACK_MAX_CAMERA_POS_Y     (BACK_HEIGHT - SCREEN_HEIGHT)  // 
+#define BACK_WIDTH_TILES          50  // Background width in tiles
+#define BACK_HEIGHT_TILES         50  // Background height in tiles
+#define BACK_WIDTH                (BACK_WIDTH_TILES * 8)  // Background width in pixels
+#define BACK_HEIGHT               (BACK_HEIGHT_TILES * 8)  // Background height in pixels
+#define BACK_MAX_CAMERA_POS_X     (BACK_WIDTH - SCREEN_WIDTH)
+#define BACK_MAX_CAMERA_POS_Y     (BACK_HEIGHT - SCREEN_HEIGHT)
 
 #define PARALLAX_RATIO_X          FIX32(BACK_WIDTH - SCREEN_WIDTH) / FIX32(MAP_WIDTH - SCREEN_WIDTH)
 #define PARALLAX_RATIO_Y          FIX32(BACK_HEIGHT - SCREEN_HEIGHT) / FIX32(MAP_HEIGHT - SCREEN_HEIGHT)
