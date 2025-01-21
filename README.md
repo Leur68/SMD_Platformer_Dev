@@ -1,5 +1,9 @@
 # Sega Mega Drive 2D Platformer
 
+YouTube Video:
+
+[![Preview](https://img.youtube.com/vi/HLaj8o_44Mg/0.jpg)](https://www.youtube.com/watch?v=HLaj8o_44Mg)
+
 Представляю Вашему вниманию 2D платформер для игровой консоли Sega Mega Drive. Находится на ранней стадии разработки. Вот что уже реализовано:
 
 - Главный персонаж и управление им  
