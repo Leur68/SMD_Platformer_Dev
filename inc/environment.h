@@ -6,8 +6,7 @@
 #define M_PLATFORM_TILE_INDEX  3
 #define STAIRS_TILE_INDEX      4
 
-typedef struct
-{
+typedef struct {
     u8 objType;
     Sprite *sprite;
     AABB globalAABB;

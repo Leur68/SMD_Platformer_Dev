@@ -1,7 +1,6 @@
 #include <global.h>
 
-typedef struct
-{
+typedef struct {
     AxisLine_u16 x;
     AxisLine_u16 y;
     AxisLine_u16 tileX;

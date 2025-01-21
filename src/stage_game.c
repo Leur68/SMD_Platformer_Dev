@@ -104,15 +104,12 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
 
 GameObject *objects[GAME_MAX_OBJECTS] = {};
 
-void stateGame_tooglePause()
-{
+void stateGame_tooglePause() {
     paused = !paused;
 }
 
-void stateGame_initObject()
-{
-    switch (currObject->objType)
-    {
+void stateGame_initObject() {
+    switch (currObject->objType) {
     case BONUS_TILE_INDEX:
 
         break;
@@ -122,10 +119,8 @@ void stateGame_initObject()
     }
 }
 
-void stateGame_initObjectSprite()
-{
-    switch (currObject->objType)
-    {
+void stateGame_initObjectSprite() {
+    switch (currObject->objType) {
     case BONUS_TILE_INDEX:
         currObject->sprite = SPR_addSpriteSafe(&smth_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(PLAYER_PALETTE, 0, false, false));
         break;
@@ -134,22 +129,16 @@ void stateGame_initObjectSprite()
     }
 }
 
-void stateGame_onUpdateObject()
-{
-    switch (currObject->objType)
-    {
+void stateGame_onUpdateObject() {
+    switch (currObject->objType) {
     case BONUS_TILE_INDEX:
 
         break;
     case M_PLATFORM_TILE_INDEX:
-        if (currObject->shift < 96)
-        {
+        if (currObject->shift < 96) {
             currObject->shift++;
-        }
-        else
-        {
-            switch (currObject->facingDirection)
-            {
+        } else {
+            switch (currObject->facingDirection) {
             case DIRECTION_RIGHT:
                 currObject->facingDirection = DIRECTION_LEFT;
                 break;
@@ -159,8 +148,7 @@ void stateGame_onUpdateObject()
             currObject->shift = 1; // On the first iteration, it must be 1
         }
 
-        switch (currObject->facingDirection)
-        {
+        switch (currObject->facingDirection) {
         case DIRECTION_RIGHT:
             currObject->globalAABB.x.min++;
             currObject->globalAABB.x.max++;
@@ -172,10 +160,8 @@ void stateGame_onUpdateObject()
     }
 }
 
-void stateGame_onUpdateObjectInViewport()
-{
-    switch (currObject->objType)
-    {
+void stateGame_onUpdateObjectInViewport() {
+    switch (currObject->objType) {
     case BONUS_TILE_INDEX:
 
         break;
@@ -185,10 +171,8 @@ void stateGame_onUpdateObjectInViewport()
     }
 }
 
-void stateGame_onObjectCollidesWithPlayerInViewport()
-{
-    switch (currObject->objType)
-    {
+void stateGame_onObjectCollidesWithPlayerInViewport() {
+    switch (currObject->objType) {
     case BONUS_TILE_INDEX:
         // Permanently delete the object and increment the game score
         environment_objectDelete();
@@ -198,8 +182,7 @@ void stateGame_onObjectCollidesWithPlayerInViewport()
     }
 }
 
-void stateGame_init()
-{
+void stateGame_init() {
     mapH = MAP_HEIGHT;
     mapW = MAP_WIDTH;
     mapHTiles = MAP_HEIGHT_TILES;
@@ -249,12 +232,10 @@ void stateGame_init()
     stateGame_updateScore(0);
 }
 
-void stateGame_release()
-{
+void stateGame_release() {
 }
 
-void stateGame_update()
-{
+void stateGame_update() {
     environment_update();
 
     player_update();
@@ -264,8 +245,7 @@ void stateGame_update()
     SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
 
 #if (DEBUG_SLOW_MODE)
-    if (hasSlowModeEnabled)
-    {
+    if (hasSlowModeEnabled) {
         waitMs(500);
     }
 #endif
@@ -277,10 +257,8 @@ void stateGame_update()
 #endif
 }
 
-void stateGame_updateScore(u16 newScore)
-{
-    if (newScore != score)
-    {
+void stateGame_updateScore(u16 newScore) {
+    if (newScore != score) {
         score = newScore;
 
         char numStr[2];
@@ -289,58 +267,43 @@ void stateGame_updateScore(u16 newScore)
     }
 }
 
-void stateGame_joyHandlerBefore()
-{
+void stateGame_joyHandlerBefore() {
 }
 
-void stateGame_joyHandlerAfter()
-{
+void stateGame_joyHandlerAfter() {
 }
 
-void stateGame_buttonUpHold()
-{
+void stateGame_buttonUpHold() {
 #if (DEBUG_FREE_MOVE_MODE)
-    if (player->velocity.y != FASTFIX32(-MAX_VELOCITY))
-    {
+    if (player->velocity.y != FASTFIX32(-MAX_VELOCITY)) {
         player->velocity.y -= FASTFIX32(ACCELERATION);
-    }
-    else if (player->velocity.y < FASTFIX32(-MAX_VELOCITY))
-    {
+    } else if (player->velocity.y < FASTFIX32(-MAX_VELOCITY)) {
         player->velocity.y = FASTFIX32(-MAX_VELOCITY);
     }
 #endif
 }
 
-void stateGame_buttonDownHold()
-{
+void stateGame_buttonDownHold() {
 #if (DEBUG_FREE_MOVE_MODE)
-    if (player->velocity.y != FASTFIX32(MAX_VELOCITY))
-    {
+    if (player->velocity.y != FASTFIX32(MAX_VELOCITY)) {
         player->velocity.y += FASTFIX32(ACCELERATION);
-    }
-    else if (player->velocity.y > FASTFIX32(MAX_VELOCITY))
-    {
+    } else if (player->velocity.y > FASTFIX32(MAX_VELOCITY)) {
         player->velocity.y = FASTFIX32(MAX_VELOCITY);
     }
 #endif
 }
 
-void stateGame_buttonLeftHold()
-{
+void stateGame_buttonLeftHold() {
 #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inLeftObstacle)
-    { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
+    if (!player->inLeftObstacle) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
-        if (player->inLowerObstacle && player->decelerating)
-        {
+        if (player->inLowerObstacle && player->decelerating) {
             player->decelerating = false;
         }
-        if (player->velocity.x != FASTFIX32(-MAX_VELOCITY))
-        {
+        if (player->velocity.x != FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.x -= FASTFIX32(ACCELERATION);
         }
-        if (player->velocity.x < FASTFIX32(-MAX_VELOCITY))
-        {
+        if (player->velocity.x < FASTFIX32(-MAX_VELOCITY)) {
             player->velocity.x = FASTFIX32(-MAX_VELOCITY);
         }
 #if (!DEBUG_FREE_MOVE_MODE)
@@ -348,22 +311,17 @@ void stateGame_buttonLeftHold()
 #endif
 }
 
-void stateGame_buttonRightHold()
-{
+void stateGame_buttonRightHold() {
 #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inRightObstacle)
-    { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
+    if (!player->inRightObstacle) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
-        if (player->inLowerObstacle && player->decelerating)
-        {
+        if (player->inLowerObstacle && player->decelerating) {
             player->decelerating = false;
         }
-        if (player->velocity.x != FASTFIX32(MAX_VELOCITY))
-        {
+        if (player->velocity.x != FASTFIX32(MAX_VELOCITY)) {
             player->velocity.x += FASTFIX32(ACCELERATION);
         }
-        if (player->velocity.x > FASTFIX32(MAX_VELOCITY))
-        {
+        if (player->velocity.x > FASTFIX32(MAX_VELOCITY)) {
             player->velocity.x = FASTFIX32(MAX_VELOCITY);
         }
 #if (!DEBUG_FREE_MOVE_MODE)
@@ -371,181 +329,136 @@ void stateGame_buttonRightHold()
 #endif
 }
 
-void stateGame_buttonXHold()
-{
+void stateGame_buttonXHold() {
 }
 
-void stateGame_buttonYHold()
-{
+void stateGame_buttonYHold() {
 }
 
-void stateGame_buttonZHold()
-{
-    if (!player->isMoving)
-    {
+void stateGame_buttonZHold() {
+    if (!player->isMoving) {
         camera_mustScrollByX(-1);
     }
 }
 
-void stateGame_buttonAHold()
-{
+void stateGame_buttonAHold() {
 }
 
-void stateGame_buttonBHold()
-{
+void stateGame_buttonBHold() {
 }
 
-void stateGame_buttonCHold()
-{
-    if (!player->isMoving)
-    {
+void stateGame_buttonCHold() {
+    if (!player->isMoving) {
         camera_mustScrollByX(1);
     }
 }
 
-void stateGame_buttonStartHold()
-{
+void stateGame_buttonStartHold() {
 }
 
-void stateGame_buttonModeHold()
-{
+void stateGame_buttonModeHold() {
 }
 
-void stateGame_buttonUpPress()
-{
+void stateGame_buttonUpPress() {
 }
 
-void stateGame_buttonDownPress()
-{
+void stateGame_buttonDownPress() {
 }
 
-void stateGame_buttonLeftPress()
-{
+void stateGame_buttonLeftPress() {
 }
 
-void stateGame_buttonRightPress()
-{
+void stateGame_buttonRightPress() {
 }
 
-void stateGame_buttonXPress()
-{
+void stateGame_buttonXPress() {
 }
 
-void stateGame_buttonYPress()
-{
+void stateGame_buttonYPress() {
 }
 
-void stateGame_buttonZPress()
-{
+void stateGame_buttonZPress() {
 }
 
-void stateGame_buttonAPress()
-{
+void stateGame_buttonAPress() {
 }
 
-void stateGame_buttonBPress()
-{
-    if (player->inLowerObstacle || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME))
-    {
+void stateGame_buttonBPress() {
+    if (player->inLowerObstacle || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
         player->velocity.y = FASTFIX32(-JUMP);
         player->inLowerObstacle = 0;
     }
 }
 
-void stateGame_buttonCPress()
-{
+void stateGame_buttonCPress() {
 }
 
-void stateGame_buttonStartPress()
-{
+void stateGame_buttonStartPress() {
     stateGame_tooglePause();
 }
 
-void stateGame_buttonModePress()
-{
+void stateGame_buttonModePress() {
 #if (DEBUG_SLOW_MODE)
     hasSlowModeEnabled = !hasSlowModeEnabled;
 #endif
 }
 
-void stateGame_buttonUpRelease()
-{
+void stateGame_buttonUpRelease() {
 #if (DEBUG_FREE_MOVE_MODE)
-    if (player->velocity.y < FASTFIX32(0))
-    {
+    if (player->velocity.y < FASTFIX32(0)) {
         player->velocity.y = FASTFIX32(0);
     }
 #endif
 }
 
-void stateGame_buttonDownRelease()
-{
+void stateGame_buttonDownRelease() {
 #if (DEBUG_FREE_MOVE_MODE)
-    if (player->velocity.y > FASTFIX32(0))
-    {
+    if (player->velocity.y > FASTFIX32(0)) {
         player->velocity.y = FASTFIX32(0);
     }
 #endif
 }
 
-void stateGame_buttonLeftRelease()
-{
-    if (player->inLowerObstacle)
-    {
+void stateGame_buttonLeftRelease() {
+    if (player->inLowerObstacle) {
         player->decelerating = true;
-    }
-    else
-    {
-        if (player->velocity.x < FASTFIX32(0))
-        {
+    } else {
+        if (player->velocity.x < FASTFIX32(0)) {
             player->velocity.x = FASTFIX32(0);
         }
     }
 }
 
-void stateGame_buttonRightRelease()
-{
-    if (player->inLowerObstacle)
-    {
+void stateGame_buttonRightRelease() {
+    if (player->inLowerObstacle) {
         player->decelerating = true;
-    }
-    else
-    {
-        if (player->velocity.x > FASTFIX32(0))
-        {
+    } else {
+        if (player->velocity.x > FASTFIX32(0)) {
             player->velocity.x = FASTFIX32(0);
         }
     }
 }
 
-void stateGame_buttonXRelease()
-{
+void stateGame_buttonXRelease() {
 }
 
-void stateGame_buttonYRelease()
-{
+void stateGame_buttonYRelease() {
 }
 
-void stateGame_buttonZRelease()
-{
+void stateGame_buttonZRelease() {
 }
 
-void stateGame_buttonARelease()
-{
+void stateGame_buttonARelease() {
 }
 
-void stateGame_buttonBRelease()
-{
+void stateGame_buttonBRelease() {
 }
 
-void stateGame_buttonCRelease()
-{
+void stateGame_buttonCRelease() {
 }
 
-void stateGame_buttonStartRelease()
-{
+void stateGame_buttonStartRelease() {
 }
 
-void stateGame_buttonModeRelease()
-{
+void stateGame_buttonModeRelease() {
 }

@@ -12,8 +12,7 @@
 #define MAX_COYOTE_TIME           10 // Maximum number of frames after leaving the ground during which the player can still jump
 #define MAX_JUMP_TIME             30 // Maximum number of frames before landing during which the player can prepare to jump
 
-typedef struct
-{
+typedef struct {
     Sprite *sprite;           // Player's sprite
     AABB globalAABB;          // Player's global axis-aligned bounding box for collision detection
     Vect2D_u16 screenPos;     // Player's position on the screen in pixels

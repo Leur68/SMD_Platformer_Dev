@@ -4,15 +4,13 @@
 bool hasSlowModeEnabled = false;
 #endif
 
-void debug_print()
-{
+void debug_print() {
     static bool debugInited = false;
     static u16 len = 4;
     u16 i = 0;
     u16 x;
 
-    if (!debugInited)
-    {
+    if (!debugInited) {
         VDP_setWindowHPos(true, 16);
 
         x = 32;
@@ -113,8 +111,7 @@ void debug_print()
 #endif
 }
 
-void kdebug_print()
-{
+void kdebug_print() {
     static char str[500];
     static char tmp[16];
     str[0] = '\n';
@@ -127,9 +124,8 @@ void kdebug_print()
 
     char *s;
 
-#define mystrcat()      \
-    while (*p++ = *s++) \
-        ;               \
+#define mystrcat()        \
+    while (*p++ = *s++);  \
     --p;
 
 #define concU(t, v)       \

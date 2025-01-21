@@ -45,8 +45,7 @@
 
 #include "../res/resources.h"
 
-typedef enum
-{
+typedef enum {
     STATE_INTRO,   // A series of intros shown when the game starts
     STATE_START,   // Game start and settings screen
     STATE_GAME,    // Gameplay state

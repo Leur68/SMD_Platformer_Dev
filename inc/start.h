@@ -1,8 +1,7 @@
 #include <global.h>
 
 #define NUM_OPTIONS 2
-typedef struct
-{
+typedef struct {
     u16 x;
     u16 y;
     char label[30];
