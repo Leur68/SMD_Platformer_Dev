@@ -21,7 +21,7 @@
 #define DEBUG_FREE_MOVE_MODE               0 // Disable gravity, collisions, enable free movement
 
 #if (DEBUG_SLOW_MODE)
-    extern bool hasSlowModeEnabled;
+extern bool hasSlowModeEnabled;
 #endif
 
 void debug_print();

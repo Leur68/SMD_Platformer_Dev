@@ -1,6 +1,7 @@
 #include "../inc/global.h"
 
-void camera_init() {
+void camera_init()
+{
     cameraPosition.x = 0;
     cameraPosition.y = MAP_MAX_CAMERA_POS_Y;
 
@@ -8,7 +9,8 @@ void camera_init() {
     backPosition.y = BACK_MAX_CAMERA_POS_Y;
 }
 
-void camera_update() {
+void camera_update()
+{
     //  If the player is currently within a NOT_SCROLLABLE zone of the camera:
     //      If the next camera position goes beyond the NOT_SCROLLABLE zone:
     //          Move the camera by the requested number of pixels
@@ -19,15 +21,21 @@ void camera_update() {
 
     scrolled = false;
 
-    if (hasPlayerMovedByX) {
-        if (currScreenPosInScrollableX) {
-            if (nextScreenPosInNotScrollableX) {
+    if (hasPlayerMovedByX)
+    {
+        if (currScreenPosInScrollableX)
+        {
+            if (nextScreenPosInNotScrollableX)
+            {
                 scrolled = true;
 
                 s16 posTemp = cameraPosition.x + player->movedPixels.x;
-                if (posTemp < 0) {
+                if (posTemp < 0)
+                {
                     posTemp = 0;
-                } else if (posTemp > mapMaxCameraPosX) {
+                }
+                else if (posTemp > mapMaxCameraPosX)
+                {
                     posTemp = mapMaxCameraPosX;
                 }
                 cameraPosition.x = posTemp;
@@ -36,16 +44,22 @@ void camera_update() {
             }
         }
     }
-    
-    if (hasPlayerMovedByY) {
-        if (currScreenPosInScrollableY) {
-            if (nextScreenPosInNotScrollableY) {
+
+    if (hasPlayerMovedByY)
+    {
+        if (currScreenPosInScrollableY)
+        {
+            if (nextScreenPosInNotScrollableY)
+            {
                 scrolled = true;
 
                 s16 posTemp = cameraPosition.y + player->movedPixels.y;
-                if (posTemp < 0) {
+                if (posTemp < 0)
+                {
                     posTemp = 0;
-                } else if (posTemp > mapMaxCameraPosY) {
+                }
+                else if (posTemp > mapMaxCameraPosY)
+                {
                     posTemp = mapMaxCameraPosY;
                 }
                 cameraPosition.y = posTemp;
@@ -55,17 +69,22 @@ void camera_update() {
         }
     }
 
-    if (scrolled) {
+    if (scrolled)
+    {
         MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
         MAP_scrollTo(back, backPosition.x, backPosition.y);
     }
 }
 
-void camera_mustScrollByX(s16 v) {
+void camera_mustScrollByX(s16 v)
+{
     s16 posTemp = cameraPosition.x + v;
-    if (posTemp < 0) {
+    if (posTemp < 0)
+    {
         posTemp = 0;
-    } else if (posTemp > mapMaxCameraPosX) {
+    }
+    else if (posTemp > mapMaxCameraPosX)
+    {
         posTemp = mapMaxCameraPosX;
     }
     cameraPosition.x = posTemp;
@@ -75,11 +94,15 @@ void camera_mustScrollByX(s16 v) {
     MAP_scrollTo(back, backPosition.x, backPosition.y);
 }
 
-void camera_mustScrollByY(s16 v) {
+void camera_mustScrollByY(s16 v)
+{
     s16 posTemp = cameraPosition.y + v;
-    if (posTemp < 0) {
+    if (posTemp < 0)
+    {
         posTemp = 0;
-    } else if (posTemp > mapMaxCameraPosY) {
+    }
+    else if (posTemp > mapMaxCameraPosY)
+    {
         posTemp = mapMaxCameraPosY;
     }
     cameraPosition.y = posTemp;

@@ -10,7 +10,7 @@
 void global_init();
 void disableSoftReset(bool resetType);
 void fadeInImage(Image img, u16 numFrame);
-void fadeInPalette(const u16 * pal, u16 numFrame);
+void fadeInPalette(const u16 *pal, u16 numFrame);
 void fadeInScreen(u16 numFrame);
 void fadeOutScreen(u16 numFrame);
 void drawInt(s32 num, u16 x, u16 y, u16 len);

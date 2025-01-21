@@ -6,7 +6,8 @@
 #define M_PLATFORM_TILE_INDEX  3
 #define STAIRS_TILE_INDEX      4
 
-typedef struct {
+typedef struct
+{
     u8 objType;
     Sprite *sprite;
     AABB globalAABB;
@@ -20,6 +21,6 @@ typedef struct {
 #define hasCurrObjectCollidesWithPlayer aabb_intersects(player->globalAABB, currObject->globalAABB)
 
 GameObject *allocGameObject();
-void environment_init(u8* collisions);
+void environment_init(u8 *collisions);
 void environment_update();
 void environment_objectDelete();

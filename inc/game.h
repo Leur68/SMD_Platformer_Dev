@@ -1,6 +1,5 @@
 #include <global.h>
 
-
 #define MAX_VELOCITY              3.5
 #define ACCELERATION              0.125
 #define DECELERATION              0.125

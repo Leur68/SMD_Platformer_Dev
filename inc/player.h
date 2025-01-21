@@ -12,33 +12,34 @@
 #define MAX_COYOTE_TIME           10 // Maximum number of frames after leaving the ground during which the player can still jump
 #define MAX_JUMP_TIME             30 // Maximum number of frames before landing during which the player can prepare to jump
 
-typedef struct {
-    Sprite *sprite; // Player's sprite
-    AABB globalAABB; // Player's global axis-aligned bounding box for collision detection
-    Vect2D_u16 screenPos; // Player's position on the screen in pixels
-    Vect2D_ff32 posBuffer; // Position buffer used for movement calculations with subpixel precision
-    Vect2D_ff32 velocity;  // Movement velocity, used to control the player's position
-    Vect2D_ff32 autoVelocity;  // Automated movement velocity, used for specific behaviors or scripts
-    u8 facingDirection; // Direction the player is facing
-    Vect2D_s16 movedPixels; // Number of pixels the player has moved in the current frame
+typedef struct
+{
+    Sprite *sprite;           // Player's sprite
+    AABB globalAABB;          // Player's global axis-aligned bounding box for collision detection
+    Vect2D_u16 screenPos;     // Player's position on the screen in pixels
+    Vect2D_ff32 posBuffer;    // Position buffer used for movement calculations with subpixel precision
+    Vect2D_ff32 velocity;     // Movement velocity, used to control the player's position
+    Vect2D_ff32 autoVelocity; // Automated movement velocity, used for specific behaviors or scripts
+    u8 facingDirection;       // Direction the player is facing
+    Vect2D_s16 movedPixels;   // Number of pixels the player has moved in the current frame
 
-    bool isJumping; // Indicates if the player is jumping
-    bool isFalling; // Indicates if the player is falling
-    bool isMoving; // Indicates if the player is moving (manual movement)
+    bool isJumping;    // Indicates if the player is jumping
+    bool isFalling;    // Indicates if the player is falling
+    bool isMoving;     // Indicates if the player is moving (manual movement)
     bool isAutoMoving; // Indicates if the player is moving automatically (scripted or forced movement)
     bool decelerating; // Indicates if the player is decelerating (slowing down)
 
-    u8 inLeftObstacle; // Indicates if the player is colliding with an obstacle on the left
+    u8 inLeftObstacle;  // Indicates if the player is colliding with an obstacle on the left
     u8 inRightObstacle; // Indicates if the player is colliding with an obstacle on the right
     u8 inUpperObstacle; // Indicates if the player is colliding with an obstacle above
     u8 inLowerObstacle; // Indicates if the player is colliding with an obstacle below
 
     u8 coyoteTimer; // Timer for the "coyote time" mechanic (frames left to jump after leaving the ground)
-    u8 jumpTimer; // Timer for the jump mechanic (tracks frames spent in the air during a jump)
+    u8 jumpTimer;   // Timer for the jump mechanic (tracks frames spent in the air during a jump)
 } Player;
 
-#define hasPlayerMovedByX (player->movedPixels.x != 0) // Checks if the player has moved along the X-axis
-#define hasPlayerMovedByY (player->movedPixels.y != 0) // Checks if the player has moved along the Y-axis
+#define hasPlayerMovedByX (player->movedPixels.x != 0)          // Checks if the player has moved along the X-axis
+#define hasPlayerMovedByY (player->movedPixels.y != 0)          // Checks if the player has moved along the Y-axis
 #define hasPlayerMoved (hasPlayerMovedByX || hasPlayerMovedByY) // Checks if the player has moved in any direction
 
 /**
