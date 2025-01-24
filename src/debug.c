@@ -146,6 +146,26 @@ void kdebug_print() {
     s = "\n";            \
     mystrcat();
 
+#define concff32(t, v)   \
+    s = t;               \
+    mystrcat();          \
+    if (v < FASTFIX32(0)) { \
+        s = "-";             \
+        mystrcat();          \
+        intToStr(fastFix32ToInt(-v), tmp, 1); \
+    } else { \
+        intToStr(fastFix32ToInt(v), tmp, 1); \
+    } \
+    s = tmp;             \
+    mystrcat();          \
+    s = ".";             \
+    mystrcat();          \
+    intToStr(((fastFix32Frac(v) * 1000) / 65536), tmp, 1); \
+    s = tmp;             \
+    mystrcat();          \
+    s = "\n";            \
+    mystrcat();
+
 #define conc_() \
     s = "\n";   \
     mystrcat();
@@ -158,8 +178,8 @@ void kdebug_print() {
     concU("xy  ", player->screenPos.y)
     conc_()
 
-    concU("vxb ", player->velocity.x != FASTFIX32(0))
-    concU("vyb ", player->velocity.y != FASTFIX32(0))
+    concff32("vx ", player->velocity.x)
+    concff32("vy ", player->velocity.y)
     concS("mpX ", player->movedPixels.x)
     concS("mpY ", player->movedPixels.y)
     conc_()
