@@ -5,29 +5,29 @@ void stateOptions_joyInit() {
 }
 
 void stateOptions_joyHandler(u16 joy, u16 changed, u16 state) {
-    if (state & changed & BUTTON_START) {
+    if (changed & state & BUTTON_START) {
         stateOptions_buttonStart();
     }
     stateOptions_joyHandlerBefore();
-    if (state & changed & BUTTON_UP) {
+    if (changed & state & BUTTON_UP) {
         stateOptions_buttonUp();
     }
-    if (state & changed & BUTTON_DOWN) {
+    if (changed & state & BUTTON_DOWN) {
         stateOptions_buttonDown();
     }
-    if (state & changed & BUTTON_LEFT) {
+    if (changed & state & BUTTON_LEFT) {
         stateOptions_buttonLeft();
     }
-    if (state & changed & BUTTON_RIGHT) {
+    if (changed & state & BUTTON_RIGHT) {
         stateOptions_buttonRight();
     }
-    if (state & changed & BUTTON_A) {
+    if (changed & state & BUTTON_A) {
         stateOptions_buttonA();
     }
-    if (state & changed & BUTTON_B) {
+    if (changed & state & BUTTON_B) {
         stateOptions_buttonB();
     }
-    if (state & changed & BUTTON_C) {
+    if (changed & state & BUTTON_C) {
         stateOptions_buttonC();
     }
     stateOptions_joyHandlerAfter();
