@@ -17,7 +17,10 @@ void camera_update() {
     //  If the player is NOT within a NOT_SCROLLABLE zone:
     //      Do nothing
 
-    scrolled = false;
+    // Initialize the initial screenPos so that, combined with movedPixels,
+    // this allows camera_update() to make the correct scrolling decision.
+    player->screenPos.x = SPR_getPositionX(player->sprite);
+    player->screenPos.y = SPR_getPositionY(player->sprite);
 
     if (hasPlayerMovedByX) {
         if (currScreenPosInScrollableX) {
@@ -59,6 +62,8 @@ void camera_update() {
         MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
         MAP_scrollTo(back, backPosition.x, backPosition.y);
     }
+
+    SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
 }
 
 void camera_mustScrollByX(s16 v) {

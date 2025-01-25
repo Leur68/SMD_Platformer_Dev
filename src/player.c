@@ -36,13 +36,6 @@ void player_init(u16 startX, u16 startY) {
 }
 
 void player_update() {
-    // Initialize the initial screenPos (before collision calculations) so that, combined with movedPixels,
-    // this allows camera_update() to make the correct scrolling decision.
-    // In player_update(), screenPos should not be updated (after collision and player position calculations),
-    // as this is the responsibility of the camera.
-    player->screenPos.x = SPR_getPositionX(player->sprite);
-    player->screenPos.y = SPR_getPositionY(player->sprite);
-
     // Handle deceleration when movement keys are released
     if (player->decelerating) {
         if (player->inLowerObstacle) {

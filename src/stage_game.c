@@ -236,13 +236,12 @@ void stateGame_release() {
 }
 
 void stateGame_update() {
-    environment_update();
 
     player_update();
 
     camera_update();
-
-    SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
+    
+    environment_update();
 
 #if (DEBUG_SLOW_MODE)
     if (hasSlowModeEnabled) {
@@ -268,6 +267,7 @@ void stateGame_updateScore(u16 newScore) {
 }
 
 void stateGame_joyHandlerBefore() {
+    scrolled = false;
 }
 
 void stateGame_joyHandlerAfter() {
