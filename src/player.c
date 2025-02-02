@@ -161,9 +161,7 @@ void player_move() {
 
     environment_updateObjects(); // Update objects for subsequent proper collision calculations with the character
 
-    //if (hasPlayerMoved || collidedObject != NULL) {
-        player_handleCollisions();
-    //}
+    player_handleCollisions();
 }
 
 void player_calculateSubpixelMovement() {

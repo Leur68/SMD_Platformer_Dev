@@ -43,7 +43,7 @@ void stateStart_update() {
 }
 
 void stateStart_release() {
-    MEM_free(cursor);
+    SPR_releaseSprite(cursor);
     cursor = NULL;
 }
 
