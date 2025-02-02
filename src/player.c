@@ -159,7 +159,7 @@ void player_move() {
 
     // Handle collisions
 
-    environment_updateObjects(); // Обновляем объекты для дальнейшего правильного расчета коллизий персонажа с ними
+    environment_updateObjects(); // Update objects for subsequent proper collision calculations with the character
 
     //if (hasPlayerMoved || collidedObject != NULL) {
         player_handleCollisions();
