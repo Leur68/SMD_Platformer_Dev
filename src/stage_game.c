@@ -236,12 +236,9 @@ void stateGame_release() {
 }
 
 void stateGame_update() {
-
     player_update();
 
     camera_update();
-    
-    environment_update();
 
 #if (DEBUG_SLOW_MODE)
     if (hasSlowModeEnabled) {
@@ -336,7 +333,7 @@ void stateGame_buttonYHold() {
 }
 
 void stateGame_buttonZHold() {
-    if (!player->isMoving) {
+    if (player->velocity.x == FASTFIX32(0)) {
         camera_mustScrollByX(-1);
     }
 }
@@ -348,7 +345,7 @@ void stateGame_buttonBHold() {
 }
 
 void stateGame_buttonCHold() {
-    if (!player->isMoving) {
+    if (player->velocity.x == FASTFIX32(0)) {
         camera_mustScrollByX(1);
     }
 }

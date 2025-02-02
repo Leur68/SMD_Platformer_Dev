@@ -1,20 +1,24 @@
 #pragma once
 #include <genesis.h>
 
-#define SCREEN_WIDTH           320
-#define SCREEN_HEIGHT          224
-#define SCREEN_WIDTH_TILES     (SCREEN_WIDTH  / 8)  // 40
-#define SCREEN_HEIGHT_TILES    (SCREEN_HEIGHT / 8)  // 28
+#define SCREEN_WIDTH            320
+#define SCREEN_HEIGHT           224
+#define SCREEN_WIDTH_TILES      (SCREEN_WIDTH  / 8)  // 40
+#define SCREEN_HEIGHT_TILES     (SCREEN_HEIGHT / 8)  // 28
 
-#define DIRECTION_NONE         0b00000000  // 0
-#define DIRECTION_LEFT         0b00000001  // 1
-#define DIRECTION_RIGHT        0b00000010  // 2
-#define DIRECTION_UP           0b00000100  // 4
-#define DIRECTION_DOWN         0b00001000  // 8
-#define DIRECTION_LEFT_UP      (DIRECTION_LEFT | DIRECTION_UP)    // 0b00000101 = 5
-#define DIRECTION_LEFT_DOWN    (DIRECTION_LEFT | DIRECTION_DOWN)  // 0b00001001 = 9
-#define DIRECTION_RIGHT_UP     (DIRECTION_RIGHT | DIRECTION_UP)   // 0b00000110 = 6
-#define DIRECTION_RIGHT_DOWN   (DIRECTION_RIGHT | DIRECTION_DOWN) // 0b00001010 = 10
+#define DIRECTION_NONE          0b00000000  // 0
+#define DIRECTION_LEFT          0b00000001  // 1
+#define DIRECTION_RIGHT         0b00000010  // 2
+#define DIRECTION_UP            0b00000100  // 4
+#define DIRECTION_DOWN          0b00001000  // 8
+#define DIRECTION_LEFT_UP       (DIRECTION_LEFT | DIRECTION_UP)    // 0b00000101 = 5
+#define DIRECTION_LEFT_DOWN     (DIRECTION_LEFT | DIRECTION_DOWN)  // 0b00001001 = 9
+#define DIRECTION_RIGHT_UP      (DIRECTION_RIGHT | DIRECTION_UP)   // 0b00000110 = 6
+#define DIRECTION_RIGHT_DOWN    (DIRECTION_RIGHT | DIRECTION_DOWN) // 0b00001010 = 10
+#define IS_ON_LEFT(direction)   (direction & (1 << 0))
+#define IS_ON_RIGHT(direction)  (direction & (1 << 1))
+#define IS_ON_TOP(direction)    (direction & (1 << 2))
+#define IS_ON_BOTTOM(direction) (direction & (1 << 3))
 
 // Palettes
 #define TEXT_PALETTE           PAL0

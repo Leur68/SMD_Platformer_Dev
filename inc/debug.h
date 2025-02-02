@@ -10,10 +10,10 @@
 #define DEBUG_WINDOW_PLAYER_MOVE           0 // Display player movement data in the debug window
 #define DEBUG_WINDOW_PLAYER_OBSTACLES      0 // Display player collision information in the debug window
 #define DEBUG_WINDOW_PLAYER_CAMERA         0 // Display camera data in the debug window
-#define DEBUG_WINDOW_PLAYER_BOOLS          1 // Display player boolean flags in the debug window
-#define DEBUG_WINDOW_PLAYER_INTS           1 // Display player integer variables in the debug window
+#define DEBUG_WINDOW_PLAYER_BOOLS          0 // Display player boolean flags in the debug window
+#define DEBUG_WINDOW_PLAYER_INTS           0 // Display player integer variables in the debug window
 
-#define DEBUG_KDEBUG                       1 // Debug information output in the console (KDebug)
+#define DEBUG_KDEBUG                       0 // Debug information output in the console (KDebug)
 
 #define DEBUG_INTERRUPT                    1 // On error, execution stops and an error description is printed (needs to be manually implemented for each debugged fragment)
 #define DEBUG_DISABLE_INTROS               1 // Disable all states except the game state

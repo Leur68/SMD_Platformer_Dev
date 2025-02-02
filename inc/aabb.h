@@ -15,3 +15,4 @@ AABB aabb_getRightAABB(AABB aabb);
 void aabb_updateTiles(AABB *aabb);
 void aabb_shift(AABB *aabb, Vect2D_s16 shift);
 void aabb_set(AABB *aabb, Vect2D_u16 pos);
+u8 aabb_getRelativePosition(AABB aabb1, AABB aabb2);

@@ -15,7 +15,6 @@
 typedef struct {
     Sprite *sprite;           // Player's sprite
     AABB globalAABB;          // Player's global axis-aligned bounding box for collision detection
-    Vect2D_u16 screenPos;     // Player's position on the screen in pixels
     Vect2D_ff32 posBuffer;    // Position buffer used for movement calculations with subpixel precision
     Vect2D_ff32 velocity;     // Movement velocity, used to control the player's position
     Vect2D_ff32 autoVelocity; // Automated movement velocity, used for specific behaviors or scripts
@@ -24,14 +23,13 @@ typedef struct {
 
     bool isJumping;    // Indicates if the player is jumping
     bool isFalling;    // Indicates if the player is falling
-    bool isMoving;     // Indicates if the player is moving (manual movement)
-    bool isAutoMoving; // Indicates if the player is moving automatically (scripted or forced movement)
     bool decelerating; // Indicates if the player is decelerating (slowing down)
 
     u8 inLeftObstacle;  // Indicates if the player is colliding with an obstacle on the left
     u8 inRightObstacle; // Indicates if the player is colliding with an obstacle on the right
     u8 inUpperObstacle; // Indicates if the player is colliding with an obstacle above
     u8 inLowerObstacle; // Indicates if the player is colliding with an obstacle below
+    bool groundCollision; // Indicates if the player is colliding with a ground layer (collision map)
 
     u8 coyoteTimer; // Timer for the "coyote time" mechanic (frames left to jump after leaving the ground)
     u8 jumpTimer;   // Timer for the jump mechanic (tracks frames spent in the air during a jump)
@@ -75,3 +73,8 @@ void player_handleCollisions();
  * and updates their "movedPixels" accordingly.
  */
 void player_calculateSubpixelMovement();
+
+/**
+ * Updates the player's sprite position on the screen.
+ */
+void player_updateSprite();

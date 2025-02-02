@@ -51,8 +51,8 @@ bool collision_checkMapArea(AABB aabb, AABB *result) {
     return exists;
 }
 
-void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *bottom) {
-    *left = *right = *top = *bottom = 0;
+void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *bottom, bool *ground) {
+    *left = *right = *top = *bottom = *ground = 0;
 
     // Get the AABB for collision checking, then filter out only the solid tiles on the map.
     // These tiles are those that are directly adjacent to or inside the corresponding sides of the player's AABB.
@@ -60,8 +60,6 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
     AABB aabbTop;
     AABB aabbRight;
     AABB aabbBottom;
-    u8 h;
-    u8 v;
 
     switch (direction) {
     // Moving left only
@@ -71,28 +69,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
 
         if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
             *left = aabbLeft.x.max - aabb.x.min + 1;
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && collidedObject->globalAABB.x.max < aabb.x.max) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (v > h) {
-                // If the collision occurs along the player's movement direction,
-                // the collision is determined along the player's axis of movement.
-                *left = h;
-            } else if (h > v) {
-                // If the collision occurs perpendicular to the player's movement direction,
-                // the collision is determined along the axis of the object causing the collision.
-                switch (collidedObject->facingDirection) {
-                case DIRECTION_UP:
-                    *bottom = h;
-                    break;
-                case DIRECTION_DOWN:
-                    *top = h;
-                    break;
-                }
-            }
+            *ground = true;
         }
         break;
     // Moving right only
@@ -101,28 +78,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         // Check collisions in the collision map
         if (collision_checkMapArea(aabbRight, &aabbRight)) {
             *right = aabb.x.max - aabbRight.x.min + 1;
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && collidedObject->globalAABB.x.min > aabb.x.min) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (v > h) {
-                // If the collision occurs along the player's movement direction,
-                // the collision is determined along the player's axis of movement.
-                *right = h;
-            } else if (h > v) {
-                // If the collision occurs perpendicular to the player's movement direction,
-                // the collision is determined along the axis of the object causing the collision.
-                switch (collidedObject->facingDirection) {
-                case DIRECTION_UP:
-                    *bottom = h;
-                    break;
-                case DIRECTION_DOWN:
-                    *top = h;
-                    break;
-                }
-            }
+            *ground = true;
         }
         break;
     // Moving up only
@@ -131,28 +87,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         // Check collisions in the collision map
         if (collision_checkMapArea(aabbTop, &aabbTop)) {
             *top = aabbTop.y.max - aabb.y.min + 1;
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && collidedObject->globalAABB.y.max < aabb.y.max) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (h > v) {
-                // If the collision occurs along the player's movement direction,
-                // the collision is determined along the player's axis of movement.
-                *top = v;
-            } else if (v > h) {
-                // If the collision occurs perpendicular to the player's movement direction,
-                // the collision is determined along the axis of the object causing the collision.
-                switch (collidedObject->facingDirection) {
-                case DIRECTION_LEFT:
-                    *right = h;
-                    break;
-                case DIRECTION_RIGHT:
-                    *left = h;
-                    break;
-                }
-            }
+            *ground = true;
         }
         break;
     // Moving down only
@@ -161,28 +96,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         // Check collisions in the collision map
         if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
             *bottom = aabb.y.max - aabbBottom.y.min + 1;
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && collidedObject->globalAABB.y.min > aabb.y.min) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (h > v) {
-                // If the collision occurs along the player's movement direction,
-                // the collision is determined along the player's axis of movement.
-                *bottom = v;
-            } else if (v > h) {
-                // If the collision occurs perpendicular to the player's movement direction,
-                // the collision is determined along the axis of the object causing the collision.
-                switch (collidedObject->facingDirection) {
-                case DIRECTION_LEFT:
-                    *right = h;
-                    break;
-                case DIRECTION_RIGHT:
-                    *left = h;
-                    break;
-                }
-            }
+            *ground = true;
         }
         break;
     // Moving up-left
@@ -192,8 +106,8 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         aabbTop = aabb_getTopAABB(aabb);
 
         if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
-            u8 h = collision_getIntersectionLen(aabbLeft.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbLeft.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbLeft.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbLeft.y, aabb.y) + 1;
 
             if (v > h) {
                 *left = h;
@@ -201,10 +115,11 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *left = h;
                 *top = v;
             }
+            *ground = true;
         }
         if (collision_checkMapArea(aabbTop, &aabbTop)) {
-            u8 h = collision_getIntersectionLen(aabbTop.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbTop.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbTop.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbTop.y, aabb.y) + 1;
 
             if (h > v) {
                 *top = v;
@@ -212,20 +127,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *left = h;
                 *top = v;
             }
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && (collidedObject->globalAABB.x.max < aabb.x.max || collidedObject->globalAABB.y.max < aabb.y.max)) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (v > h) {
-                *left = h;
-            } else if (h > v) {
-                *top = v;
-            } else if (v == h) {
-                *left = h;
-                *top = v;
-            }
+            *ground = true;
         }
         break;
     // Moving up-right
@@ -235,8 +137,8 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         aabbTop = aabb_getTopAABB(aabb);
 
         if (collision_checkMapArea(aabbRight, &aabbRight)) {
-            u8 h = collision_getIntersectionLen(aabbRight.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbRight.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbRight.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbRight.y, aabb.y) + 1;
 
             if (v > h) {
                 *right = h;
@@ -244,10 +146,11 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *right = h;
                 *top = v;
             }
+            *ground = true;
         }
         if (collision_checkMapArea(aabbTop, &aabbTop)) {
-            u8 h = collision_getIntersectionLen(aabbTop.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbTop.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbTop.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbTop.y, aabb.y) + 1;
 
             if (h > v) {
                 *top = v;
@@ -255,20 +158,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *right = h;
                 *top = v;
             }
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && (collidedObject->globalAABB.x.min > aabb.x.min || collidedObject->globalAABB.y.max < aabb.y.max)) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (v > h) {
-                *right = h;
-            } else if (h > v) {
-                *top = v;
-            } else if (v == h) {
-                *right = h;
-                *top = v;
-            }
+            *ground = true;
         }
         break;
     // Moving down-left
@@ -278,8 +168,8 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         aabbBottom = aabb_getBottomAABB(aabb);
 
         if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
-            u8 h = collision_getIntersectionLen(aabbLeft.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbLeft.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbLeft.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbLeft.y, aabb.y) + 1;
 
             if (v > h) {
                 *left = h;
@@ -287,10 +177,11 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *left = h;
                 *bottom = v;
             }
+            *ground = true;
         }
         if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
-            u8 h = collision_getIntersectionLen(aabbBottom.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbBottom.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbBottom.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbBottom.y, aabb.y) + 1;
 
             if (h > v) {
                 *bottom = v;
@@ -298,20 +189,7 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *left = h;
                 *bottom = v;
             }
-        }
-        // Check collisions with objects
-        if (collidedObject != NULL && (collidedObject->globalAABB.x.max < aabb.x.max || collidedObject->globalAABB.y.min > aabb.y.min)) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
-
-            if (v > h) {
-                *left = h;
-            } else if (h > v) {
-                *bottom = v;
-            } else if (v == h) {
-                *left = h;
-                *bottom = v;
-            }
+            *ground = true;
         }
         break;
     // Moving down-right
@@ -321,8 +199,8 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
         aabbBottom = aabb_getBottomAABB(aabb);
 
         if (collision_checkMapArea(aabbRight, &aabbRight)) {
-            u8 h = collision_getIntersectionLen(aabbRight.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbRight.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbRight.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbRight.y, aabb.y) + 1;
 
             if (v > h) {
                 *right = h;
@@ -330,10 +208,11 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *right = h;
                 *bottom = v;
             }
+            *ground = true;
         }
         if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
-            u8 h = collision_getIntersectionLen(aabbBottom.x, aabb.x) + 1;
-            u8 v = collision_getIntersectionLen(aabbBottom.y, aabb.y) + 1;
+            s16 h = collision_getIntersectionLen(aabbBottom.x, aabb.x) + 1;
+            s16 v = collision_getIntersectionLen(aabbBottom.y, aabb.y) + 1;
 
             if (h > v) {
                 *bottom = v;
@@ -341,28 +220,53 @@ void collision_check(AABB aabb, u8 direction, u8 *left, u8 *right, u8 *top, u8 *
                 *right = h;
                 *bottom = v;
             }
+            *ground = true;
         }
-        // Check collisions with objects
-        if (collidedObject != NULL && (collidedObject->globalAABB.x.min > aabb.x.min || collidedObject->globalAABB.y.min > aabb.y.min)) {
-            h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
-            v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
+    }
 
-            if (v > h) {
+    // Check collisions with objects
+    if (collidedObject != NULL) {
+
+        s16 h = collision_getIntersectionLen(collidedObject->globalAABB.x, aabb.x) + 1;
+        s16 v = collision_getIntersectionLen(collidedObject->globalAABB.y, aabb.y) + 1;
+        u8 relativeDirection = aabb_getRelativePosition(aabb, collidedObject->globalAABB);   
+
+        if (v > h) { 
+            if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
+                *left = h;
+            } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
                 *right = h;
-            } else if (h > v) {
+            }
+        } else if (h > v) {
+            if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
+                *top = v;
+            } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
                 *bottom = v;
-            } else if (v == h) {
-                *right = h;
-                *bottom = v;
+            }
+        } else if (v == h) {
+            // We take into account the character's movement direction so that after the shift, v does not equal h.
+
+            if (player->velocity.x > player->velocity.y || player->autoVelocity.x > player->autoVelocity.y) {
+                if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
+                    *left = h;
+                } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
+                    *right = h;
+                }
+            } else if (player->velocity.y > player->velocity.x || player->autoVelocity.y > player->autoVelocity.x) {
+                if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
+                    *top = v;
+                } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
+                    *bottom = v;
+                }
             }
         }
     }
 }
 
-u8 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b) {
+s16 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b) {
     u16 start = a.min > b.min ? a.min : b.min; // The larger of the two minimum values
     u16 end = a.max < b.max ? a.max : b.max;   // The smaller of the two maximum values
 
-    u8 len = end - start;     // Calculate the length of the intersection
+    s16 len = end - start;     // Calculate the length of the intersection
     return len > 0 ? len : 0; // If the intersection length is negative, there is no intersection
 }

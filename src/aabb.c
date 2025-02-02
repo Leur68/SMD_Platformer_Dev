@@ -110,3 +110,42 @@ void aabb_updateTiles(AABB *aabb) {
     aabb->tileY.min = aabb->y.min >> 3;
     aabb->tileY.max = aabb->y.max >> 3;
 }
+
+u8 aabb_getRelativePosition(AABB aabb1, AABB aabb2) {
+    f32 centerAX = fix32Div(FIX32(aabb1.x.min + aabb1.x.max), FIX32(2));
+    f32 centerAY = fix32Div(FIX32(aabb1.y.min + aabb1.y.max), FIX32(2));
+
+    f32 centerBX = fix32Div(FIX32(aabb2.x.min + aabb2.x.max), FIX32(2));
+    f32 centerBY = fix32Div(FIX32(aabb2.y.min + aabb2.y.max), FIX32(2));
+
+    // Calculate the offsets
+    f32 dx = centerBX - centerAX; // The position of the second AABB relative to the first along the X axis
+    f32 dy = centerBY - centerAY; // The position of the second AABB relative to the first along the Y axis
+
+    // Determine the direction based on dx and dy
+    if (dy < FIX32(0)) { // The second AABB is above
+        if (dx > FIX32(0)) {
+            return DIRECTION_RIGHT_UP; // Top-right
+        } else if (dx < FIX32(0)) {
+            return DIRECTION_LEFT_UP; // Top-left
+        } else {
+            return DIRECTION_UP; // Directly above
+        }
+    } else if (dy > FIX32(0)) { // The second AABB is below
+        if (dx > FIX32(0)) {
+            return DIRECTION_RIGHT_DOWN; // Bottom-right
+        } else if (dx < FIX32(0)) {
+            return DIRECTION_LEFT_DOWN; // Bottom-left
+        } else {
+            return DIRECTION_DOWN; // Directly below
+        }
+    } else { // dy == 0, on the same horizontal line
+        if (dx > FIX32(0)) {
+            return DIRECTION_RIGHT; // Directly to the right
+        } else if (dx < FIX32(0)) {
+            return DIRECTION_LEFT; // Directly to the left
+        }
+    }
+
+    return DIRECTION_NONE; // Undefined state (should not happen)
+}

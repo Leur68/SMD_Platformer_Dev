@@ -71,8 +71,6 @@ void debug_print() {
     drawInt(player->globalAABB.x.max, x, i++, len);
     drawInt(player->globalAABB.y.min, x, i++, len);
     drawInt(player->globalAABB.y.max, x, i++, len);
-    drawInt(player->screenPos.x, x, i++, len);
-    drawInt(player->screenPos.y, x, i++, len);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_MOVE)
@@ -92,8 +90,6 @@ void debug_print() {
 #if (DEBUG_WINDOW_PLAYER_BOOLS)
     drawInt(player->isJumping, x, i++, len);
     drawInt(player->isFalling, x, i++, len);
-    drawInt(player->isMoving, x, i++, len);
-    drawInt(player->isAutoMoving, x, i++, len);
     drawInt(player->decelerating, x, i++, len);
 #endif
 
@@ -170,43 +166,54 @@ void kdebug_print() {
     s = "\n";   \
     mystrcat();
 
-    concU("x1  ", player->globalAABB.x.min)
-    concU("x2  ", player->globalAABB.x.max)
-    concU("y1  ", player->globalAABB.y.min)
-    concU("y2  ", player->globalAABB.y.max)
-    concU("sx  ", player->screenPos.x)
-    concU("xy  ", player->screenPos.y)
+    concU("x  ", player->globalAABB.x.min)
+    concU("xm  ", player->globalAABB.x.max)
+    concU("y  ", player->globalAABB.y.min)
+    concU("ym  ", player->globalAABB.y.max)
+
+    if (collidedObject != NULL) {
+        concU("ox  ", collidedObject->globalAABB.x.min)
+        concU("oxm  ", collidedObject->globalAABB.x.max)
+        concU("oy  ", collidedObject->globalAABB.y.min)
+        concU("oym  ", collidedObject->globalAABB.y.max)
+    } else {
+        concU("ox  ", 0)
+        concU("oxm  ", 0)
+        concU("oy  ", 0)
+        concU("oym  ", 0)
+    }
     conc_()
 
     concff32("vx ", player->velocity.x)
     concff32("vy ", player->velocity.y)
-    concS("mpX ", player->movedPixels.x)
-    concS("mpY ", player->movedPixels.y)
+    concff32("avx ", player->autoVelocity.x)
+    concff32("avy ", player->autoVelocity.y)
+    concS("mX ", player->movedPixels.x)
+    concS("mY ", player->movedPixels.y)
     conc_()
 
-    concU("u   ", player->inUpperObstacle)
-    concU("g   ", player->inLowerObstacle)
-    concU("l   ", player->inLeftObstacle)
-    concU("r   ", player->inRightObstacle)
+    concU("t ", player->inUpperObstacle)
+    concU("b ", player->inLowerObstacle)
+    concU("l ", player->inLeftObstacle)
+    concU("r ", player->inRightObstacle)
+    concU("g ", player->groundCollision)
     conc_()
 
-    concU("ju  ", player->isJumping)
-    concU("fa  ", player->isFalling)
-    concU("mo  ", player->isMoving)
-    concU("amo ", player->isAutoMoving)
-    concU("de  ", player->decelerating)
+    concU("j ", player->isJumping)
+    concU("f ", player->isFalling)
+    concU("de ", player->decelerating)
     conc_()
 
-    concU("cot ", player->coyoteTimer)
-    concU("jut ", player->jumpTimer)
-    concU("fd  ", player->facingDirection)
-    concU("s   ", scrolled)
+    concU("c ", player->coyoteTimer)
+    concU("jt ", player->jumpTimer)
+    concU("d ", player->facingDirection)
+    concU("s ", scrolled)
     conc_()
 
-    concU("cx  ", cameraPosition.x)
-    concU("cy  ", cameraPosition.y)
-    concU("bx  ", backPosition.x)
-    concU("by  ", backPosition.y)
+    concU("cx ", cameraPosition.x)
+    concU("cy ", cameraPosition.y)
+    concU("bx ", backPosition.x)
+    concU("by ", backPosition.y)
 
     KDebug_Alert(str);
 }
