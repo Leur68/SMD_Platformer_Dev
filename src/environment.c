@@ -9,14 +9,14 @@ void environment_init(u8 *collisions) {
 
     for (u16 x = 0; x < mapWTiles; x++) {
         for (u16 y = 0; y < mapHTiles; y++) {
-            u8 objType = mapPointerGet(collisionsMap, x, y);
-            if (objType > 1) {
+            u8 tileIndex = mapPointerGet(collisionsMap, x, y);
+            if (tileIndex == BONUS_TILE_INDEX || tileIndex == M_PLATFORM_TILE_INDEX) {
                 currObject = allocGameObject();
 
                 u16 globalPosX = (x << 3);
                 u16 globalPosY = (y << 3);
 
-                currObject->objType = objType;
+                currObject->objType = tileIndex;
                 currObject->visible = true;
                 currObject->globalAABB.x.min = globalPosX;
                 currObject->globalAABB.y.min = globalPosY;

@@ -125,8 +125,7 @@ void player_update() {
     // Update animations based on the player's state
     if (!player->inLowerObstacle) {
         SPR_setAnim(player->sprite, ANIM_STAND);
-    } else if (player->inLowerObstacle) {
-
+    } else {
         if (player->velocity.x != FASTFIX32(0)) {
 
             // void playerFrameChanged(Sprite* sprite) {
