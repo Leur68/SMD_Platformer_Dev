@@ -177,6 +177,7 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
         // Permanently delete the object and increment the game score
         environment_objectDelete();
         stateGame_updateScore(score + 1);
+        hud_setHP(hp - 1);
         break;
     case M_PLATFORM_TILE_INDEX:
     }
@@ -230,6 +231,8 @@ void stateGame_init() {
     VDP_drawText("Score: ", 10, 0);
 
     stateGame_updateScore(0);
+
+    hud_init();
 }
 
 void stateGame_release() {

@@ -46,6 +46,7 @@
 
 #include "player.h"
 #include "camera.h"
+#include "hud.h"
 
 #include "../res/resources.h"
 
@@ -85,3 +86,4 @@ extern void (*environment_initObjectSprite)(void);                     // Pointe
 extern void (*environment_onUpdateObject)(void);                       // Pointer to the function that updates an object (currObject) in the current frame
 extern void (*environment_onUpdateObjectInViewport)(void);             // Pointer to the function that updates an object (currObject) in the current frame within the viewport
 extern void (*environment_onObjectCollidesWithPlayerInViewport)(void); // Pointer to the function that handles collisions between the player and an object (currObject) in the current frame within the viewport
+extern u16 hp;

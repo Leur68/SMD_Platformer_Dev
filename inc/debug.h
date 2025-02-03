@@ -16,7 +16,7 @@
 #define DEBUG_KDEBUG                       0 // Debug information output in the console (KDebug)
 
 #define DEBUG_INTERRUPT                    1 // On error, execution stops and an error description is printed (needs to be manually implemented for each debugged fragment)
-#define DEBUG_DISABLE_INTROS               0 // Disable all states except the game state
+#define DEBUG_DISABLE_INTROS               1 // Disable all states except the game state
 #define DEBUG_SLOW_MODE                    1 // Enable slow-motion mode. When the mode button is pressed, the game slows down significantly
 #define DEBUG_FREE_MOVE_MODE               0 // Disable gravity, collisions, enable free movement
 

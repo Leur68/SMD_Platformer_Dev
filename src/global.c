@@ -27,3 +27,4 @@ void (*environment_initObjectSprite)(void);
 void (*environment_onUpdateObject)(void);
 void (*environment_onUpdateObjectInViewport)(void);
 void (*environment_onObjectCollidesWithPlayerInViewport)(void);
+u16 hp;
