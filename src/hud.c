@@ -34,7 +34,7 @@ void hud_updateSprites() {
             }
         } else {
             if (currSprite == NULL) {
-                currSprite = SPR_addSpriteSafe(&heart_sprite, ((29 * 8) + (i * 16)), 8, TILE_ATTR(PLAYER_PALETTE, 0, false, false));
+                currSprite = SPR_addSpriteSafe(&heart_sprite, ((29 * 8) + (i * 16)), 0, TILE_ATTR(PLAYER_PALETTE, 0, false, false));
                 sprites[i] = currSprite;
             }
             SPR_setAnim(currSprite, currHp - 1);
@@ -43,8 +43,8 @@ void hud_updateSprites() {
     }
 }
 
-void hud_setHP(u8 val) {
-    if (val == hp) {
+void hud_setHP(s16 val) {
+    if (val == hp || val < 0) {
         return;
     }
     hp = val;

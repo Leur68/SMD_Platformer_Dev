@@ -44,8 +44,8 @@ void stateGame_initObjectSprite();
 void stateGame_onUpdateObject();
 void stateGame_onUpdateObjectInViewport();
 void stateGame_onObjectCollidesWithPlayerInViewport();
+void stateGame_onTileCollidesWithPlayerInViewport();
 
-void stateGame_scroll();
 void stateGame_tooglePause();
 
 void stateGame_joyHandlerBefore();

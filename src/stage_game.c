@@ -97,10 +97,10 @@ u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     {1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
 GameObject *objects[GAME_MAX_OBJECTS] = {};
 
@@ -177,9 +177,14 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
         // Permanently delete the object and increment the game score
         environment_objectDelete();
         stateGame_updateScore(score + 1);
-        hud_setHP(hp - 1);
         break;
     case M_PLATFORM_TILE_INDEX:
+    }
+}
+
+void stateGame_onTileCollidesWithPlayerInViewport() {
+    if (HAS_TILE_COLLISION(player->collider, WATER_TILE_INDEX)) {
+        hud_setHP(hp - 1);
     }
 }
 
@@ -223,6 +228,7 @@ void stateGame_init() {
     environment_onUpdateObject = stateGame_onUpdateObject;
     environment_onUpdateObjectInViewport = stateGame_onUpdateObjectInViewport;
     environment_onObjectCollidesWithPlayerInViewport = stateGame_onObjectCollidesWithPlayerInViewport;
+    environment_onTileCollidesWithPlayerInViewport = stateGame_onTileCollidesWithPlayerInViewport;
 
     environment_init(collisions1);
 
@@ -295,9 +301,11 @@ void stateGame_buttonDownHold() {
 
 void stateGame_buttonLeftHold() {
 #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inLeftObstacle) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
+    u8 left = GET_LEFT_COLLISION(player->collider);
+    if (!left) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
-        if (player->inLowerObstacle && player->decelerating) {
+        u8 bottom = GET_BOTTOM_COLLISION(player->collider);
+        if (bottom && player->decelerating) {
             player->decelerating = false;
         }
         if (player->velocity.x != FASTFIX32(-MAX_VELOCITY)) {
@@ -313,9 +321,11 @@ void stateGame_buttonLeftHold() {
 
 void stateGame_buttonRightHold() {
 #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inRightObstacle) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
+    u8 right = GET_RIGHT_COLLISION(player->collider);
+    if (!right) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
-        if (player->inLowerObstacle && player->decelerating) {
+        u8 bottom = GET_RIGHT_COLLISION(player->collider);
+        if (bottom && player->decelerating) {
             player->decelerating = false;
         }
         if (player->velocity.x != FASTFIX32(MAX_VELOCITY)) {
@@ -384,9 +394,10 @@ void stateGame_buttonAPress() {
 }
 
 void stateGame_buttonBPress() {
-    if (player->inLowerObstacle || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
+    u8 bottom = GET_BOTTOM_COLLISION(player->collider);
+    if (bottom || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
         player->velocity.y = FASTFIX32(-JUMP);
-        player->inLowerObstacle = 0;
+        setThreeBitField(&player->collider->groundCollisionData, 0, BOTTOM_BIT_SHIFT);
     }
 }
 
@@ -420,7 +431,8 @@ void stateGame_buttonDownRelease() {
 }
 
 void stateGame_buttonLeftRelease() {
-    if (player->inLowerObstacle) {
+    u8 bottom = GET_BOTTOM_COLLISION(player->collider);
+    if (bottom) {
         player->decelerating = true;
     } else {
         if (player->velocity.x < FASTFIX32(0)) {
@@ -430,7 +442,8 @@ void stateGame_buttonLeftRelease() {
 }
 
 void stateGame_buttonRightRelease() {
-    if (player->inLowerObstacle) {
+    u8 bottom = GET_BOTTOM_COLLISION(player->collider);
+    if (bottom) {
         player->decelerating = true;
     } else {
         if (player->velocity.x > FASTFIX32(0)) {

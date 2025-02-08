@@ -10,34 +10,36 @@ void player_init(u16 startX, u16 startY) {
     SPR_setAlwaysOnTop(player->sprite);
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
 
+    player->collider = (Collider *)MEM_alloc(sizeof(Collider));
+
     // Position
-    aabb_set(&player->globalAABB, (Vect2D_u16){startX, startY + mapMaxCameraPosY});
-    player->posBuffer = (Vect2D_ff32){intToFastFix32(player->globalAABB.x.min), intToFastFix32(player->globalAABB.y.min)};
+    aabb_set(&player->collider->globalAABB, (Vect2D_u16){startX, startY + mapMaxCameraPosY});
+    player->posBuffer = (Vect2D_ff32){intToFastFix32(player->collider->globalAABB.x.min), intToFastFix32(player->collider->globalAABB.y.min)};
 
     // Movement
     player->velocity = (Vect2D_ff32){FASTFIX32(0), FASTFIX32(0)};
     player->autoVelocity = (Vect2D_ff32){FASTFIX32(0), FASTFIX32(0)};
     player->movedPixels = (Vect2D_s16){0, 0};
 
-    player->facingDirection = DIRECTION_NONE;
+    player->collider->facingDirection = DIRECTION_NONE;
     player->coyoteTimer = 0;
     player->isJumping = false;
     player->isFalling = false;
     player->decelerating = false;
 
     // Collisions
-    player->inUpperObstacle = false;
-    player->inLowerObstacle = false;
-    player->inLeftObstacle = false;
-    player->inRightObstacle = false;
+    player->collider->groundCollisionData = 0;
+    player->collider->tileCollisionFlags = 0;
 }
 
 void player_update() {
     // Update properties before moving
 
+    u8 bottom = GET_BOTTOM_COLLISION(player->collider);
+
     // Handle deceleration when movement keys are released
     if (player->decelerating) {
-        if (player->inLowerObstacle) {
+        if (bottom) {
             if (player->velocity.x < FASTFIX32(0)) { // left
                 player->velocity.x += FASTFIX32(DECELERATION);
                 if (player->velocity.x > FASTFIX32(0)) {
@@ -61,7 +63,7 @@ void player_update() {
 
 // Add gravity
 #if (!DEBUG_FREE_MOVE_MODE)
-    if (!player->inLowerObstacle) {
+    if (!bottom) {
         if (player->velocity.y < FASTFIX32(GRAVITY)) {
             player->velocity.y += FASTFIX32(GRAVITY_ACCELERATION);
         }
@@ -72,58 +74,60 @@ void player_update() {
 #endif
 
     // Update facing direction
-    player->facingDirection = DIRECTION_NONE;
+    player->collider->facingDirection = DIRECTION_NONE;
 
     if (player->velocity.x < FASTFIX32(0)) {
 
-        player->facingDirection |= DIRECTION_LEFT;
+        player->collider->facingDirection |= DIRECTION_LEFT;
         SPR_setHFlip(player->sprite, false); // Update sprite's horizontal orientation
 
     } else if (player->velocity.x > FASTFIX32(0)) {
 
-        player->facingDirection |= DIRECTION_RIGHT;
+        player->collider->facingDirection |= DIRECTION_RIGHT;
         SPR_setHFlip(player->sprite, true); // Update sprite's horizontal orientation
 
     }
     if (player->velocity.y < FASTFIX32(0)) {
 
-        player->facingDirection |= DIRECTION_UP;
+        player->collider->facingDirection |= DIRECTION_UP;
 
     } else if (player->velocity.y >= FASTFIX32(0)) { // falling or standing on ground
 
-        player->facingDirection |= DIRECTION_DOWN;
+        player->collider->facingDirection |= DIRECTION_DOWN;
 
     }
     
 #if (DEBUG_INTERRUPT)
-    if (player->facingDirection > 10 || player->facingDirection == 3 || player->facingDirection == 7) {
+    if (player->collider->facingDirection > 10 || player->collider->facingDirection == 3 || player->collider->facingDirection == 7) {
         char str[3];
-        intToStr(player->facingDirection, str, 3);
-        SYS_die("The value of player.facingDirection", "is not valid.", "", str, NULL);
+        intToStr(player->collider->facingDirection, str, 3);
+        SYS_die("The value of player.collider.facingDirection", "is not valid.", "", str, NULL);
     }
 #endif
 
-    u8 lastLower = player->inLowerObstacle;
+    u8 lastLower = bottom;
 
     // Handle collisions and move the player
     player_move();
 
     // Update properties after moving
 
-    if (player->inLowerObstacle && player->coyoteTimer != 0) {
+    bottom = GET_BOTTOM_COLLISION(player->collider);
+
+    if (bottom && player->coyoteTimer != 0) {
         player->coyoteTimer = 0; // Reset the timer
-    } else if (lastLower && !player->inLowerObstacle) {
+    } else if (lastLower && !bottom) {
         player->coyoteTimer = 1; // Start the timer if the player falls off the ground
     } else if (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME) { // Allow the timer to exceed the maximum by one frame
         player->coyoteTimer++;
     }
 
     // These values should be calculated here (after collision handling)
-    player->isJumping = !player->inLowerObstacle && player->velocity.y < FASTFIX32(0);
-    player->isFalling = !player->inLowerObstacle && player->velocity.y > FASTFIX32(0);
+    player->isJumping = !bottom && player->velocity.y < FASTFIX32(0);
+    player->isFalling = !bottom && player->velocity.y > FASTFIX32(0);
 
     // Update animations based on the player's state
-    if (!player->inLowerObstacle) {
+    if (!bottom) {
         SPR_setAnim(player->sprite, ANIM_STAND);
     } else {
         if (player->velocity.x != FASTFIX32(0)) {
@@ -138,6 +142,10 @@ void player_update() {
             SPR_setAnim(player->sprite, ANIM_STAND);
         }
     }
+
+    if (player->collider->tileCollisionFlags != 0) {
+        environment_onTileCollidesWithPlayerInViewport();
+    }
 }
 
 void player_move() {
@@ -149,7 +157,7 @@ void player_move() {
         player_calculateSubpixelMovement();
 
         // Update the player's coordinates
-        aabb_shift(&player->globalAABB, player->movedPixels);
+        aabb_shift(&player->collider->globalAABB, player->movedPixels);
 
     } else {
         player->movedPixels.x = 0;
@@ -183,41 +191,50 @@ void player_calculateSubpixelMovement() {
     s16 newPosX = fastFix32ToInt(fastFix32Int(player->posBuffer.x));
     s16 newPosY = fastFix32ToInt(fastFix32Int(player->posBuffer.y));
 
-    player->movedPixels.x = newPosX - player->globalAABB.x.min;
-    player->movedPixels.y = newPosY - player->globalAABB.y.min;
+    player->movedPixels.x = newPosX - player->collider->globalAABB.x.min;
+    player->movedPixels.y = newPosY - player->collider->globalAABB.y.min;
 }
 
 void player_handleCollisions() {
     player->autoVelocity.x = FASTFIX32(0);
 
-    collision_check(player->globalAABB, player->facingDirection,
-                    &player->inLeftObstacle,
-                    &player->inRightObstacle,
-                    &player->inUpperObstacle,
-                    &player->inLowerObstacle,
-                    &player->groundCollision);
+    collision_check(player->collider);
 
 #if (!DEBUG_FREE_MOVE_MODE)
-    bool overlapped = (player->inLeftObstacle + player->inRightObstacle + player->inUpperObstacle + player->inLowerObstacle) != 0;
+    bool overlapped = HAS_ANY_COLLISION(player->collider);
     if (overlapped) {
         // Check if the player is stuck in an obstacle
         // Calculate the amount of displacement along both axes
         Vect2D_s16 shift = {0, 0};
 
-        if (player->inLeftObstacle > 1) {
-            shift.x = player->inLeftObstacle - 1;
-        } else if (player->inRightObstacle > 1) {
-            shift.x = (1 - player->inRightObstacle);
+        u8 left     = GET_LEFT_COLLISION(player->collider);
+        u8 right    = GET_RIGHT_COLLISION(player->collider);
+        u8 top      = GET_TOP_COLLISION(player->collider);
+        u8 bottom   = GET_BOTTOM_COLLISION(player->collider);
+        bool ground = HAS_GROUND_COLLISION(player->collider);
+
+        if (left > 1) {
+
+            shift.x = left - 1;
+
+        } else if (right > 1) {
+
+            shift.x = (1 - right);
+
         }
-        if (player->inUpperObstacle > 1) {
-            shift.y = player->inUpperObstacle - 1;
-        } else if (player->inLowerObstacle > 1) {
-            shift.y = (1 - player->inLowerObstacle);
+        if (top > 1) {
+
+            shift.y = top - 1;
+
+        } else if (bottom > 1) {
+
+            shift.y = (1 - bottom);
+
         }
         // Push the player out of the obstacle if stuck (this happens only at speeds greater than 1)
         if (shift.x != 0 || shift.y != 0) {
             // Push out
-            aabb_shift(&player->globalAABB, shift);
+            aabb_shift(&player->collider->globalAABB, shift);
 
             // Adjust variables
             player->posBuffer.x += FASTFIX32(shift.x);
@@ -227,23 +244,24 @@ void player_handleCollisions() {
 
             // Recalculate collisions
 
-            collision_check(player->globalAABB, player->facingDirection,
-                            &player->inLeftObstacle,
-                            &player->inRightObstacle,
-                            &player->inUpperObstacle,
-                            &player->inLowerObstacle,
-                            &player->groundCollision);
+            collision_check(player->collider);
+
+            left   = GET_LEFT_COLLISION(player->collider);
+            right  = GET_RIGHT_COLLISION(player->collider);
+            top    = GET_TOP_COLLISION(player->collider);
+            bottom = GET_BOTTOM_COLLISION(player->collider);
+            ground = HAS_GROUND_COLLISION(player->collider);
         }
 
         // Stop velocity on the corresponding axis when colliding with an obstacle
-        if (player->inLeftObstacle) {
+        if (left) {
             if (player->velocity.x < FASTFIX32(0)) {
                 player->velocity.x = FASTFIX32(0);
             }
             if (player->autoVelocity.x < FASTFIX32(0)) {
                 player->autoVelocity.x = FASTFIX32(0);
             }
-        } else if (player->inRightObstacle) {
+        } else if (right) {
             if (player->velocity.x > FASTFIX32(0)) {
                 player->velocity.x = FASTFIX32(0);
             }
@@ -251,14 +269,14 @@ void player_handleCollisions() {
                 player->autoVelocity.x = FASTFIX32(0);
             }
         }
-        if (player->inUpperObstacle) {
+        if (top) {
             if (player->velocity.y < FASTFIX32(0)) {
                 player->velocity.y = FASTFIX32(0);
             }
             if (player->autoVelocity.y < FASTFIX32(0)) {
                 player->autoVelocity.y = FASTFIX32(0);
             }
-        } else if (player->inLowerObstacle) {
+        } else if (bottom) {
             if (player->velocity.y > FASTFIX32(0)) {
                 player->velocity.y = FASTFIX32(0);
             }
@@ -267,7 +285,7 @@ void player_handleCollisions() {
             }
         }
         
-        if (collidedObject != NULL && player->inLowerObstacle && !player->groundCollision) {
+        if (collidedObject != NULL && bottom && !ground) {
             switch (collidedObject->facingDirection) {
             case DIRECTION_RIGHT:
                 player->autoVelocity.x = FASTFIX32(1.0);
@@ -281,5 +299,5 @@ void player_handleCollisions() {
 }
 
 void player_updateSprite() {
-    SPR_setPosition(player->sprite, player->globalAABB.x.min - cameraPosition.x, player->globalAABB.y.min - cameraPosition.y);
+    SPR_setPosition(player->sprite, player->collider->globalAABB.x.min - cameraPosition.x, player->collider->globalAABB.y.min - cameraPosition.y);
 }

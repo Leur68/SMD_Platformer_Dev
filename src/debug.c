@@ -20,8 +20,6 @@ void debug_print() {
         VDP_drawText("x2", x, i++);
         VDP_drawText("y1", x, i++);
         VDP_drawText("y2", x, i++);
-        VDP_drawText("sx", x, i++);
-        VDP_drawText("xy", x, i++);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_MOVE)
@@ -32,17 +30,15 @@ void debug_print() {
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_OBSTACLES)
-        VDP_drawText("u", x, i++);
-        VDP_drawText("g", x, i++);
         VDP_drawText("l", x, i++);
         VDP_drawText("r", x, i++);
+        VDP_drawText("t", x, i++);
+        VDP_drawText("b", x, i++);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_BOOLS)
         VDP_drawText("j", x, i++);
         VDP_drawText("f", x, i++);
-        VDP_drawText("m", x, i++);
-        VDP_drawText("am", x, i++);
         VDP_drawText("d", x, i++);
 #endif
 
@@ -67,10 +63,10 @@ void debug_print() {
     x = 36;
 
 #if (DEBUG_WINDOW_PLAYER_POS)
-    drawInt(player->globalAABB.x.min, x, i++, len);
-    drawInt(player->globalAABB.x.max, x, i++, len);
-    drawInt(player->globalAABB.y.min, x, i++, len);
-    drawInt(player->globalAABB.y.max, x, i++, len);
+    drawInt(player->collider->globalAABB.x.min, x, i++, len);
+    drawInt(player->collider->globalAABB.x.max, x, i++, len);
+    drawInt(player->collider->globalAABB.y.min, x, i++, len);
+    drawInt(player->collider->globalAABB.y.max, x, i++, len);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_MOVE)
@@ -81,10 +77,10 @@ void debug_print() {
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_OBSTACLES)
-    drawInt(player->inUpperObstacle, x, i++, len);
-    drawInt(player->inLowerObstacle, x, i++, len);
-    drawInt(player->inLeftObstacle, x, i++, len);
-    drawInt(player->inRightObstacle, x, i++, len);
+    drawInt(GET_LEFT_COLLISION(player->collider), x, i++, len);
+    drawInt(GET_RIGHT_COLLISION(player->collider), x, i++, len);
+    drawInt(GET_TOP_COLLISION(player->collider), x, i++, len);
+    drawInt(GET_BOTTOM_COLLISION(player->collider), x, i++, len);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_BOOLS)
@@ -96,7 +92,7 @@ void debug_print() {
 #if (DEBUG_WINDOW_PLAYER_INTS)
     drawInt(player->coyoteTimer, x, i++, len);
     drawInt(player->jumpTimer, x, i++, len);
-    drawInt(player->facingDirection, x, i++, len);
+    drawInt(player->collider->facingDirection, x, i++, len);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_CAMERA)
@@ -108,6 +104,13 @@ void debug_print() {
 }
 
 void kdebug_print() {
+    u8 left     = GET_LEFT_COLLISION(player->collider);
+    u8 right    = GET_RIGHT_COLLISION(player->collider);
+    u8 top      = GET_TOP_COLLISION(player->collider);
+    u8 bottom   = GET_BOTTOM_COLLISION(player->collider);
+    bool ground = HAS_GROUND_COLLISION(player->collider);
+    bool anyCollision = HAS_ANY_COLLISION(player->collider);
+
     static char str[500];
     static char tmp[16];
     str[0] = '\n';
@@ -166,16 +169,16 @@ void kdebug_print() {
     s = "\n";   \
     mystrcat();
 
-    concU("x  ", player->globalAABB.x.min)
-    concU("xm  ", player->globalAABB.x.max)
-    concU("y  ", player->globalAABB.y.min)
-    concU("ym  ", player->globalAABB.y.max)
+    concU("x  ", player->collider->globalAABB.x.min)
+    concU("xm  ", player->collider->globalAABB.x.max)
+    concU("y  ", player->collider->globalAABB.y.min)
+    concU("ym  ", player->collider->globalAABB.y.max)
 
     if (collidedObject != NULL) {
-        concU("ox  ", collidedObject->globalAABB.x.min)
-        concU("oxm  ", collidedObject->globalAABB.x.max)
-        concU("oy  ", collidedObject->globalAABB.y.min)
-        concU("oym  ", collidedObject->globalAABB.y.max)
+        concU("ox  ", (collidedObject->globalAABB.x.min))
+        concU("oxm  ", (collidedObject->globalAABB.x.max))
+        concU("oy  ", (collidedObject->globalAABB.y.min))
+        concU("oym  ", (collidedObject->globalAABB.y.max))
     } else {
         concU("ox  ", 0)
         concU("oxm  ", 0)
@@ -192,11 +195,12 @@ void kdebug_print() {
     concS("mY ", player->movedPixels.y)
     conc_()
 
-    concU("t ", player->inUpperObstacle)
-    concU("b ", player->inLowerObstacle)
-    concU("l ", player->inLeftObstacle)
-    concU("r ", player->inRightObstacle)
-    concU("g ", player->groundCollision)
+    concU("l ", left)
+    concU("r ", right)
+    concU("t ", top)
+    concU("b ", bottom)
+    concU("g ", ground)
+    concU("a ", anyCollision)
     conc_()
 
     concU("j ", player->isJumping)
@@ -206,7 +210,7 @@ void kdebug_print() {
 
     concU("c ", player->coyoteTimer)
     concU("jt ", player->jumpTimer)
-    concU("d ", player->facingDirection)
+    concU("d ", player->collider->facingDirection)
     concU("s ", scrolled)
     conc_()
 

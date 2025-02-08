@@ -46,3 +46,22 @@ void drawFix(f32 num, u16 x, u16 y, u16 len) {
     fix32ToStr(num, result, 1);
     VDP_drawTextFill(result, x, y, len);
 }
+// Mask for 3 bits: 0b111, or 7 in decimal representation
+u16 mask = 0x7;
+
+void setThreeBitField(u16 *num, u8 value, u8 bitShift) {
+    // Clear 3 bits in the specified field while keeping the other bits unchanged
+    *num &= ~(mask << bitShift);
+    // Write the value into this field, taking only the lowest 3 bits of value
+    *num |= ((value & mask) << bitShift);
+}
+
+void setBit(u16 *num, u8 value, u8 bitPosition) {
+    if (value) {
+        // Set the bit: perform bitwise OR with a mask where only the target bit is 1.
+        *num |= (1 << bitPosition);
+    } else {
+        // Clear the bit: perform bitwise AND with the negation of the mask.
+        *num &= ~(1 << value);
+    }
+}
