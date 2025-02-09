@@ -67,6 +67,11 @@ void stateGame_buttonCHold();
 void stateGame_buttonStartHold();
 void stateGame_buttonModeHold();
 
+void stateGame_buttonZplusLeftHold();
+void stateGame_buttonZplusRightHold();
+void stateGame_buttonZplusUpHold();
+void stateGame_buttonZplusDownHold();
+
 void stateGame_buttonUpPress();
 void stateGame_buttonDownPress();
 void stateGame_buttonLeftPress();

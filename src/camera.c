@@ -91,7 +91,7 @@ void camera_mustScrollByY(s16 v) {
     }
     cameraPosition.y = posTemp;
     backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
-    scrolled = true; // for condition in environment_update()
+    scrolled = true; // for condition in environment_updateSprites()
     MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
     MAP_scrollTo(back, backPosition.x, backPosition.y);
 }

@@ -346,9 +346,6 @@ void stateGame_buttonYHold() {
 }
 
 void stateGame_buttonZHold() {
-    if (player->velocity.x == FASTFIX32(0)) {
-        camera_mustScrollByX(-1);
-    }
 }
 
 void stateGame_buttonAHold() {
@@ -358,15 +355,36 @@ void stateGame_buttonBHold() {
 }
 
 void stateGame_buttonCHold() {
-    if (player->velocity.x == FASTFIX32(0)) {
-        camera_mustScrollByX(1);
-    }
 }
 
 void stateGame_buttonStartHold() {
 }
 
 void stateGame_buttonModeHold() {
+}
+
+void stateGame_buttonZplusLeftHold() {
+    if (player->velocity.x == FASTFIX32(0)) {
+        camera_mustScrollByX(-1);
+    }
+}
+
+void stateGame_buttonZplusRightHold() {
+    if (player->velocity.x == FASTFIX32(0)) {
+        camera_mustScrollByX(1);
+    }
+}
+
+void stateGame_buttonZplusUpHold() {
+    if (player->velocity.y == FASTFIX32(0)) {
+        camera_mustScrollByY(-1);
+    }
+}
+
+void stateGame_buttonZplusDownHold() {
+    if (player->velocity.y == FASTFIX32(0)) {
+        camera_mustScrollByY(1);
+    }
 }
 
 void stateGame_buttonUpPress() {
@@ -394,14 +412,14 @@ void stateGame_buttonAPress() {
 }
 
 void stateGame_buttonBPress() {
+}
+
+void stateGame_buttonCPress() {
     u8 bottom = GET_BOTTOM_COLLISION(player->collider);
     if (bottom || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
         player->velocity.y = FASTFIX32(-JUMP);
         setThreeBitField(&player->collider->groundCollisionData, 0, BOTTOM_BIT_SHIFT);
     }
-}
-
-void stateGame_buttonCPress() {
 }
 
 void stateGame_buttonStartPress() {

@@ -16,17 +16,17 @@ void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
     }
     stateGame_joyHandlerBefore();
 
-    if (changed & state & BUTTON_UP) {
-        stateGame_buttonUpPress();
-    }
-    if (changed & state & BUTTON_DOWN) {
-        stateGame_buttonDownPress();
-    }
     if (changed & state & BUTTON_LEFT) {
         stateGame_buttonLeftPress();
     }
     if (changed & state & BUTTON_RIGHT) {
         stateGame_buttonRightPress();
+    }
+    if (changed & state & BUTTON_UP) {
+        stateGame_buttonUpPress();
+    }
+    if (changed & state & BUTTON_DOWN) {
+        stateGame_buttonDownPress();
     }
     if (changed & state & BUTTON_X) {
         stateGame_buttonXPress();
@@ -50,17 +50,17 @@ void stateGame_joyChangedHandler(u16 joy, u16 changed, u16 state) {
         stateGame_buttonModePress();
     }
 
-    if (!(state & BUTTON_UP) && (changed & BUTTON_UP)) {
-        stateGame_buttonUpRelease();
-    }
-    if (!(state & BUTTON_DOWN) && (changed & BUTTON_DOWN)) {
-        stateGame_buttonDownRelease();
-    }
     if (!(state & BUTTON_LEFT) && (changed & BUTTON_LEFT)) {
         stateGame_buttonLeftRelease();
     }
     if (!(state & BUTTON_RIGHT) && (changed & BUTTON_RIGHT)) {
         stateGame_buttonRightRelease();
+    }
+    if (!(state & BUTTON_UP) && (changed & BUTTON_UP)) {
+        stateGame_buttonUpRelease();
+    }
+    if (!(state & BUTTON_DOWN) && (changed & BUTTON_DOWN)) {
+        stateGame_buttonDownRelease();
     }
     if (!(state & BUTTON_X) && (changed & BUTTON_X)) {
         stateGame_buttonXRelease();
@@ -96,18 +96,35 @@ void stateGame_joyHoldingHandler() {
 
     stateGame_joyHandlerBefore();
 
-    if (state & BUTTON_UP) {
-        stateGame_buttonUpHold();
-    }
-    if (state & BUTTON_DOWN) {
-        stateGame_buttonDownHold();
-    }
     if (state & BUTTON_LEFT) {
-        stateGame_buttonLeftHold();
+        if (state & BUTTON_Z) {
+            stateGame_buttonZplusLeftHold();
+        } else {
+            stateGame_buttonLeftHold();
+        }
     }
     if (state & BUTTON_RIGHT) {
-        stateGame_buttonRightHold();
+        if (state & BUTTON_Z) {
+            stateGame_buttonZplusRightHold();
+        } else {
+            stateGame_buttonRightHold();
+        }
     }
+    if (state & BUTTON_UP) {
+        if (state & BUTTON_Z) {
+            stateGame_buttonZplusUpHold();
+        } else {
+            stateGame_buttonUpHold();
+        }
+    }
+    if (state & BUTTON_DOWN) {
+        if (state & BUTTON_Z) {
+            stateGame_buttonZplusDownHold();
+        } else {
+            stateGame_buttonDownHold();
+        }
+    }
+    
     if (state & BUTTON_X) {
         stateGame_buttonXHold();
     }
