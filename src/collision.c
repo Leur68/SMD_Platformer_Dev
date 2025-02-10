@@ -6,7 +6,7 @@ u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     return mapPointerGet(collisionsMap, xTile, yTile);
 }
 
-bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB) {
+bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags) {
     u16 xMin = targetAABB.tileX.max; // Minimum x and y tile values
     u16 yMin = targetAABB.tileY.max;
     u16 xMax = targetAABB.tileX.min; // Maximum x and y tile values
@@ -26,6 +26,8 @@ bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB) {
                 if (currYTile > yMax) yMax = currYTile;
 
                 exists = true;
+            } else if (tileIndex != 0) {
+                setBit(tileCollisionFlags, tileIndex);
             }
         }
     }
@@ -63,10 +65,9 @@ void collision_check(Collider *collider) {
     if (collider->facingDirection > 0) {
         for (u16 currYTile = collider->globalAABB.tileY.min; currYTile < collider->globalAABB.tileY.max; currYTile++) {
             for (u16 currXTile = collider->globalAABB.tileX.min; currXTile < collider->globalAABB.tileX.max; currXTile++) {
-
                 u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
                 if (tileIndex > SOLID_TILE_INDEX) {
-                    setBit(tileCollisionFlags, true, tileIndex);
+                    setBit(tileCollisionFlags, tileIndex);
                 }
             }
         }
@@ -78,36 +79,36 @@ void collision_check(Collider *collider) {
         // Check collisions in the collision map
         aabbLeft = aabb_getLeftAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
+        if (collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags)) {
             setThreeBitField(groundCollisionData, aabbLeft.x.max - objectAABB.x.min + 1, LEFT_BIT_SHIFT);
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving right only
     case DIRECTION_RIGHT:
         aabbRight = aabb_getRightAABB(objectAABB);
         // Check collisions in the collision map
-        if (collision_checkMapArea(aabbRight, &aabbRight)) {
+        if (collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags)) {
             setThreeBitField(groundCollisionData, objectAABB.x.max - aabbRight.x.min + 1, RIGHT_BIT_SHIFT);
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving up only
     case DIRECTION_UP:
         aabbTop = aabb_getTopAABB(objectAABB);
         // Check collisions in the collision map
-        if (collision_checkMapArea(aabbTop, &aabbTop)) {
+        if (collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags)) {
             setThreeBitField(groundCollisionData, aabbTop.y.max - objectAABB.y.min + 1, TOP_BIT_SHIFT);
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving down only
     case DIRECTION_DOWN:
         aabbBottom = aabb_getBottomAABB(objectAABB);
         // Check collisions in the collision map
-        if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
+        if (collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags)) {
             setThreeBitField(groundCollisionData, objectAABB.y.max - aabbBottom.y.min + 1, BOTTOM_BIT_SHIFT);
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving up-left
@@ -116,7 +117,7 @@ void collision_check(Collider *collider) {
         aabbLeft = aabb_getLeftAABB(objectAABB);
         aabbTop = aabb_getTopAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
+        if (collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbLeft.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbLeft.y, objectAABB.y) + 1;
 
@@ -126,9 +127,9 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbTop, &aabbTop)) {
+        if (collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbTop.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbTop.y, objectAABB.y) + 1;
 
@@ -138,7 +139,7 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving up-right
@@ -147,7 +148,7 @@ void collision_check(Collider *collider) {
         aabbRight = aabb_getRightAABB(objectAABB);
         aabbTop = aabb_getTopAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbRight, &aabbRight)) {
+        if (collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbRight.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbRight.y, objectAABB.y) + 1;
 
@@ -157,9 +158,9 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbTop, &aabbTop)) {
+        if (collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbTop.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbTop.y, objectAABB.y) + 1;
 
@@ -169,7 +170,7 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving down-left
@@ -178,7 +179,7 @@ void collision_check(Collider *collider) {
         aabbLeft = aabb_getLeftAABB(objectAABB);
         aabbBottom = aabb_getBottomAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbLeft, &aabbLeft)) {
+        if (collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbLeft.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbLeft.y, objectAABB.y) + 1;
 
@@ -188,9 +189,9 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
+        if (collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbBottom.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbBottom.y, objectAABB.y) + 1;
 
@@ -200,7 +201,7 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
         break;
     // Moving down-right
@@ -209,7 +210,7 @@ void collision_check(Collider *collider) {
         aabbRight = aabb_getRightAABB(objectAABB);
         aabbBottom = aabb_getBottomAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbRight, &aabbRight)) {
+        if (collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbRight.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbRight.y, objectAABB.y) + 1;
 
@@ -219,9 +220,9 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbBottom, &aabbBottom)) {
+        if (collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags)) {
             s16 h = collision_getIntersectionLen(aabbBottom.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbBottom.y, objectAABB.y) + 1;
 
@@ -231,7 +232,7 @@ void collision_check(Collider *collider) {
                 setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
                 setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
             }
-            setBit(groundCollisionData, true, GROUND_BIT_POS);
+            setBit(groundCollisionData, GROUND_BIT_POS);
         }
     }
 

@@ -16,4 +16,4 @@ void fadeOutScreen(u16 numFrame);
 void drawInt(s32 num, u16 x, u16 y, u16 len);
 void drawFix(f32 num, u16 x, u16 y, u16 len);
 void setThreeBitField(u16 *num, u8 value, u8 bitShift);
-void setBit(u16 *num, u8 value, u8 bitPosition);
+void setBit(u16 *num, u8 bitPosition);

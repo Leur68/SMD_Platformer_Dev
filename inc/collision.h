@@ -22,7 +22,7 @@ typedef struct {
     u16 tileCollisionFlags;
 } Collider;
 
-bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB);
+bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags);
 s16 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b);
 u8 collision_getTileIndex(u16 xTile, u16 yTile);
 void collision_check(Collider *collider);
