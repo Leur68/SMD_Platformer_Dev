@@ -17,13 +17,13 @@ YouTube Video:
 - Камера, включая естественное и принудительное перемещение  
 - "Not scrollable" зона движения персонажа
 - Различные события геймпада (press, release, hold)
-- Движок стейджей. Реализованы следующие состояния:  
+- Реализованы следующие состояния:  
   - `STATE_INTRO` (начальные заставки)  
   - `STATE_START` (экран запуска игры и переход в меню)  
   - `STATE_GAME` (геймплей)  
   - `STATE_OPTIONS` (настройки)  
   - `STATE_CREDITS` (титры)  
-- Код стейджей разделён на контроллер и сам стейдж (например, `controller_game.c` и `stage_game.c`)  
+- Код состояний разделён на контроллер и сам state (например, `controller_game.c` и `state_game.c`)  
 - Удобные инструменты отладки:  
   - Режим замедления игрового процесса  
   - Режим свободного перемещения  
@@ -31,7 +31,7 @@ YouTube Video:
   - Печать отладочной информации на window plane игры  
   - Отображение FPS и загрузки CPU  
   - Прерывание игры с описанием ошибки на экране  
-  - Отключение всех стейджей, предшествующих геймплею, для быстрого тестирования  
+  - Отключение всех стейтов, предшествующих геймплею, для быстрого тестирования  
 - Двигающиеся платформы, реализованные в виде игровых объектов, включая их коллизии (пока работают не идеально). На одном фрейме рассчитывается коллизия персонажа только с одним твёрдым игровым объектом (как двигающаяся платформа)
 - Объекты-бонусы, которые можно подбирать  
 - Игровой счёт  
@@ -67,13 +67,13 @@ Let me introduce you to a 2D platformer for the Sega Mega Drive game console. It
 - Camera, including natural and forced movement  
 - A "Not scrollable" zone for player movement  
 - Various gamepad events (press, release, hold)  
-- Stage engine. The following states have been implemented:  
+- State engine. The following states have been implemented:  
   - `STATE_INTRO` (intro screens)  
   - `STATE_START` (game start screen and menu transitions)  
   - `STATE_GAME` (gameplay)  
   - `STATE_OPTIONS` (settings)  
   - `STATE_CREDITS` (credits)  
-- Stage code is split into the controller and the stage itself (e.g., `controller_game.c` and `stage_game.c`)  
+- State code is split into the controller and the state itself (e.g., `controller_game.c` and `state_game.c`)  
 - Convenient debugging tools:  
   - Slow-motion mode for gameplay  
   - Free movement mode  
@@ -81,7 +81,7 @@ Let me introduce you to a 2D platformer for the Sega Mega Drive game console. It
   - Printing debug information to the game's window plane  
   - Displaying FPS and CPU load  
   - In-game interruptions with error descriptions on the screen  
-  - Disabling all stages prior to the gameplay stage for quick testing  
+  - Disabling all states prior to the gameplay state for quick testing  
 - Moving platforms implemented as game objects, including collision detection with them (though it's not perfect yet). On each frame, collision is calculated with only one solid game object (like a moving platform).  
 - Bonus objects that can be picked up  
 - Game score tracking  

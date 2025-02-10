@@ -133,7 +133,7 @@ void player_update() {
     if (inWater) {
         player->waterTimer++;
         if (player->waterTimer > 240) {
-            if ((player->waterTimer & 0xF) == 0xF) {
+            if ((player->waterTimer & 0x3F) == 0x3F) { // every 0b**********111111
                 hud_updateHP(hp - 1);
             }
 
@@ -142,7 +142,6 @@ void player_update() {
             }
         }
     }
-    
 
     // These values should be calculated here (after collision handling)
     player->isJumping = !bottom && player->velocity.y < FASTFIX32(0);

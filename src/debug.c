@@ -210,6 +210,7 @@ void kdebug_print() {
 
     concU("c ", player->coyoteTimer)
     concU("jt ", player->jumpTimer)
+    concU("wt ", player->waterTimer)
     concU("d ", player->collider->facingDirection)
     concU("s ", scrolled)
     conc_()
