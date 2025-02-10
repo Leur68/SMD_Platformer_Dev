@@ -176,7 +176,7 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
     case BONUS_TILE_INDEX:
         // Permanently delete the object and increment the game score
         environment_objectDelete();
-        stateGame_updateScore(score + 1);
+        hud_updateScore(score + 1);
         break;
     case M_PLATFORM_TILE_INDEX:
     }
@@ -184,7 +184,7 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
 
 void stateGame_onTileCollidesWithPlayerInViewport() {
     if (HAS_TILE_COLLISION(player->collider, WATER_TILE_INDEX)) {
-        hud_setHP(hp - 1);
+        hud_updateHP(hp - 1);
     }
 }
 
@@ -203,11 +203,6 @@ void stateGame_init() {
     stateGame_joyInit();
 
     camera_init();
-
-    VDP_setWindowOnTop(1); // Top panel with information
-
-    VDP_setTextPlane(TEXT_PLANE);
-    VDP_setTextPalette(TEXT_PALETTE);
 
     PAL_setPalette(BACKGROUND_PALETTE, level1_back_palette.data, DMA);
     PAL_setPalette(GROUND_PALETTE, level1_palette.data, DMA);
@@ -232,12 +227,6 @@ void stateGame_init() {
 
     environment_init(collisions1);
 
-    score = -1;
-
-    VDP_drawText("Score: ", 10, 0);
-
-    stateGame_updateScore(0);
-
     hud_init();
 }
 
@@ -260,16 +249,6 @@ void stateGame_update() {
 #if (DEBUG_KDEBUG)
     kdebug_print();
 #endif
-}
-
-void stateGame_updateScore(u16 newScore) {
-    if (newScore != score) {
-        score = newScore;
-
-        char numStr[2];
-        intToStr(score, &numStr, 1);
-        VDP_drawText(numStr, 17, 0);
-    }
 }
 
 void stateGame_joyHandlerBefore() {

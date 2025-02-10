@@ -46,6 +46,7 @@ void drawFix(f32 num, u16 x, u16 y, u16 len) {
     fix32ToStr(num, result, 1);
     VDP_drawTextFill(result, x, y, len);
 }
+
 // Mask for 3 bits: 0b111, or 7 in decimal representation
 u16 mask = 0x7;
 
