@@ -13,10 +13,11 @@
 #define MAX_JUMP_TIME             30 // Maximum number of frames before landing during which the player can prepare to jump
 
 typedef struct {
-    Collider *collider;
-
     Sprite *sprite;           // Player's sprite
+
+    Collider *collider;
     Vect2D_ff32 posBuffer;    // Position buffer used for movement calculations with subpixel precision
+
     Vect2D_ff32 velocity;     // Movement velocity, used to control the player's position
     Vect2D_ff32 autoVelocity; // Automated movement velocity, used for specific behaviors or scripts
     Vect2D_s16 movedPixels;   // Number of pixels the player has moved in the current frame
@@ -27,7 +28,7 @@ typedef struct {
 
     u8 coyoteTimer; // Timer for the "coyote time" mechanic (frames left to jump after leaving the ground)
     u8 jumpTimer;   // Timer for the jump mechanic (tracks frames spent in the air during a jump)
-    u8 waterTimer;
+    u16 waterTimer;
 } Player;
 
 #define hasPlayerMovedByX (player->movedPixels.x != 0)          // Checks if the player has moved along the X-axis

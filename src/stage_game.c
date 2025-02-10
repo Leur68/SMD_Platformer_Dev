@@ -183,9 +183,6 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
 }
 
 void stateGame_onTileCollidesWithPlayerInViewport() {
-    if (HAS_TILE_COLLISION(player->collider, WATER_TILE_INDEX)) {
-        hud_updateHP(hp - 1);
-    }
 }
 
 void stateGame_init() {

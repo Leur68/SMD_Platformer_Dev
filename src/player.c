@@ -10,26 +10,28 @@ void player_init(u16 startX, u16 startY) {
     SPR_setAlwaysOnTop(player->sprite);
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
 
+    // Collider, position
     player->collider = (Collider *)MEM_alloc(sizeof(Collider));
-
-    // Position
-    aabb_set(&player->collider->globalAABB, (Vect2D_u16){startX, startY + mapMaxCameraPosY});
+    aabb_set(&player->collider->globalAABB, (Vect2D_u16){startX, startY + mapMaxCameraPosY}); // Position
     player->posBuffer = (Vect2D_ff32){intToFastFix32(player->collider->globalAABB.x.min), intToFastFix32(player->collider->globalAABB.y.min)};
+    player->collider->facingDirection = DIRECTION_NONE;
+    player->collider->groundCollisionData = 0;
+    player->collider->tileCollisionFlags = 0;
 
     // Movement
     player->velocity = (Vect2D_ff32){FASTFIX32(0), FASTFIX32(0)};
     player->autoVelocity = (Vect2D_ff32){FASTFIX32(0), FASTFIX32(0)};
     player->movedPixels = (Vect2D_s16){0, 0};
 
-    player->collider->facingDirection = DIRECTION_NONE;
-    player->coyoteTimer = 0;
+    // Flags
     player->isJumping = false;
     player->isFalling = false;
     player->decelerating = false;
 
-    // Collisions
-    player->collider->groundCollisionData = 0;
-    player->collider->tileCollisionFlags = 0;
+    // Timers
+    player->coyoteTimer = 0;
+    player->jumpTimer = 0;
+    player->waterTimer = 0;
 }
 
 void player_update() {
@@ -106,6 +108,7 @@ void player_update() {
 #endif
 
     u8 lastLower = bottom;
+    bool lastInWater = HAS_TILE_COLLISION(player->collider, WATER_TILE_INDEX);
 
     // Handle collisions and move the player
     player_move();
@@ -121,6 +124,25 @@ void player_update() {
     } else if (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME) { // Allow the timer to exceed the maximum by one frame
         player->coyoteTimer++;
     }
+
+    bool inWater = HAS_TILE_COLLISION(player->collider, WATER_TILE_INDEX);
+
+    if (lastInWater == true && inWater == false) {
+        player->waterTimer = 0;
+    }
+    if (inWater) {
+        player->waterTimer++;
+        if (player->waterTimer > 240) {
+            if ((player->waterTimer & 0xF) == 0xF) {
+                hud_updateHP(hp - 1);
+            }
+
+            if (player->waterTimer == MAX_U16) {
+                player->waterTimer = 240;
+            }
+        }
+    }
+    
 
     // These values should be calculated here (after collision handling)
     player->isJumping = !bottom && player->velocity.y < FASTFIX32(0);
