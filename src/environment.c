@@ -110,6 +110,9 @@ void environment_updateSprites() {
             if (currObject->visible == true) {
                 SPR_releaseSprite(currObject->sprite);
                 currObject->visible = false;
+#if DEBUG_KDEBUG_LOG
+                KDebug_Alert("Object sprite released");
+#endif
             }
         }
         

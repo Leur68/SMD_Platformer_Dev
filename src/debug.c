@@ -4,7 +4,7 @@
 bool hasSlowModeEnabled = false;
 #endif
 
-void debug_print() {
+void debug_printStateOnScreen() {
     static bool debugInited = false;
     static u16 len = 4;
     u16 i = 0;
@@ -103,7 +103,7 @@ void debug_print() {
 #endif
 }
 
-void kdebug_print() {
+void kdebug_printState() {
     u8 left     = GET_LEFT_COLLISION(player->collider);
     u8 right    = GET_RIGHT_COLLISION(player->collider);
     u8 top      = GET_TOP_COLLISION(player->collider);

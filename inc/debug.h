@@ -4,6 +4,7 @@
 
 #define DEBUG_SHOW_FPS                     1 // Show FPS on screen
 #define DEBUG_SHOW_CPU                     1 // Show CPU load on screen
+#define DEBUG_SHOW_FREE_RAM                1 // Show CPU load on screen
 
 #define DEBUG_WINDOW                       0 // Sidebar (WINDOW PLANE) with debug information
 #define DEBUG_WINDOW_PLAYER_POS            0 // Display player position in the debug window
@@ -13,7 +14,8 @@
 #define DEBUG_WINDOW_PLAYER_BOOLS          0 // Display player boolean flags in the debug window
 #define DEBUG_WINDOW_PLAYER_INTS           0 // Display player integer variables in the debug window
 
-#define DEBUG_KDEBUG                       0 // Debug information output in the console (KDebug)
+#define DEBUG_KDEBUG_STATE                 0 // Debug information output in the console (KDebug)
+#define DEBUG_KDEBUG_LOG                   1 // Debug information output in the console (KDebug)
 
 #define DEBUG_INTERRUPT                    1 // On error, execution stops and an error description is printed (needs to be manually implemented for each debugged fragment)
 #define DEBUG_DISABLE_INTROS               1 // Disable all states except the game state
@@ -24,5 +26,5 @@
 extern bool hasSlowModeEnabled;
 #endif
 
-void debug_print();
-void kdebug_print();
+void debug_printStateOnScreen();
+void kdebug_printState();

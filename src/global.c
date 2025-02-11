@@ -18,6 +18,7 @@ Vect2D_u16 backPosition;
 bool scrolled;
 u8 *collisionsMap;
 u8 lastLoadedObject = 0;
+GameObject *objects[50] = {};
 u8 currObjectIndex = 0;
 GameObject *currObject;
 GameObject *collidedObject;

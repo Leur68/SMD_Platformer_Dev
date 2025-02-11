@@ -15,7 +15,7 @@ void hud_init() {
     hud_updateHP(20);
 
     // score
-    VDP_drawText("Score: ", 10, 0);
+    VDP_drawText("Score: ", 20, 0);
     hud_updateScore(0);
 }
 
@@ -67,5 +67,5 @@ void hud_updateScore(s16 val) {
 
     char str[2];
     intToStr(score, &str, 1);
-    VDP_drawText(str, 17, 0);
+    VDP_drawText(str, 27, 0);
 }

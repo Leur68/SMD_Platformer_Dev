@@ -164,6 +164,9 @@ void stateGame_process() {
 #if DEBUG_SHOW_CPU
             VDP_showCPULoad(5, 0);
 #endif
+#if DEBUG_SHOW_FREE_RAM
+            drawInt(MEM_getFree(), 9, 0, 6);
+#endif
 
             SPR_update();
             SPR_defragVRAM();
