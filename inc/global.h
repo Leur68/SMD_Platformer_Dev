@@ -43,6 +43,7 @@
 #include "start.h"
 #include "options.h"
 #include "game.h"
+#include "gameover.h"
 
 #include "player.h"
 #include "camera.h"
@@ -51,11 +52,12 @@
 #include "../res/resources.h"
 
 typedef enum {
-    STATE_INTRO,   // A series of intros shown when the game starts
-    STATE_START,   // Game start and settings screen
-    STATE_GAME,    // Gameplay state
-    STATE_OPTIONS, // Settings menu
-    STATE_CREDITS, // Credits screen
+    STATE_INTRO,    // A series of intros shown when the game starts
+    STATE_START,    // Game start and settings screen
+    STATE_GAME,     // Gameplay state
+    STATE_GAMEOVER, // Game over state
+    STATE_OPTIONS,  // Settings menu
+    STATE_CREDITS,  // Credits screen
 } GameState;
 
 extern GameState currentState;                                         // The current state of the game

@@ -175,7 +175,7 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
     switch (currObject->objType) {
     case BONUS_TILE_INDEX:
         // Permanently delete the object and increment the game score
-        environment_objectDelete();
+        environment_freeObject();
         hud_updateScore(score + 1);
         break;
     case M_PLATFORM_TILE_INDEX:
@@ -228,6 +228,9 @@ void stateGame_init() {
 }
 
 void stateGame_release() {
+    environment_cleanup();
+    SPR_releaseSprite(player->sprite);
+    MEM_free(player);
 }
 
 void stateGame_update() {

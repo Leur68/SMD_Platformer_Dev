@@ -32,6 +32,10 @@ void hud_updateHP(s16 val) {
     hearts[4] = max(0, min(hp, 20) - 17 + 1); // [17,20]
 
     hud_updateHpSprites();
+
+    if (hp == 0) {
+        currentState = STATE_GAMEOVER;
+    }
 }
 
 void hud_updateHpSprites() {

@@ -57,10 +57,25 @@ void environment_updateObjects() {
     }
 }
 
-void environment_objectDelete() {
+void environment_freeObject() {
     SPR_releaseSprite(currObject->sprite);
     MEM_free(currObject);
     objects[currObjectIndex] = NULL;
+}
+
+void environment_cleanup() {
+    for (u8 i = 0; i < lastLoadedObject; i++) {
+        currObject = objects[i];
+
+        if (currObject == NULL) {
+            continue;
+        }
+
+        environment_freeObject();
+    }
+
+    MEM_free(objects);
+    MEM_free(collisionsMap);
 }
 
 void environment_updateSprites() {

@@ -23,9 +23,12 @@ int main(resetType) {
             stateGame_process();
             break;
         }
+        case STATE_GAMEOVER: {
+            stateGameOver_process();
+            break;
+        }
         case STATE_OPTIONS: {
             stateOptions_process();
-            break;
         }
         }
     }

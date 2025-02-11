@@ -12,7 +12,7 @@
 #define GET_BOTTOM_COLLISION(collider)          ((collider->groundCollisionData >> BOTTOM_BIT_SHIFT) & 0x7)
 #define HAS_ANY_COLLISION(collider)             ((collider->groundCollisionData & 0x0FFF) ? 1 : 0)
 #define HAS_GROUND_COLLISION(collider)          ((collider->groundCollisionData >> GROUND_BIT_POS) & 1)
-#define HAS_TILE_COLLISION(collider, tileIndex)  ((collider->tileCollisionFlags >> tileIndex) & 1)
+#define HAS_TILE_COLLISION(collider, tileIndex) ((collider->tileCollisionFlags >> tileIndex) & 1)
 
 // Contains minimal information required to calculate and determine collisions
 typedef struct {

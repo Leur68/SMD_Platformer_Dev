@@ -22,5 +22,6 @@ typedef struct {
 GameObject *allocGameObject();
 void environment_init(u8 *collisions);
 void environment_updateObjects();
-void environment_objectDelete();
+void environment_freeObject();
 void environment_updateSprites();
+void environment_cleanup();
