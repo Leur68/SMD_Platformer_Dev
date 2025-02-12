@@ -31,7 +31,7 @@
 #define NOT_SCROLLABLE_MIN_Y      70
 #define NOT_SCROLLABLE_MAX_Y      154
 
-#define GAME_MAX_OBJECTS          100
+#define GAME_MAX_OBJECTS          28
 
 void stateGame_init();
 void stateGame_joyInit();

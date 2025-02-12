@@ -1,11 +1,13 @@
 #include "../inc/global.h"
 
 GameObject *allocGameObject() {
-    return (GameObject *)MEM_alloc(sizeof(GameObject));
+    return POOL_allocate(objectsPool);
 }
 
 void environment_init(u8 *collisions) {
     collisionsMap = collisions;
+
+    objectsPool = POOL_create(GAME_MAX_OBJECTS, sizeof(GameObject));
 
     for (u16 x = 0; x < mapWTiles; x++) {
         for (u16 y = 0; y < mapHTiles; y++) {
@@ -26,10 +28,6 @@ void environment_init(u8 *collisions) {
 
                 currObject->globalAABB.x.max = globalPosX + currObject->sprite->definition->w;
                 currObject->globalAABB.y.max = globalPosY + currObject->sprite->definition->h;
-
-                objects[lastLoadedObject] = currObject;
-
-                lastLoadedObject++;
             }
         }
     }
@@ -38,12 +36,10 @@ void environment_init(u8 *collisions) {
 void environment_updateObjects() {
     collidedObject = NULL;
 
-    for (currObjectIndex = 0; currObjectIndex < lastLoadedObject; currObjectIndex++) {
-        currObject = objects[currObjectIndex];
-
-        if (currObject == NULL) {
-            continue;
-        }
+    GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
+    u16 num = POOL_getNumAllocated(objectsPool);
+    while (num--) {
+        currObject = *objects++;
 
         environment_onUpdateObject();
 
@@ -59,32 +55,26 @@ void environment_updateObjects() {
 
 void environment_freeObject() {
     SPR_releaseSprite(currObject->sprite);
-    MEM_free(currObject);
-    objects[currObjectIndex] = NULL;
+    POOL_release(objectsPool, currObject, true);
+    currObject = NULL;
 }
 
 void environment_cleanup() {
-    for (u8 i = 0; i < lastLoadedObject; i++) {
-        currObject = objects[i];
-
-        if (currObject == NULL) {
-            continue;
-        }
-
+    GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
+    u16 num = POOL_getNumAllocated(objectsPool);
+    while (num--) {
+        currObject = *objects++;
         environment_freeObject();
     }
-
-    MEM_free(objects);
+    POOL_destroy(objectsPool);
     MEM_free(collisionsMap);
 }
 
 void environment_updateSprites() {
-    for (currObjectIndex = 0; currObjectIndex < lastLoadedObject; currObjectIndex++) {
-        currObject = objects[currObjectIndex];
-
-        if (currObject == NULL) {
-            continue;
-        }
+    GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
+    u16 num = POOL_getNumAllocated(objectsPool);
+    while (num--) {
+        currObject = *objects++;
 
         s16 playerScreenX = currObject->globalAABB.x.min - cameraPosition.x;
         s16 playerScreenY = currObject->globalAABB.y.min - cameraPosition.y;
@@ -101,7 +91,7 @@ void environment_updateSprites() {
             bool changedPos = currObject->objType == M_PLATFORM_TILE_INDEX || scrolled;
             if (changedPos) {
                 // If the object was not deleted, update the sprite's position on the screen
-                if (objects[currObjectIndex] != NULL) { // The object might be deleted during callbacks
+                if (currObject != NULL) { // The object might be deleted during callbacks
                     SPR_setPosition(currObject->sprite, playerScreenX, playerScreenY);
                 }
             }

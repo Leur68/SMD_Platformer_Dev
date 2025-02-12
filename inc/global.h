@@ -78,11 +78,9 @@ extern Vect2D_u16 backPosition;                                        // Curren
 extern bool scrolled;                                                  // Indicates if the map was scrolled during the current frame
 extern u8 *collisionsMap;                                              // Pointer to the collision map data
 extern u16 score;                                                      // Current player score
-extern u8 lastLoadedObject;                                            // Index of the last object that was loaded
-extern GameObject *objects[];                                          // Array of all game objects
-extern GameObject *collidedObject;                                     // Object that the player collided with in the current frame
-extern u8 currObjectIndex;                                             // Index of the object currently being processed in `environment_update()`
+extern Pool *objectsPool;
 extern GameObject *currObject;                                         // Object currently being processed in `environment_update()`
+extern GameObject *collidedObject;                                     // Object that the player collided with in the current frame
 extern void (*environment_initObject)(void);                           // Pointer to the function that initializes an object
 extern void (*environment_initObjectSprite)(void);                     // Pointer to the function that initializes an object's sprite
 extern void (*environment_onUpdateObject)(void);                       // Pointer to the function that updates an object (currObject) in the current frame
