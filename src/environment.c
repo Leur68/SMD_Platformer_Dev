@@ -4,9 +4,7 @@ GameObject *allocGameObject() {
     return POOL_allocate(objectsPool);
 }
 
-void environment_init(u8 *collisions) {
-    collisionsMap = collisions;
-
+void environment_init() {
     objectsPool = POOL_create(GAME_MAX_OBJECTS, sizeof(GameObject));
 
     for (u16 x = 0; x < mapWTiles; x++) {

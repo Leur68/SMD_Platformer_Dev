@@ -20,7 +20,7 @@ typedef struct {
 #define hasCurrObjectCollidesWithPlayer aabb_intersects(player->collider->globalAABB, currObject->globalAABB)
 
 GameObject *allocGameObject();
-void environment_init(u8 *collisions);
+void environment_init();
 void environment_updateObjects();
 void environment_freeObject();
 void environment_updateSprites();
