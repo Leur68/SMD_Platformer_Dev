@@ -17,9 +17,6 @@ typedef struct {
     u8 facingDirection;
 } GameObject;
 
-#define isCurrObjectVisible(screenX, screenY) (((screenX + currObject->sprite->definition->w) >= 0 && (screenX) < (SCREEN_WIDTH)) && ((screenY + currObject->sprite->definition->h) >= 0 && (screenY) < (SCREEN_HEIGHT)))
-#define hasCurrObjectCollidesWithPlayer aabb_intersects(player->collider->globalAABB, currObject->globalAABB)
-
 GameObject *allocGameObject();
 void environment_init();
 void environment_updateObjects();

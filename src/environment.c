@@ -41,7 +41,8 @@ void environment_updateObjects() {
 
         environment_onUpdateObject();
 
-        if (hasCurrObjectCollidesWithPlayer) {
+        // hasCurrObjectCollidesWithPlayer
+        if (aabb_intersects(player->collider->globalAABB, currObject->globalAABB)) {
             
             if (currObject->objType == M_X_PLATFORM_TILE_INDEX || currObject->objType == M_Y_PLATFORM_TILE_INDEX) {
                 collidedObject = currObject;
@@ -74,10 +75,10 @@ void environment_updateSprites() {
     while (num--) {
         currObject = *objects++;
 
-        s16 playerScreenX = currObject->globalAABB.x.min - cameraPosition.x;
-        s16 playerScreenY = currObject->globalAABB.y.min - cameraPosition.y;
+        s16 currObjectScreenX = currObject->globalAABB.x.min - cameraPosition.x;
+        s16 currObjectScreenY = currObject->globalAABB.y.min - cameraPosition.y;
 
-        if (isCurrObjectVisible(playerScreenX, playerScreenY)) {
+        if (isObjectVisible(currObjectScreenX, currObjectScreenY, currObject->sprite->definition->w, currObject->sprite->definition->h)) {
             // If the sprite is within the visible area but was previously hidden, restore it
             if (currObject->visible == false) {
                 environment_initObjectSprite();
@@ -90,7 +91,7 @@ void environment_updateSprites() {
             if (changedPos) {
                 // If the object was not deleted, update the sprite's position on the screen
                 if (currObject != NULL) { // The object might be deleted during callbacks
-                    SPR_setPosition(currObject->sprite, playerScreenX, playerScreenY);
+                    SPR_setPosition(currObject->sprite, currObjectScreenX, currObjectScreenY);
                 }
             }
         } else {
