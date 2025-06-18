@@ -13,7 +13,7 @@ void player_init(u16 startX, u16 startY) {
     // Collider, position
     player->collider = (Collider *)MEM_alloc(sizeof(Collider));
     aabb_set(&player->collider->globalAABB, (Vect2D_u16){startX, startY + mapMaxCameraPosY}); // Position
-    player->posBuffer = (Vect2D_ff32){intToFastFix32(player->collider->globalAABB.x.min), intToFastFix32(player->collider->globalAABB.y.min)};
+    player->posBuffer = (Vect2D_ff32){FASTFIX32(player->collider->globalAABB.x.min), FASTFIX32(player->collider->globalAABB.y.min)};
     player->collider->facingDirection = DIRECTION_NONE;
     player->collider->groundCollisionData = 0;
     player->collider->tileCollisionFlags = 0;
@@ -209,8 +209,8 @@ void player_calculateSubpixelMovement() {
     }
 #endif
 
-    s16 newPosX = fastFix32ToInt(fastFix32Int(player->posBuffer.x));
-    s16 newPosY = fastFix32ToInt(fastFix32Int(player->posBuffer.y));
+    s16 newPosX = FF32_toInt(FF32_int(player->posBuffer.x));
+    s16 newPosY = FF32_toInt(FF32_int(player->posBuffer.y));
 
     player->movedPixels.x = newPosX - player->collider->globalAABB.x.min;
     player->movedPixels.y = newPosY - player->collider->globalAABB.y.min;

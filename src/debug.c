@@ -151,15 +151,15 @@ void kdebug_printState() {
     if (v < FASTFIX32(0)) { \
         s = "-";             \
         mystrcat();          \
-        intToStr(fastFix32ToInt(-v), tmp, 1); \
+        intToStr(FF32_toInt(-v), tmp, 1); \
     } else { \
-        intToStr(fastFix32ToInt(v), tmp, 1); \
+        intToStr(FF32_toInt(v), tmp, 1); \
     } \
     s = tmp;             \
     mystrcat();          \
     s = ".";             \
     mystrcat();          \
-    intToStr(((fastFix32Frac(v) * 1000) / 65536), tmp, 1); \
+    intToStr(((FF32_frac(v) * 1000) / 65536), tmp, 1); \
     s = tmp;             \
     mystrcat();          \
     s = "\n";            \
