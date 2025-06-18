@@ -1,11 +1,12 @@
 #include <global.h>
 
-#define NONE_TILE_INDEX        0
-#define SOLID_TILE_INDEX       1
-#define BONUS_TILE_INDEX       2
-#define M_PLATFORM_TILE_INDEX  3
-#define STAIRS_TILE_INDEX      4
-#define WATER_TILE_INDEX       5
+#define NONE_TILE_INDEX          0
+#define SOLID_TILE_INDEX         1
+#define BONUS_TILE_INDEX         2
+#define M_X_PLATFORM_TILE_INDEX  3
+#define STAIRS_TILE_INDEX        4
+#define WATER_TILE_INDEX         5
+#define M_Y_PLATFORM_TILE_INDEX  6
 
 typedef struct {
     u8 objType;

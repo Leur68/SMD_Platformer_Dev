@@ -306,6 +306,8 @@ void player_handleCollisions() {
             }
         }
         
+        player->autoVelocity.x = FASTFIX32(0);
+        player->autoVelocity.y = FASTFIX32(0);
         if (collidedObject != NULL && bottom && !ground) {
             switch (collidedObject->facingDirection) {
             case DIRECTION_RIGHT:
@@ -313,6 +315,12 @@ void player_handleCollisions() {
                 break;
             case DIRECTION_LEFT:
                 player->autoVelocity.x = FASTFIX32(-1.0);
+                break;
+            case DIRECTION_DOWN:
+                player->autoVelocity.y = FASTFIX32(1.0);
+                break;
+            case DIRECTION_UP:
+                player->autoVelocity.y = FASTFIX32(-1.0);
             }
         }
     }
