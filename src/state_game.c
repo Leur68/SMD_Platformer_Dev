@@ -198,6 +198,7 @@ void stateGame_onUpdateObjectInViewport() {
     case M_X_PLATFORM_TILE_INDEX:
 
         break;
+    case M_Y_PLATFORM_TILE_INDEX:
     }
 }
 
@@ -209,6 +210,8 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
         hud_updateScore(score + 1);
         break;
     case M_X_PLATFORM_TILE_INDEX:
+        break;
+    case M_Y_PLATFORM_TILE_INDEX:
     }
 }
 
