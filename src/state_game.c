@@ -114,11 +114,11 @@ void stateGame_initObject() {
         break;
     case M_X_PLATFORM_TILE_INDEX:
         currObject->shift = 0;
-        currObject->facingDirection = DIRECTION_RIGHT;
+        currObject->moving.x = 1;
         break;
     case M_Y_PLATFORM_TILE_INDEX:
         currObject->shift = 0;
-        currObject->facingDirection = DIRECTION_DOWN;
+        currObject->moving.y = 1;
     }
 }
 
@@ -144,49 +144,23 @@ void stateGame_onUpdateObject() {
         if (currObject->shift < 96) {
             currObject->shift++;
         } else {
-            switch (currObject->facingDirection) {
-            case DIRECTION_RIGHT:
-                currObject->facingDirection = DIRECTION_LEFT;
-                break;
-            case DIRECTION_LEFT:
-                currObject->facingDirection = DIRECTION_RIGHT;
-            }
+            currObject->moving.x = muls(currObject->moving.x, -1);
             currObject->shift = 1; // On the first iteration, it must be 1
         }
 
-        switch (currObject->facingDirection) {
-        case DIRECTION_RIGHT:
-            currObject->globalAABB.x.min++;
-            currObject->globalAABB.x.max++;
-            break;
-        case DIRECTION_LEFT:
-            currObject->globalAABB.x.min--;
-            currObject->globalAABB.x.max--;
-        }
+        currObject->globalAABB.x.min += currObject->moving.x;
+        currObject->globalAABB.x.max += currObject->moving.x;
         break;
     case M_Y_PLATFORM_TILE_INDEX:
         if (currObject->shift < 96) {
             currObject->shift++;
         } else {
-            switch (currObject->facingDirection) {
-            case DIRECTION_DOWN:
-                currObject->facingDirection = DIRECTION_UP;
-                break;
-            case DIRECTION_UP:
-                currObject->facingDirection = DIRECTION_DOWN;
-            }
+            currObject->moving.y = muls(currObject->moving.y, -1);
             currObject->shift = 1; // On the first iteration, it must be 1
         }
 
-        switch (currObject->facingDirection) {
-        case DIRECTION_DOWN:
-            currObject->globalAABB.y.min++;
-            currObject->globalAABB.y.max++;
-            break;
-        case DIRECTION_UP:
-            currObject->globalAABB.y.min--;
-            currObject->globalAABB.y.max--;
-        }
+        currObject->globalAABB.y.min += currObject->moving.y;
+        currObject->globalAABB.y.max += currObject->moving.y;
     }
 }
 

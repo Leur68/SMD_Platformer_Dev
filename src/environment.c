@@ -33,21 +33,41 @@ void environment_init() {
 
 void environment_updateObjects() {
     collidedObject = NULL;
+    player->autoVelocity.x = FASTFIX32(0);
+    player->autoVelocity.y = FASTFIX32(0);
 
     GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
     u16 num = POOL_getNumAllocated(objectsPool);
     while (num--) {
         currObject = *objects++;
 
+        bool intersects = aabb_intersects(player->collider->globalAABB, currObject->globalAABB);
+
         environment_onUpdateObject();
 
         // hasCurrObjectCollidesWithPlayer
-        if (aabb_intersects(player->collider->globalAABB, currObject->globalAABB)) {
+        if (intersects) {
             
             if (currObject->objType == M_X_PLATFORM_TILE_INDEX || currObject->objType == M_Y_PLATFORM_TILE_INDEX) {
                 collidedObject = currObject;
             }
             environment_onObjectCollidesWithPlayerInViewport();
+        }
+    }
+    
+    if (collidedObject == NULL) {
+        return;
+    }
+
+    u8 bottom   = GET_BOTTOM_COLLISION(player->collider); // чтобы платформа не двигала песонажа если он ударился головой об нее
+    bool ground = HAS_GROUND_COLLISION(player->collider); // чтобы персонаж не "прилипал" к платформе если он стоит на земле, а она столкнулась с ним
+        
+    if (bottom && !ground) {
+        if (collidedObject->moving.x != 0) {
+            player->autoVelocity.x = FASTFIX32(collidedObject->moving.x);
+        }
+        if (collidedObject->moving.y != 0) {
+            player->autoVelocity.y = FASTFIX32(collidedObject->moving.y);
         }
     }
 }

@@ -14,7 +14,7 @@ typedef struct {
     AABB globalAABB;
     bool visible;
     u8 shift;
-    u8 facingDirection;
+    Vect2D_s16 moving;
 } GameObject;
 
 GameObject *allocGameObject();

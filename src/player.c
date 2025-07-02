@@ -170,6 +170,8 @@ void player_update() {
 }
 
 void player_move() {
+    environment_updateObjects(); // Update objects for subsequent proper collision calculations with the character
+
     // Do not check collisions if the player is stationary
 
     if (player->velocity.x != FASTFIX32(0) || player->velocity.y != FASTFIX32(0) || player->autoVelocity.x != FASTFIX32(0) || player->autoVelocity.y != FASTFIX32(0)) {
@@ -186,8 +188,6 @@ void player_move() {
     }
 
     // Handle collisions
-
-    environment_updateObjects(); // Update objects for subsequent proper collision calculations with the character
 
     player_handleCollisions();
 }
@@ -217,13 +217,11 @@ void player_calculateSubpixelMovement() {
 }
 
 void player_handleCollisions() {
-    player->autoVelocity.x = FASTFIX32(0);
 
     collision_check(player->collider);
 
 #if (!DEBUG_FREE_MOVE_MODE)
-    bool overlapped = HAS_ANY_COLLISION(player->collider);
-    if (overlapped) {
+    if (HAS_ANY_COLLISION(player->collider)) {
         // Check if the player is stuck in an obstacle
         // Calculate the amount of displacement along both axes
         Vect2D_s16 shift = {0, 0};
@@ -303,24 +301,6 @@ void player_handleCollisions() {
             }
             if (player->autoVelocity.y > FASTFIX32(0)) {
                 player->autoVelocity.y = FASTFIX32(0);
-            }
-        }
-        
-        player->autoVelocity.x = FASTFIX32(0);
-        player->autoVelocity.y = FASTFIX32(0);
-        if (collidedObject != NULL && bottom && !ground) {
-            switch (collidedObject->facingDirection) {
-            case DIRECTION_RIGHT:
-                player->autoVelocity.x = FASTFIX32(1.0);
-                break;
-            case DIRECTION_LEFT:
-                player->autoVelocity.x = FASTFIX32(-1.0);
-                break;
-            case DIRECTION_DOWN:
-                player->autoVelocity.y = FASTFIX32(1.0);
-                break;
-            case DIRECTION_UP:
-                player->autoVelocity.y = FASTFIX32(-1.0);
             }
         }
     }
