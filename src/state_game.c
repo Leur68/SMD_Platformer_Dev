@@ -243,6 +243,9 @@ void stateGame_release() {
 }
 
 void stateGame_update() {
+
+    environment_updateObjects(); // Update objects for subsequent proper collision calculations with the character
+
     player_update();
 
     camera_update();

@@ -170,7 +170,6 @@ void player_update() {
 }
 
 void player_move() {
-    environment_updateObjects(); // Update objects for subsequent proper collision calculations with the character
 
     // Do not check collisions if the player is stationary
 
