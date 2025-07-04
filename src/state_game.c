@@ -48,7 +48,7 @@ const u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -81,7 +81,7 @@ const u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 4, 4, 4, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -113,11 +113,16 @@ void stateGame_initObject() {
 
         break;
     case M_X_PLATFORM_TILE_INDEX:
-        currObject->shift = 0;
+        currObject->timer = 0;
         currObject->moving.x = 1;
         break;
     case M_Y_PLATFORM_TILE_INDEX:
-        currObject->shift = 0;
+        currObject->timer = 0;
+        currObject->moving.y = 1;
+        break;
+    case M_XY_PLATFORM_TILE_INDEX:
+        currObject->timer = 0;
+        currObject->moving.x = 1;
         currObject->moving.y = 1;
     }
 }
@@ -132,6 +137,9 @@ void stateGame_initObjectSprite() {
         break;
     case M_Y_PLATFORM_TILE_INDEX:
         currObject->sprite = SPR_addSpriteSafe(&m_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
+        break;
+    case M_XY_PLATFORM_TILE_INDEX:
+        currObject->sprite = SPR_addSpriteSafe(&m_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
     }
 }
 
@@ -141,24 +149,38 @@ void stateGame_onUpdateObject() {
 
         break;
     case M_X_PLATFORM_TILE_INDEX:
-        if (currObject->shift < 96) {
-            currObject->shift++;
+        if (currObject->timer < 96) {
+            currObject->timer++;
         } else {
             currObject->moving.x = muls(currObject->moving.x, -1);
-            currObject->shift = 1; // On the first iteration, it must be 1
+            currObject->timer = 1; // On the first iteration, it must be 1
         }
 
         currObject->globalAABB.x.min += currObject->moving.x;
         currObject->globalAABB.x.max += currObject->moving.x;
         break;
     case M_Y_PLATFORM_TILE_INDEX:
-        if (currObject->shift < 96) {
-            currObject->shift++;
+        if (currObject->timer < 96) {
+            currObject->timer++;
         } else {
             currObject->moving.y = muls(currObject->moving.y, -1);
-            currObject->shift = 1; // On the first iteration, it must be 1
+            currObject->timer = 1; // On the first iteration, it must be 1
         }
 
+        currObject->globalAABB.y.min += currObject->moving.y;
+        currObject->globalAABB.y.max += currObject->moving.y;
+        break;
+    case M_XY_PLATFORM_TILE_INDEX:
+        if (currObject->timer < 96) {
+            currObject->timer++;
+        } else {
+            currObject->moving.x = muls(currObject->moving.x, -1);
+            currObject->moving.y = muls(currObject->moving.y, -1);
+            currObject->timer = 1; // On the first iteration, it must be 1
+        }
+
+        currObject->globalAABB.x.min += currObject->moving.x;
+        currObject->globalAABB.x.max += currObject->moving.x;
         currObject->globalAABB.y.min += currObject->moving.y;
         currObject->globalAABB.y.max += currObject->moving.y;
     }
@@ -173,6 +195,8 @@ void stateGame_onUpdateObjectInViewport() {
 
         break;
     case M_Y_PLATFORM_TILE_INDEX:
+        break;
+    case M_XY_PLATFORM_TILE_INDEX:
     }
 }
 
@@ -186,6 +210,8 @@ void stateGame_onObjectCollidesWithPlayerInViewport() {
     case M_X_PLATFORM_TILE_INDEX:
         break;
     case M_Y_PLATFORM_TILE_INDEX:
+        break;
+    case M_XY_PLATFORM_TILE_INDEX:
     }
 }
 
@@ -278,6 +304,15 @@ void stateGame_buttonUpHold() {
         player->velocity.y = FASTFIX32(-MAX_VELOCITY);
     }
 #endif
+    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX)) {
+        player->velocity.y = FASTFIX32(0);
+        Vect2D_s16 shift = {0, -2};
+        aabb_shift(&player->collider->globalAABB, shift);
+        player->posBuffer.x += FASTFIX32(shift.x);
+        player->posBuffer.y += FASTFIX32(shift.y);
+        player->movedPixels.x += shift.x;
+        player->movedPixels.y += shift.y;
+    }
 }
 
 void stateGame_buttonDownHold() {
@@ -288,6 +323,15 @@ void stateGame_buttonDownHold() {
         player->velocity.y = FASTFIX32(MAX_VELOCITY);
     }
 #endif
+    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !GET_BOTTOM_COLLISION(player->collider)) {
+        player->velocity.y = FASTFIX32(0);
+        Vect2D_s16 shift = {0, +2};
+        aabb_shift(&player->collider->globalAABB, shift);
+        player->posBuffer.x += FASTFIX32(shift.x);
+        player->posBuffer.y += FASTFIX32(shift.y);
+        player->movedPixels.x += shift.x;
+        player->movedPixels.y += shift.y;
+    }
 }
 
 void stateGame_buttonLeftHold() {
@@ -410,6 +454,7 @@ void stateGame_buttonCPress() {
     if (bottom || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
         player->velocity.y = FASTFIX32(-JUMP);
         setThreeBitField(&player->collider->groundCollisionData, 0, BOTTOM_BIT_SHIFT);
+        player->isJumping = true;
     }
 }
 

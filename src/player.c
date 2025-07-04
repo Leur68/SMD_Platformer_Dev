@@ -65,7 +65,9 @@ void player_update() {
 
 // Add gravity
 #if (!DEBUG_FREE_MOVE_MODE)
-    if (!bottom) {
+    // в воздухе, но не на лестнице
+    // в прыжке
+    if ((!bottom && !HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX)) || player->isJumping) {
         if (player->velocity.y < FASTFIX32(GRAVITY)) {
             player->velocity.y += FASTFIX32(GRAVITY_ACCELERATION);
         }
@@ -144,8 +146,10 @@ void player_update() {
     }
 
     // These values should be calculated here (after collision handling)
-    player->isJumping = !bottom && player->velocity.y < FASTFIX32(0);
     player->isFalling = !bottom && player->velocity.y > FASTFIX32(0);
+    if (player->isJumping && bottom) {
+        player->isJumping = false;
+    }
 
     // Update animations based on the player's state
     if (!bottom) {

@@ -10,7 +10,7 @@ void environment_init() {
     for (u16 x = 0; x < mapWTiles; x++) {
         for (u16 y = 0; y < mapHTiles; y++) {
             u8 tileIndex = mapPointerGet(collisionsMap, x, y);
-            if (tileIndex == BONUS_TILE_INDEX || tileIndex == M_X_PLATFORM_TILE_INDEX || tileIndex == M_Y_PLATFORM_TILE_INDEX) {
+            if (tileIndex == BONUS_TILE_INDEX || tileIndex == M_X_PLATFORM_TILE_INDEX || tileIndex == M_Y_PLATFORM_TILE_INDEX || tileIndex == M_XY_PLATFORM_TILE_INDEX) {
                 currObject = allocGameObject();
 
                 u16 globalPosX = (x << 3);
@@ -48,7 +48,7 @@ void environment_updateObjects() {
         // hasCurrObjectCollidesWithPlayer
         if (intersects) {
             
-            if (currObject->objType == M_X_PLATFORM_TILE_INDEX || currObject->objType == M_Y_PLATFORM_TILE_INDEX) {
+            if (currObject->objType == M_X_PLATFORM_TILE_INDEX || currObject->objType == M_Y_PLATFORM_TILE_INDEX || currObject->objType == M_XY_PLATFORM_TILE_INDEX) {
                 collidedObject = currObject;
             }
             environment_onObjectCollidesWithPlayerInViewport();
@@ -107,7 +107,7 @@ void environment_updateSprites() {
 
             environment_onUpdateObjectInViewport();
 
-            bool changedPos = currObject->objType == M_X_PLATFORM_TILE_INDEX || currObject->objType == M_Y_PLATFORM_TILE_INDEX || scrolled;
+            bool changedPos = currObject->objType == M_X_PLATFORM_TILE_INDEX || currObject->objType == M_Y_PLATFORM_TILE_INDEX || currObject->objType == M_XY_PLATFORM_TILE_INDEX || scrolled;
             if (changedPos) {
                 // If the object was not deleted, update the sprite's position on the screen
                 if (currObject != NULL) { // The object might be deleted during callbacks
