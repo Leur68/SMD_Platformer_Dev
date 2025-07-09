@@ -6,26 +6,26 @@ u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     return mapPointerGet(collisionsMap, xTile, yTile);
 }
 
-bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags) {
+u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags) {
     u16 xMin = targetAABB.tileX.max; // Minimum x and y tile values
     u16 yMin = targetAABB.tileY.max;
     u16 xMax = targetAABB.tileX.min; // Maximum x and y tile values
     u16 yMax = targetAABB.tileY.min;
-    bool exists = false;
+    u8 exists = 0;
 
     // Iterate through each tile in the specified area
     for (u16 currYTile = targetAABB.tileY.min; currYTile < targetAABB.tileY.max; currYTile++) {
         for (u16 currXTile = targetAABB.tileX.min; currXTile < targetAABB.tileX.max; currXTile++) {
             // Check if the tile is solid
             u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
-            if (tileIndex == SOLID_TILE_INDEX) {
+            if (tileIndex == SOLID_TILE_INDEX || tileIndex == TOP_SOLID_TILE_INDEX) {
                 // Determine the minimum and maximum tile coordinates
                 if (currXTile < xMin) xMin = currXTile;
                 if (currYTile < yMin) yMin = currYTile;
                 if (currXTile > xMax) xMax = currXTile;
                 if (currYTile > yMax) yMax = currYTile;
 
-                exists = true;
+                exists = tileIndex;
             } else if (tileIndex != 0) {
                 setBit(tileCollisionFlags, tileIndex);
             }
@@ -33,7 +33,7 @@ bool collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tile
     }
 
     // If collisions are found, calculate the AABB
-    if (exists) {
+    if (exists != 0) {
         collidingTilesAABB->tileX.min = xMin;
         collidingTilesAABB->tileY.min = yMin;
         collidingTilesAABB->tileX.max = xMax;
@@ -66,7 +66,7 @@ void collision_check(Collider *collider) {
         for (u16 currYTile = collider->globalAABB.tileY.min; currYTile < collider->globalAABB.tileY.max; currYTile++) {
             for (u16 currXTile = collider->globalAABB.tileX.min; currXTile < collider->globalAABB.tileX.max; currXTile++) {
                 u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
-                if (tileIndex > SOLID_TILE_INDEX) {
+                if (tileIndex != SOLID_TILE_INDEX && tileIndex != TOP_SOLID_TILE_INDEX) {
                     setBit(tileCollisionFlags, tileIndex);
                 }
             }
@@ -79,7 +79,9 @@ void collision_check(Collider *collider) {
         // Check collisions in the collision map
         aabbLeft = aabb_getLeftAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags)) {
+        u8 i = collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             setThreeBitField(groundCollisionData, aabbLeft.x.max - objectAABB.x.min + 1, LEFT_BIT_SHIFT);
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
@@ -88,7 +90,10 @@ void collision_check(Collider *collider) {
     case DIRECTION_RIGHT:
         aabbRight = aabb_getRightAABB(objectAABB);
         // Check collisions in the collision map
-        if (collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             setThreeBitField(groundCollisionData, objectAABB.x.max - aabbRight.x.min + 1, RIGHT_BIT_SHIFT);
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
@@ -97,7 +102,10 @@ void collision_check(Collider *collider) {
     case DIRECTION_UP:
         aabbTop = aabb_getTopAABB(objectAABB);
         // Check collisions in the collision map
-        if (collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             setThreeBitField(groundCollisionData, aabbTop.y.max - objectAABB.y.min + 1, TOP_BIT_SHIFT);
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
@@ -106,7 +114,10 @@ void collision_check(Collider *collider) {
     case DIRECTION_DOWN:
         aabbBottom = aabb_getBottomAABB(objectAABB);
         // Check collisions in the collision map
-        if (collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
             setThreeBitField(groundCollisionData, objectAABB.y.max - aabbBottom.y.min + 1, BOTTOM_BIT_SHIFT);
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
@@ -117,7 +128,9 @@ void collision_check(Collider *collider) {
         aabbLeft = aabb_getLeftAABB(objectAABB);
         aabbTop = aabb_getTopAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags)) {
+        i = collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbLeft.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbLeft.y, objectAABB.y) + 1;
 
@@ -129,7 +142,10 @@ void collision_check(Collider *collider) {
             }
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbTop.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbTop.y, objectAABB.y) + 1;
 
@@ -148,7 +164,9 @@ void collision_check(Collider *collider) {
         aabbRight = aabb_getRightAABB(objectAABB);
         aabbTop = aabb_getTopAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags)) {
+        i = collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbRight.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbRight.y, objectAABB.y) + 1;
 
@@ -160,7 +178,10 @@ void collision_check(Collider *collider) {
             }
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbTop.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbTop.y, objectAABB.y) + 1;
 
@@ -179,7 +200,9 @@ void collision_check(Collider *collider) {
         aabbLeft = aabb_getLeftAABB(objectAABB);
         aabbBottom = aabb_getBottomAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags)) {
+        i = collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbLeft.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbLeft.y, objectAABB.y) + 1;
 
@@ -191,7 +214,10 @@ void collision_check(Collider *collider) {
             }
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbBottom.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbBottom.y, objectAABB.y) + 1;
 
@@ -210,7 +236,9 @@ void collision_check(Collider *collider) {
         aabbRight = aabb_getRightAABB(objectAABB);
         aabbBottom = aabb_getBottomAABB(objectAABB);
 
-        if (collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags)) {
+        i = collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbRight.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbRight.y, objectAABB.y) + 1;
 
@@ -222,7 +250,10 @@ void collision_check(Collider *collider) {
             }
             setBit(groundCollisionData, GROUND_BIT_POS);
         }
-        if (collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags)) {
+
+        i = collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags);
+
+        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
             s16 h = collision_getIntersectionLen(aabbBottom.x, objectAABB.x) + 1;
             s16 v = collision_getIntersectionLen(aabbBottom.y, objectAABB.y) + 1;
 
