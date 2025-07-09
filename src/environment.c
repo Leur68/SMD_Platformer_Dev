@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 GameObject *allocGameObject() {
     return POOL_allocate(objectsPool);

@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 void stateIntro_joyHandler(u16 joy, u16 changed, u16 state) {
     if (changed & state & BUTTON_START) {

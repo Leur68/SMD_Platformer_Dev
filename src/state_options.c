@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 void stateOptions_update() {
 }

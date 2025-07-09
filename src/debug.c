@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 #if (DEBUG_SLOW_MODE)
 bool hasSlowModeEnabled = false;

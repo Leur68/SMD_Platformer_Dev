@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 void stateGameOver_init() {
     VDP_drawTextFill("Game over!", 10, 10, 10);

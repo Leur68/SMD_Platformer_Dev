@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 void stateGame_joyInit() {
     JOY_setEventHandler(&stateGame_joyChangedHandler);

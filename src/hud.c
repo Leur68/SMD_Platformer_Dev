@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 u8 hearts[] = {0, 0, 0, 0, 0};
 Sprite* sprites[5];

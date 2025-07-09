@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 bool aabb_intersects(AABB aabb1, AABB aabb2) {
     return (aabb1.x.max >= aabb2.x.min && aabb2.x.max >= aabb1.x.min) && (aabb1.y.max >= aabb2.y.min && aabb2.y.max >= aabb1.y.min);

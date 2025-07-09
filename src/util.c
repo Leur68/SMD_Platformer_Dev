@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 void global_init() {
     VDP_setScreenWidth320();

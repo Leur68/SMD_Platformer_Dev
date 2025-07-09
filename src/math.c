@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 s16 math_roundUpByEight(s16 x) {
     return (x + 7) & (-8);

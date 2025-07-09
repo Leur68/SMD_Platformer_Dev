@@ -39,11 +39,11 @@
 #include "environment.h"
 #include "util.h"
 
-#include "intro.h"
-#include "start.h"
-#include "options.h"
-#include "game.h"
-#include "gameover.h"
+#include "state_intro.h"
+#include "state_start.h"
+#include "state_options.h"
+#include "state_game.h"
+#include "state_gameover.h"
 
 #include "player.h"
 #include "camera.h"

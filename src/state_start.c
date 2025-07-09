@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 u8 cursorIndex;
 Sprite *cursor;

@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     if (xTile < 0 || yTile < 0 || xTile >= mapWTiles || yTile >= mapHTiles)

@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 Player *allocPlayer() {
     return (Player *)MEM_alloc(sizeof(Player));

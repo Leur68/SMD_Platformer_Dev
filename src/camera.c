@@ -1,4 +1,4 @@
-#include "../inc/global.h"
+#include "global.h"
 
 void camera_init() {
     cameraPosition.x = 0;
