@@ -32,9 +32,6 @@ void environment_init() {
 }
 
 void environment_updateObjects() {
-    collidedObject = NULL;
-    player->autoVelocity.x = FASTFIX32(0);
-    player->autoVelocity.y = FASTFIX32(0);
 
     GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
     u16 num = POOL_getNumAllocated(objectsPool);

@@ -26,6 +26,7 @@ void player_init(u16 startX, u16 startY) {
     // Flags
     player->isJumping = false;
     player->isFalling = false;
+    player->isClimbing = false;
     player->decelerating = false;
 
     // Timers
@@ -61,6 +62,11 @@ void player_update() {
             player->decelerating = false;
             player->velocity.x = FASTFIX32(0);
         }
+    }
+
+    bool onStairs = HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX);
+    if (player->isClimbing && !onStairs) {
+        player->isClimbing = false;
     }
 
 // Add gravity

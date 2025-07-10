@@ -291,6 +291,9 @@ void stateGame_update() {
 
 void stateGame_joyHandlerBefore() {
     scrolled = false;
+    collidedObject = NULL;
+    player->autoVelocity.x = FASTFIX32(0);
+    player->autoVelocity.y = FASTFIX32(0);
 }
 
 void stateGame_joyHandlerAfter() {
@@ -305,13 +308,8 @@ void stateGame_buttonUpHold() {
     }
 #endif
     if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !player->isJumping) {
-        player->velocity.y = FASTFIX32(0);
-        Vect2D_s16 shift = {0, -2};
-        aabb_shift(&player->collider->globalAABB, shift);
-        player->posBuffer.x += FASTFIX32(shift.x);
-        player->posBuffer.y += FASTFIX32(shift.y);
-        player->movedPixels.x += shift.x;
-        player->movedPixels.y += shift.y;
+        player->autoVelocity.y = FASTFIX32(-2);
+        player->isClimbing = true;
     }
 }
 
@@ -324,13 +322,8 @@ void stateGame_buttonDownHold() {
     }
 #endif
     if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !GET_BOTTOM_COLLISION(player->collider) && !player->isJumping) {
-        player->velocity.y = FASTFIX32(0);
-        Vect2D_s16 shift = {0, +2};
-        aabb_shift(&player->collider->globalAABB, shift);
-        player->posBuffer.x += FASTFIX32(shift.x);
-        player->posBuffer.y += FASTFIX32(shift.y);
-        player->movedPixels.x += shift.x;
-        player->movedPixels.y += shift.y;
+        player->autoVelocity.y = FASTFIX32(+2);
+        player->isClimbing = true;
     }
 }
 

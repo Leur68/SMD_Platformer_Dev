@@ -205,6 +205,7 @@ void kdebug_printState() {
 
     concU("j ", player->isJumping)
     concU("f ", player->isFalling)
+    concU("c ", player->isClimbing)
     concU("de ", player->decelerating)
     conc_()
 

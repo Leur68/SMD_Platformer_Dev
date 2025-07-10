@@ -24,6 +24,7 @@ typedef struct {
 
     bool isJumping;    // Indicates if the player is jumping
     bool isFalling;    // Indicates if the player is falling
+    bool isClimbing;   // Indicates if the player is climbing
     bool decelerating; // Indicates if the player is decelerating (slowing down)
 
     u8 coyoteTimer; // Timer for the "coyote time" mechanic (frames left to jump after leaving the ground)
