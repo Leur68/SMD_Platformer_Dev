@@ -22,6 +22,8 @@ typedef struct {
     u16 tileCollisionFlags;
 } Collider;
 
+Collider *allocCollider();
+void collider_init(Collider* collider, u16 x, u16 y);
 u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags);
 s16 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b);
 u8 collision_getTileIndex(u16 xTile, u16 yTile);

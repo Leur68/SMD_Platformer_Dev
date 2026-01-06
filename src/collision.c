@@ -1,5 +1,16 @@
 #include "global.h"
 
+Collider *allocCollider() {
+    return (Collider *)MEM_alloc(sizeof(Collider));
+}
+
+void collider_init(Collider* collider, u16 x, u16 y) {
+    aabb_set(&collider->globalAABB, (Vect2D_u16){x, y}); // Position
+    collider->facingDirection = DIRECTION_NONE;
+    collider->groundCollisionData = 0;
+    collider->tileCollisionFlags = 0;
+}
+
 u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     if (xTile < 0 || yTile < 0 || xTile >= mapWTiles || yTile >= mapHTiles)
         return true;

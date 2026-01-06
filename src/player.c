@@ -11,12 +11,10 @@ void player_init(u16 startX, u16 startY) {
     PAL_setPalette(PLAYER_PALETTE, player_sprite.palette->data, DMA);
 
     // Collider, position
-    player->collider = (Collider *)MEM_alloc(sizeof(Collider));
-    aabb_set(&player->collider->globalAABB, (Vect2D_u16){startX, startY + mapMaxCameraPosY}); // Position
+    player->collider = allocCollider();
+    collider_init(player->collider, startX, startY + mapMaxCameraPosY);
+
     player->posBuffer = (Vect2D_ff32){FASTFIX32(player->collider->globalAABB.x.min), FASTFIX32(player->collider->globalAABB.y.min)};
-    player->collider->facingDirection = DIRECTION_NONE;
-    player->collider->groundCollisionData = 0;
-    player->collider->tileCollisionFlags = 0;
 
     // Movement
     player->velocity = (Vect2D_ff32){FASTFIX32(0), FASTFIX32(0)};
