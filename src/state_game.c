@@ -81,7 +81,7 @@ const u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 4, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -108,7 +108,7 @@ void stateGame_tooglePause() {
 }
 
 void stateGame_initObject() {
-    switch (currObject->objType) {
+    switch (currObject->tileIndex) {
     case BONUS_TILE_INDEX:
 
         break;
@@ -128,7 +128,7 @@ void stateGame_initObject() {
 }
 
 void stateGame_initObjectSprite() {
-    switch (currObject->objType) {
+    switch (currObject->tileIndex) {
     case BONUS_TILE_INDEX:
         currObject->sprite = SPR_addSpriteSafe(&smth_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(PLAYER_PALETTE, 0, false, false));
         break;
@@ -144,7 +144,7 @@ void stateGame_initObjectSprite() {
 }
 
 void stateGame_onUpdateObject() {
-    switch (currObject->objType) {
+    switch (currObject->tileIndex) {
     case BONUS_TILE_INDEX:
 
         break;
@@ -187,7 +187,7 @@ void stateGame_onUpdateObject() {
 }
 
 void stateGame_onUpdateObjectInViewport() {
-    switch (currObject->objType) {
+    switch (currObject->tileIndex) {
     case BONUS_TILE_INDEX:
 
         break;
@@ -201,17 +201,26 @@ void stateGame_onUpdateObjectInViewport() {
 }
 
 void stateGame_onObjectCollidesWithPlayerInViewport() {
-    switch (currObject->objType) {
+    switch (currObject->tileIndex) {
     case BONUS_TILE_INDEX:
         // Permanently delete the object and increment the game score
         environment_freeObject();
         hud_updateScore(score + 1);
         break;
     case M_X_PLATFORM_TILE_INDEX:
-        break;
     case M_Y_PLATFORM_TILE_INDEX:
-        break;
     case M_XY_PLATFORM_TILE_INDEX:
+        u8 bottom   = GET_BOTTOM_COLLISION(player->collider); // чтобы платформа не двигала песонажа если он ударился головой об нее
+        bool ground = HAS_GROUND_COLLISION(player->collider); // чтобы персонаж не "прилипал" к платформе если он стоит на земле, а она столкнулась с ним
+            
+        if (bottom && !ground) {
+            if (currObject->moving.x != 0) {
+                player->autoVelocity.x = FASTFIX32(currObject->moving.x);
+            }
+            if (currObject->moving.y != 0) {
+                player->autoVelocity.y = FASTFIX32(currObject->moving.y);
+            }
+        }
     }
 }
 
@@ -352,7 +361,7 @@ void stateGame_buttonRightHold() {
     u8 right = GET_RIGHT_COLLISION(player->collider);
     if (!right) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
-        u8 bottom = GET_RIGHT_COLLISION(player->collider);
+        u8 bottom = GET_BOTTOM_COLLISION(player->collider);
         if (bottom && player->decelerating) {
             player->decelerating = false;
         }
@@ -393,25 +402,25 @@ void stateGame_buttonModeHold() {
 
 void stateGame_buttonZplusLeftHold() {
     if (player->velocity.x == FASTFIX32(0)) {
-        camera_mustScrollByX(-1);
+        camera_mustScroll(-1, 0);
     }
 }
 
 void stateGame_buttonZplusRightHold() {
     if (player->velocity.x == FASTFIX32(0)) {
-        camera_mustScrollByX(1);
+        camera_mustScroll(1, 0);
     }
 }
 
 void stateGame_buttonZplusUpHold() {
     if (player->velocity.y == FASTFIX32(0)) {
-        camera_mustScrollByY(-1);
+        camera_mustScroll(0, -1);
     }
 }
 
 void stateGame_buttonZplusDownHold() {
     if (player->velocity.y == FASTFIX32(0)) {
-        camera_mustScrollByY(1);
+        camera_mustScroll(0, 1);
     }
 }
 

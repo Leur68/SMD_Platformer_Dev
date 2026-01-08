@@ -17,6 +17,9 @@ u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     return mapPointerGet(collisionsMap, xTile, yTile);
 }
 
+// проверяет указанный AABB на присутствие в тайловой карте. 
+// если targetAABB пересекается с SOLID_TILE_INDEX или TOP_SOLID_TILE_INDEX, возвращает collidingTilesAABB, представляющий собой AABB точно выровненный по клеткам тайловой карты
+// в tileCollisionFlags записывает информацию о типах тайлов, с которыми произошло пересечение
 u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags) {
     u16 xMin = targetAABB.tileX.max; // Minimum x and y tile values
     u16 yMin = targetAABB.tileY.max;
@@ -29,6 +32,7 @@ u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCo
         for (u16 currXTile = targetAABB.tileX.min; currXTile < targetAABB.tileX.max; currXTile++) {
             // Check if the tile is solid
             u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
+
             if (tileIndex == SOLID_TILE_INDEX || tileIndex == TOP_SOLID_TILE_INDEX) {
                 // Determine the minimum and maximum tile coordinates
                 if (currXTile < xMin) xMin = currXTile;
@@ -37,9 +41,10 @@ u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCo
                 if (currYTile > yMax) yMax = currYTile;
 
                 exists = tileIndex;
-            } else if (tileIndex != 0) {
-                setBit(tileCollisionFlags, tileIndex);
             }
+            
+            setBit(tileCollisionFlags, tileIndex);
+            
         }
     }
 
@@ -70,12 +75,16 @@ void collision_check(Collider *collider) {
     AABB objectAABB = collider->globalAABB;
     u16 *groundCollisionData = &collider->groundCollisionData;
     u16 *tileCollisionFlags = &collider->tileCollisionFlags;
+
     *groundCollisionData = 0;
     *tileCollisionFlags = 0;
 
+    // проверяем сам объект на коллизии с тайлами. 
+    // ниже будем делать то же, но с aabb с которыми объект пересекается (в теле collision_checkMapArea)
     if (collider->facingDirection > 0) {
-        for (u16 currYTile = collider->globalAABB.tileY.min; currYTile < collider->globalAABB.tileY.max; currYTile++) {
-            for (u16 currXTile = collider->globalAABB.tileX.min; currXTile < collider->globalAABB.tileX.max; currXTile++) {
+        for (u16 currYTile = objectAABB.tileY.min; currYTile < objectAABB.tileY.max; currYTile++) {
+            for (u16 currXTile = objectAABB.tileX.min; currXTile < objectAABB.tileX.max; currXTile++) {
+                
                 u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
                 if (tileIndex != SOLID_TILE_INDEX && tileIndex != TOP_SOLID_TILE_INDEX) {
                     setBit(tileCollisionFlags, tileIndex);
@@ -278,40 +287,41 @@ void collision_check(Collider *collider) {
         }
     }
 
-    // Check collisions with objects
-    if (collidedObject != NULL) {
+    // Check collisions with solid objects
+    if (collidedObject == NULL || !IS_SOLID_OBJECT(collidedObject->tileIndex)) {
+        return;
+    }
 
-        s16 h = collision_getIntersectionLen(collidedObject->globalAABB.x, objectAABB.x) + 1;
-        s16 v = collision_getIntersectionLen(collidedObject->globalAABB.y, objectAABB.y) + 1;
-        u8 relativeDirection = aabb_getRelativePosition(objectAABB, collidedObject->globalAABB);   
+    s16 h = collision_getIntersectionLen(collidedObject->globalAABB.x, objectAABB.x) + 1;
+    s16 v = collision_getIntersectionLen(collidedObject->globalAABB.y, objectAABB.y) + 1;
+    u8 relativeDirection = aabb_getRelativePosition(objectAABB, collidedObject->globalAABB);   
 
-        if (v > h) { 
+    if (v > h) { 
+        if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
+            setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
+        } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
+            setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
+        }
+    } else if (h > v) {
+        if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
+            setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
+        } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
+            setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
+        }
+    } else if (v == h) {
+        // We take into account the character's movement direction so that after the shift, v does not equal h.
+
+        if (player->velocity.x > player->velocity.y || player->autoVelocity.x > player->autoVelocity.y) {
             if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
                 setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
             } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
                 setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
             }
-        } else if (h > v) {
+        } else if (player->velocity.y > player->velocity.x || player->autoVelocity.y > player->autoVelocity.x) {
             if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
                 setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
             } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
                 setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            }
-        } else if (v == h) {
-            // We take into account the character's movement direction so that after the shift, v does not equal h.
-
-            if (player->velocity.x > player->velocity.y || player->autoVelocity.x > player->autoVelocity.y) {
-                if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
-                    setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-                } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
-                    setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-                }
-            } else if (player->velocity.y > player->velocity.x || player->autoVelocity.y > player->autoVelocity.x) {
-                if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
-                    setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-                } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
-                    setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-                }
             }
         }
     }

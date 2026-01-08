@@ -34,9 +34,12 @@ void player_init(u16 startX, u16 startY) {
 }
 
 void player_update() {
-    // Update properties before moving
+    /////////////////////////////////////
+    // Update properties before moving //
+    /////////////////////////////////////
 
     u8 bottom = GET_BOTTOM_COLLISION(player->collider);
+    bool onStairs = HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX);
 
     // Handle deceleration when movement keys are released
     if (player->decelerating) {
@@ -62,7 +65,6 @@ void player_update() {
         }
     }
 
-    bool onStairs = HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX);
     if (player->isClimbing && !onStairs) {
         player->isClimbing = false;
     }
@@ -71,7 +73,7 @@ void player_update() {
 #if (!DEBUG_FREE_MOVE_MODE)
     // в воздухе, но не на лестнице
     // в прыжке
-    if ((!bottom && !HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX)) || player->isJumping) {
+    if ((!bottom && !onStairs) || player->isJumping) {
         if (player->velocity.y < FASTFIX32(GRAVITY)) {
             player->velocity.y += FASTFIX32(GRAVITY_ACCELERATION);
         }
@@ -113,19 +115,23 @@ void player_update() {
     }
 #endif
 
-    u8 lastLower = bottom;
+    u8 lastBottom = bottom;
     bool lastInWater = HAS_TILE_COLLISION(player->collider, WATER_TILE_INDEX);
 
-    // Handle collisions and move the player
+    ///////////////////////////////////////////
+    // Move the player and handle collisions //
+    ///////////////////////////////////////////
     player_move();
 
-    // Update properties after moving
+    ////////////////////////////////////
+    // Update properties after moving //
+    ////////////////////////////////////
 
     bottom = GET_BOTTOM_COLLISION(player->collider);
 
     if (bottom && player->coyoteTimer != 0) {
         player->coyoteTimer = 0; // Reset the timer
-    } else if (lastLower && !bottom) {
+    } else if (lastBottom && !bottom) {
         player->coyoteTimer = 1; // Start the timer if the player falls off the ground
     } else if (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME) { // Allow the timer to exceed the maximum by one frame
         player->coyoteTimer++;

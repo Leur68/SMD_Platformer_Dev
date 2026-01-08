@@ -18,8 +18,17 @@
 typedef struct {
     AABB globalAABB; // Object's global axis-aligned bounding box for collision detection
     u8 facingDirection; // Direction the object is facing
+
+    // Bits:  15 14 13 12 | 11 10  9 | 8  7  6 | 5  4  3 | 2  1  0
+    //        ----------- | -------- | ------- | ------- | -------
+    //            GRND    |  BOTTOM  |   TOP   |  RIGHT  |  LEFT
     u16 groundCollisionData;
-    u16 tileCollisionFlags;
+
+
+    // Bits:  15 | 14 | 13 | 12 | 11 | 10 |  9 |  8 |  7 |  6 |  5 |  4 |  3 |  2 |  1 |  0
+    //        -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+    //       T15 |T14 |T13 |T12 |T11 |T10 | T9 | T8 | T7 | T6 | T5 | T4 | T3 | T2 | T1 | T0
+    u16 tileCollisionFlags;  // 
 } Collider;
 
 Collider *allocCollider();

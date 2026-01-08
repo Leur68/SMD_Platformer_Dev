@@ -68,30 +68,42 @@ void camera_update() {
     environment_updateSprites();
 }
 
-void camera_mustScrollByX(s16 v) {
-    s16 posTemp = cameraPosition.x + v;
-    if (posTemp < 0) {
-        posTemp = 0;
-    } else if (posTemp > mapMaxCameraPosX) {
-        posTemp = mapMaxCameraPosX;
+void camera_mustScroll(s16 x, s16 y) {
+    if (x != 0) {
+        s16 posTemp = cameraPosition.x + x;
+        if (posTemp < 0) {
+            posTemp = 0;
+        } else if (posTemp > mapMaxCameraPosX) {
+            posTemp = mapMaxCameraPosX;
+        }
+        
+        // Prevent player from going off-screen
+        s16 playerScreenX = player->collider->globalAABB.x.min - posTemp;
+        if (playerScreenX < 0 || (playerScreenX + PLAYER_WIDTH) > SCREEN_WIDTH) {
+            return; // Don't scroll if it would push player off-screen
+        }
+        
+        cameraPosition.x = posTemp;
+        backPosition.x = cameraPosition.x * PARALLAX_RATIO_X;
     }
-    cameraPosition.x = posTemp;
-    backPosition.x = cameraPosition.x * PARALLAX_RATIO_X;
-    scrolled = true; // for condition in environment_update()
-    MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
-    MAP_scrollTo(back, backPosition.x, backPosition.y);
-}
 
-void camera_mustScrollByY(s16 v) {
-    s16 posTemp = cameraPosition.y + v;
-    if (posTemp < 0) {
-        posTemp = 0;
-    } else if (posTemp > mapMaxCameraPosY) {
-        posTemp = mapMaxCameraPosY;
+    if (y != 0) {
+        s16 posTemp = cameraPosition.y + y;
+        if (posTemp < 0) {
+            posTemp = 0;
+        } else if (posTemp > mapMaxCameraPosY) {
+            posTemp = mapMaxCameraPosY;
+        }
+        
+        // Prevent player from going off-screen
+        s16 playerScreenY = player->collider->globalAABB.y.min - posTemp;
+        if (playerScreenY < 0 || (playerScreenY + PLAYER_HEIGHT) > SCREEN_HEIGHT) {
+            return; // Don't scroll if it would push player off-screen
+        }
+        
+        cameraPosition.y = posTemp;
+        backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
     }
-    cameraPosition.y = posTemp;
-    backPosition.y = cameraPosition.y * PARALLAX_RATIO_Y;
-    scrolled = true; // for condition in environment_updateSprites()
-    MAP_scrollTo(map, cameraPosition.x, cameraPosition.y);
-    MAP_scrollTo(back, backPosition.x, backPosition.y);
+    
+    scrolled = true; // for condition in environment_update()
 }

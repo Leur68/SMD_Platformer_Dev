@@ -13,8 +13,12 @@
 #define STAIRS_TILE_INDEX        4
 #define WATER_TILE_INDEX         5
 
+#define IS_MOVING_PLATFORM(tileIndex) ((tileIndex) == M_X_PLATFORM_TILE_INDEX || (tileIndex) == M_Y_PLATFORM_TILE_INDEX || (tileIndex) == M_XY_PLATFORM_TILE_INDEX)
+#define IS_OBJECT(tileIndex) ((tileIndex) == BONUS_TILE_INDEX || IS_MOVING_PLATFORM(tileIndex))
+#define IS_SOLID_OBJECT(tileIndex) (IS_MOVING_PLATFORM(tileIndex))
+
 typedef struct {
-    u8 objType;
+    u8 tileIndex; // для определения типа объекта
     Sprite *sprite;
     AABB globalAABB;
     bool visible;
