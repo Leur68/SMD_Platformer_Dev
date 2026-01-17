@@ -121,7 +121,25 @@ void player_update() {
     ///////////////////////////////////////////
     // Move the player and handle collisions //
     ///////////////////////////////////////////
+
     player_move();
+
+    GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
+    u16 num = POOL_getNumAllocated(objectsPool);
+    while (num--) {
+        GameObject *object = *objects++;
+
+        bool intersects = aabb_intersects(player->collider->globalAABB, object->globalAABB);
+
+        if (intersects) {
+            collidedObject = object;
+            break;
+        }
+    }
+
+    // Handle collisions
+
+    player_handleCollisions();
 
     ////////////////////////////////////
     // Update properties after moving //
@@ -178,8 +196,14 @@ void player_update() {
         }
     }
 
+    player->autoVelocity.x = FASTFIX32(0);
+    player->autoVelocity.y = FASTFIX32(0);
+
     if (player->collider->tileCollisionFlags != 0) {
         environment_onTileCollidesWithPlayerInViewport();
+    }
+    if (collidedObject != NULL) {
+        environment_onObjectCollidesWithPlayerInViewport(collidedObject);
     }
 }
 
@@ -199,10 +223,6 @@ void player_move() {
         player->movedPixels.x = 0;
         player->movedPixels.y = 0;
     }
-
-    // Handle collisions
-
-    player_handleCollisions();
 }
 
 void player_calculateSubpixelMovement() {

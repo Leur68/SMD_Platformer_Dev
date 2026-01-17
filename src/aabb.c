@@ -111,12 +111,12 @@ void aabb_updateTiles(AABB *aabb) {
     aabb->tileY.max = aabb->y.max >> 3;
 }
 
-u8 aabb_getRelativePosition(AABB aabb1, AABB aabb2) {
-    f32 centerAX = F32_div(FIX32(aabb1.x.min + aabb1.x.max), FIX32(2));
-    f32 centerAY = F32_div(FIX32(aabb1.y.min + aabb1.y.max), FIX32(2));
+u8 aabb_getRelativePosition(AABB aabbA, AABB aabbB) {
+    f32 centerAX = F32_div(FIX32(aabbA.x.min + aabbA.x.max), FIX32(2));
+    f32 centerAY = F32_div(FIX32(aabbA.y.min + aabbA.y.max), FIX32(2));
 
-    f32 centerBX = F32_div(FIX32(aabb2.x.min + aabb2.x.max), FIX32(2));
-    f32 centerBY = F32_div(FIX32(aabb2.y.min + aabb2.y.max), FIX32(2));
+    f32 centerBX = F32_div(FIX32(aabbB.x.min + aabbB.x.max), FIX32(2));
+    f32 centerBY = F32_div(FIX32(aabbB.y.min + aabbB.y.max), FIX32(2));
 
     // Calculate the offsets
     f32 dx = centerBX - centerAX; // The position of the second AABB relative to the first along the X axis

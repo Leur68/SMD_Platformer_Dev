@@ -76,8 +76,8 @@ const u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -85,11 +85,11 @@ const u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -107,118 +107,161 @@ void stateGame_tooglePause() {
     paused = !paused;
 }
 
-void stateGame_initObject() {
-    switch (currObject->tileIndex) {
+void stateGame_initObject(GameObject *object) {
+    switch (object->tileIndex) {
     case BONUS_TILE_INDEX:
 
         break;
     case M_X_PLATFORM_TILE_INDEX:
-        currObject->timer = 0;
-        currObject->moving.x = 1;
+        object->timer = 0;
+        object->moving.x = 1;
         break;
     case M_Y_PLATFORM_TILE_INDEX:
-        currObject->timer = 0;
-        currObject->moving.y = 1;
+        object->timer = 0;
+        object->moving.y = 1;
         break;
     case M_XY_PLATFORM_TILE_INDEX:
-        currObject->timer = 0;
-        currObject->moving.x = 1;
-        currObject->moving.y = 1;
+        object->timer = 0;
+        object->moving.x = 1;
+        object->moving.y = 1;
+        break;
+    case M_X_PLATFORM_TOP_SOLID_TILE_INDEX:
+        object->timer = 0;
+        object->moving.x = 1;
+        break;
+    case M_Y_PLATFORM_TOP_SOLID_TILE_INDEX:
+        
+        break;
+    case M_XY_PLATFORM_TOP_SOLID_TILE_INDEX:
+
     }
 }
 
-void stateGame_initObjectSprite() {
-    switch (currObject->tileIndex) {
+void stateGame_initObjectSprite(GameObject *object) {
+    switch (object->tileIndex) {
     case BONUS_TILE_INDEX:
-        currObject->sprite = SPR_addSpriteSafe(&smth_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(PLAYER_PALETTE, 0, false, false));
+        object->sprite = SPR_addSpriteSafe(&smth_sprite, object->globalAABB.x.min - cameraPosition.x, object->globalAABB.y.min - cameraPosition.y, TILE_ATTR(PLAYER_PALETTE, 0, false, false));
         break;
     case M_X_PLATFORM_TILE_INDEX:
-        currObject->sprite = SPR_addSpriteSafe(&m_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
+        object->sprite = SPR_addSpriteSafe(&m_sprite, object->globalAABB.x.min - cameraPosition.x, object->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
         break;
     case M_Y_PLATFORM_TILE_INDEX:
-        currObject->sprite = SPR_addSpriteSafe(&m_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
+        object->sprite = SPR_addSpriteSafe(&m_sprite, object->globalAABB.x.min - cameraPosition.x, object->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
         break;
     case M_XY_PLATFORM_TILE_INDEX:
-        currObject->sprite = SPR_addSpriteSafe(&m_sprite, currObject->globalAABB.x.min - cameraPosition.x, currObject->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
+        object->sprite = SPR_addSpriteSafe(&m_sprite, object->globalAABB.x.min - cameraPosition.x, object->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
+        break;
+    case M_X_PLATFORM_TOP_SOLID_TILE_INDEX:
+        object->sprite = SPR_addSpriteSafe(&m_sprite, object->globalAABB.x.min - cameraPosition.x, object->globalAABB.y.min - cameraPosition.y, TILE_ATTR(GROUND_PALETTE, 0, false, false));
+        break;
+    case M_Y_PLATFORM_TOP_SOLID_TILE_INDEX:
+        
+        break;
+    case M_XY_PLATFORM_TOP_SOLID_TILE_INDEX:
+        
     }
 }
 
-void stateGame_onUpdateObject() {
-    switch (currObject->tileIndex) {
+void stateGame_onUpdateObject(GameObject *object) {
+    switch (object->tileIndex) {
     case BONUS_TILE_INDEX:
 
         break;
     case M_X_PLATFORM_TILE_INDEX:
-        if (currObject->timer < 96) {
-            currObject->timer++;
+        if (object->timer < 96) {
+            object->timer++;
         } else {
-            currObject->moving.x = muls(currObject->moving.x, -1);
-            currObject->timer = 1; // On the first iteration, it must be 1
+            object->moving.x = muls(object->moving.x, -1);
+            object->timer = 1; // On the first iteration, it must be 1
         }
 
-        currObject->globalAABB.x.min += currObject->moving.x;
-        currObject->globalAABB.x.max += currObject->moving.x;
+        object->globalAABB.x.min += object->moving.x;
+        object->globalAABB.x.max += object->moving.x;
         break;
     case M_Y_PLATFORM_TILE_INDEX:
-        if (currObject->timer < 96) {
-            currObject->timer++;
+        if (object->timer < 96) {
+            object->timer++;
         } else {
-            currObject->moving.y = muls(currObject->moving.y, -1);
-            currObject->timer = 1; // On the first iteration, it must be 1
+            object->moving.y = muls(object->moving.y, -1);
+            object->timer = 1; // On the first iteration, it must be 1
         }
 
-        currObject->globalAABB.y.min += currObject->moving.y;
-        currObject->globalAABB.y.max += currObject->moving.y;
+        object->globalAABB.y.min += object->moving.y;
+        object->globalAABB.y.max += object->moving.y;
         break;
     case M_XY_PLATFORM_TILE_INDEX:
-        if (currObject->timer < 96) {
-            currObject->timer++;
+        if (object->timer < 96) {
+            object->timer++;
         } else {
-            currObject->moving.x = muls(currObject->moving.x, -1);
-            currObject->moving.y = muls(currObject->moving.y, -1);
-            currObject->timer = 1; // On the first iteration, it must be 1
+            object->moving.x = muls(object->moving.x, -1);
+            object->moving.y = muls(object->moving.y, -1);
+            object->timer = 1; // On the first iteration, it must be 1
         }
 
-        currObject->globalAABB.x.min += currObject->moving.x;
-        currObject->globalAABB.x.max += currObject->moving.x;
-        currObject->globalAABB.y.min += currObject->moving.y;
-        currObject->globalAABB.y.max += currObject->moving.y;
+        object->globalAABB.x.min += object->moving.x;
+        object->globalAABB.x.max += object->moving.x;
+        object->globalAABB.y.min += object->moving.y;
+        object->globalAABB.y.max += object->moving.y;
+        break;
+    case M_X_PLATFORM_TOP_SOLID_TILE_INDEX:
+        if (object->timer < 96) {
+            object->timer++;
+        } else {
+            object->moving.x = muls(object->moving.x, -1);
+            object->timer = 1; // On the first iteration, it must be 1
+        }
+
+        object->globalAABB.x.min += object->moving.x;
+        object->globalAABB.x.max += object->moving.x;
+        break;
+    case M_Y_PLATFORM_TOP_SOLID_TILE_INDEX:
+        
+        break;
+    case M_XY_PLATFORM_TOP_SOLID_TILE_INDEX:
+        
     }
 }
 
-void stateGame_onUpdateObjectInViewport() {
-    switch (currObject->tileIndex) {
+void stateGame_onUpdateObjectInViewport(GameObject *object) {
+    switch (object->tileIndex) {
     case BONUS_TILE_INDEX:
-
         break;
     case M_X_PLATFORM_TILE_INDEX:
-
         break;
     case M_Y_PLATFORM_TILE_INDEX:
         break;
     case M_XY_PLATFORM_TILE_INDEX:
+        break;
+    case M_X_PLATFORM_TOP_SOLID_TILE_INDEX:
+        break;
+    case M_Y_PLATFORM_TOP_SOLID_TILE_INDEX:
+        break;
+    case M_XY_PLATFORM_TOP_SOLID_TILE_INDEX:
     }
 }
 
-void stateGame_onObjectCollidesWithPlayerInViewport() {
-    switch (currObject->tileIndex) {
+void stateGame_onObjectCollidesWithPlayerInViewport(GameObject *object) {
+    switch (object->tileIndex) {
     case BONUS_TILE_INDEX:
         // Permanently delete the object and increment the game score
-        environment_freeObject();
+        environment_freeObject(object);
         hud_updateScore(score + 1);
         break;
     case M_X_PLATFORM_TILE_INDEX:
     case M_Y_PLATFORM_TILE_INDEX:
     case M_XY_PLATFORM_TILE_INDEX:
+    case M_X_PLATFORM_TOP_SOLID_TILE_INDEX:
+    case M_Y_PLATFORM_TOP_SOLID_TILE_INDEX:
+    case M_XY_PLATFORM_TOP_SOLID_TILE_INDEX:
         u8 bottom   = GET_BOTTOM_COLLISION(player->collider); // чтобы платформа не двигала песонажа если он ударился головой об нее
         bool ground = HAS_GROUND_COLLISION(player->collider); // чтобы персонаж не "прилипал" к платформе если он стоит на земле, а она столкнулась с ним
             
-        if (bottom && !ground) {
-            if (currObject->moving.x != 0) {
-                player->autoVelocity.x = FASTFIX32(currObject->moving.x);
+        if (bottom && player->velocity.y == FASTFIX32(0) && !ground) {
+            if (object->moving.x != 0) {
+                player->autoVelocity.x = FASTFIX32(object->moving.x);
             }
-            if (currObject->moving.y != 0) {
-                player->autoVelocity.y = FASTFIX32(currObject->moving.y);
+            if (object->moving.y != 0) {
+                player->autoVelocity.y = FASTFIX32(object->moving.y);
             }
         }
     }
@@ -301,8 +344,6 @@ void stateGame_update() {
 void stateGame_joyHandlerBefore() {
     scrolled = false;
     collidedObject = NULL;
-    player->autoVelocity.x = FASTFIX32(0);
-    player->autoVelocity.y = FASTFIX32(0);
 }
 
 void stateGame_joyHandlerAfter() {
@@ -316,9 +357,11 @@ void stateGame_buttonUpHold() {
         player->velocity.y = FASTFIX32(-MAX_VELOCITY);
     }
 #endif
-    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !player->isJumping) {
+    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX)) {
+        player->velocity.y = FASTFIX32(0);
         player->autoVelocity.y = FASTFIX32(-2);
         player->isClimbing = true;
+        player->isJumping = false;
     }
 }
 
@@ -330,9 +373,11 @@ void stateGame_buttonDownHold() {
         player->velocity.y = FASTFIX32(MAX_VELOCITY);
     }
 #endif
-    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !GET_BOTTOM_COLLISION(player->collider) && !player->isJumping) {
+    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !GET_BOTTOM_COLLISION(player->collider)) {
+        player->velocity.y = FASTFIX32(0);
         player->autoVelocity.y = FASTFIX32(+2);
         player->isClimbing = true;
+        player->isJumping = false;
     }
 }
 

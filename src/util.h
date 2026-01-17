@@ -15,5 +15,11 @@ void fadeInScreen(u16 numFrame);
 void fadeOutScreen(u16 numFrame);
 void drawInt(s32 num, u16 x, u16 y, u16 len);
 void drawFix(f32 num, u16 x, u16 y, u16 len);
-void setThreeBitField(u16 *num, u8 value, u8 bitShift);
-void setBit(u16 *num, u8 bitPosition);
+
+// Write the value into this field, taking only the lowest 3 bits of value
+// Mask 0x7 for 3 bits: 0b111, or 7 in decimal representation
+#define setThreeBitField(num, value, bitShift)   \
+    *num |= ((value & 0x7) << bitShift);
+
+#define setBit(num, bitPosition)   \
+    *num |= (1 << bitPosition);

@@ -46,13 +46,3 @@ void drawFix(f32 num, u16 x, u16 y, u16 len) {
     fix32ToStr(num, result, 1);
     VDP_drawTextFill(result, x, y, len);
 }
-
-void setThreeBitField(u16 *num, u8 value, u8 bitShift) {
-    // Write the value into this field, taking only the lowest 3 bits of value
-    // Mask 0x7 for 3 bits: 0b111, or 7 in decimal representation
-    *num |= ((value & 0x7) << bitShift);
-}
-
-void setBit(u16 *num, u8 bitPosition) {
-    *num |= (1 << bitPosition);
-}

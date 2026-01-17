@@ -11,21 +11,29 @@ void environment_init() {
         for (u16 y = 0; y < mapHTiles; y++) {
             u8 tileIndex = mapPointerGet(collisionsMap, x, y);
             if (IS_OBJECT(tileIndex)) {
-                currObject = allocGameObject();
+                GameObject *currObject = allocGameObject();
 
                 u16 globalPosX = (x << 3);
                 u16 globalPosY = (y << 3);
 
                 currObject->tileIndex = tileIndex;
                 currObject->visible = true;
+
+                environment_initObject(currObject);
+
                 currObject->globalAABB.x.min = globalPosX;
                 currObject->globalAABB.y.min = globalPosY;
 
-                environment_initObject();
-                environment_initObjectSprite();
-
+                environment_initObjectSprite(currObject);
+                
                 currObject->globalAABB.x.max = globalPosX + currObject->sprite->definition->w;
-                currObject->globalAABB.y.max = globalPosY + currObject->sprite->definition->h;
+
+                if (IS_TOP_SOLID_OBJECT(tileIndex)) {
+                    currObject->globalAABB.y.max = globalPosY + 7; // если поставить 8, персонаж сможет стоять ниже поверхности платформы
+                } else {
+                    currObject->globalAABB.y.max = globalPosY + currObject->sprite->definition->h;
+                }
+
             }
         }
     }
@@ -36,35 +44,23 @@ void environment_updateObjects() {
     GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
     u16 num = POOL_getNumAllocated(objectsPool);
     while (num--) {
-        currObject = *objects++;
+        GameObject *object = *objects++;
 
-        bool intersects = aabb_intersects(player->collider->globalAABB, currObject->globalAABB);
-
-        environment_onUpdateObject();
-
-        // hasCurrObjectCollidesWithPlayer
-        if (intersects) {
-
-            if (IS_OBJECT(currObject->tileIndex)) {
-                collidedObject = currObject;
-                environment_onObjectCollidesWithPlayerInViewport();
-            }
-        }
+        environment_onUpdateObject(object);
     }
 }
 
-void environment_freeObject() {
-    SPR_releaseSprite(currObject->sprite);
-    POOL_release(objectsPool, currObject, true);
-    currObject = NULL;
+void environment_freeObject(GameObject *object) {
+    SPR_releaseSprite(object->sprite);
+    POOL_release(objectsPool, object, true);
 }
 
 void environment_cleanup() {
     GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
     u16 num = POOL_getNumAllocated(objectsPool);
     while (num--) {
-        currObject = *objects++;
-        environment_freeObject();
+        GameObject *currObject = *objects++;
+        environment_freeObject(currObject);
     }
     POOL_destroy(objectsPool);
     MEM_free(collisionsMap);
@@ -74,7 +70,7 @@ void environment_updateSprites() {
     GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
     u16 num = POOL_getNumAllocated(objectsPool);
     while (num--) {
-        currObject = *objects++;
+        GameObject *currObject = *objects++;
 
         s16 currObjectScreenX = currObject->globalAABB.x.min - cameraPosition.x;
         s16 currObjectScreenY = currObject->globalAABB.y.min - cameraPosition.y;
@@ -82,11 +78,11 @@ void environment_updateSprites() {
         if (isObjectVisible(currObjectScreenX, currObjectScreenY, currObject->sprite->definition->w, currObject->sprite->definition->h)) {
             // If the sprite is within the visible area but was previously hidden, restore it
             if (currObject->visible == false) {
-                environment_initObjectSprite();
+                environment_initObjectSprite(currObject);
                 currObject->visible = true;
             }
 
-            environment_onUpdateObjectInViewport();
+            environment_onUpdateObjectInViewport(currObject);
 
             bool changedPos = IS_MOVING_PLATFORM(currObject->tileIndex) || scrolled;
             if (changedPos) {
@@ -105,6 +101,5 @@ void environment_updateSprites() {
 #endif
             }
         }
-        
     }
 }

@@ -6,3 +6,5 @@ out/rom_head.bin
 *.out
 *.json
 .vscode/*
+scripts/*
+scratches/*
