@@ -1,27 +1,23 @@
 #include <global.h>
 
 #define LEFT_BIT_SHIFT     0
-#define RIGHT_BIT_SHIFT    3
-#define TOP_BIT_SHIFT      6
-#define BOTTOM_BIT_SHIFT   9
-#define GROUND_BIT_POS     12
+#define RIGHT_BIT_SHIFT    1
+#define TOP_BIT_SHIFT      2
+#define BOTTOM_BIT_SHIFT   3
+#define GROUND_BIT_POS     4
 
-#define GET_LEFT_COLLISION(collider)            (collider->groundCollisionData & 0x7)
-#define GET_RIGHT_COLLISION(collider)           ((collider->groundCollisionData >> RIGHT_BIT_SHIFT) & 0x7)
-#define GET_TOP_COLLISION(collider)             ((collider->groundCollisionData >> TOP_BIT_SHIFT) & 0x7)
-#define GET_BOTTOM_COLLISION(collider)          ((collider->groundCollisionData >> BOTTOM_BIT_SHIFT) & 0x7)
+#define GET_LEFT_COLLISION(collider)            (collider->groundCollisionData & 1)
+#define GET_RIGHT_COLLISION(collider)           ((collider->groundCollisionData >> RIGHT_BIT_SHIFT) & 1)
+#define GET_TOP_COLLISION(collider)             ((collider->groundCollisionData >> TOP_BIT_SHIFT) & 1)
+#define GET_BOTTOM_COLLISION(collider)          ((collider->groundCollisionData >> BOTTOM_BIT_SHIFT) & 1)
 #define HAS_ANY_COLLISION(collider)             ((collider->groundCollisionData & 0x0FFF) ? 1 : 0)
 #define HAS_GROUND_COLLISION(collider)          ((collider->groundCollisionData >> GROUND_BIT_POS) & 1)
-#define HAS_TILE_COLLISION(collider, tileIndex) ((collider->tileCollisionFlags >> tileIndex) & 1)
+#define HAS_TILE_COLLISION(flags, tileIndex)    ((flags >> tileIndex) & 1)
 
 // Contains minimal information required to calculate and determine collisions
 typedef struct {
     AABB globalAABB; // Object's global axis-aligned bounding box for collision detection
-    u8 facingDirection; // Direction the object is facing
 
-    // Bits:  15 14 13 12 | 11 10  9 | 8  7  6 | 5  4  3 | 2  1  0
-    //        ----------- | -------- | ------- | ------- | -------
-    //            GRND    |  BOTTOM  |   TOP   |  RIGHT  |  LEFT
     u16 groundCollisionData;
 
 
@@ -33,7 +29,8 @@ typedef struct {
 
 Collider *allocCollider();
 void collider_init(Collider* collider, u16 x, u16 y);
-u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags);
-s16 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b);
 u8 collision_getTileIndex(u16 xTile, u16 yTile);
-void collision_check(Collider *collider);
+bool collision_checkTileCollisions(AABB aabb, u16 *tileCollisionFlags);
+bool collision_searchTileCollision(AABB aabb, u8 tileIndex);
+s16 collision_moveX(Collider* collider, s16 intendedDeltaX);
+s16 collision_moveY(Collider* collider, s16 intendedDeltaY);

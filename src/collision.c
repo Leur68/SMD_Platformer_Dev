@@ -5,8 +5,7 @@ Collider *allocCollider() {
 }
 
 void collider_init(Collider* collider, u16 x, u16 y) {
-    aabb_set(&collider->globalAABB, (Vect2D_u16){x, y}); // Position
-    collider->facingDirection = DIRECTION_NONE;
+    aabb_set(&collider->globalAABB, x, y); // Position
     collider->groundCollisionData = 0;
     collider->tileCollisionFlags = 0;
 }
@@ -17,360 +16,166 @@ u8 collision_getTileIndex(u16 xTile, u16 yTile) {
     return mapPointerGet(collisionsMap, xTile, yTile);
 }
 
-// проверяет указанный AABB на присутствие в тайловой карте. 
-// если targetAABB пересекается с SOLID_TILE_INDEX или TOP_SOLID_TILE_INDEX, возвращает collidingTilesAABB, представляющий собой AABB точно выровненный по клеткам тайловой карты
-// в tileCollisionFlags записывает информацию о типах тайлов, с которыми произошло пересечение
-u8 collision_checkMapArea(AABB targetAABB, AABB *collidingTilesAABB, u16 *tileCollisionFlags) {
-    u16 xMin = targetAABB.tileX.max; // Minimum x and y tile values
-    u16 yMin = targetAABB.tileY.max;
-    u16 xMax = targetAABB.tileX.min; // Maximum x and y tile values
-    u16 yMax = targetAABB.tileY.min;
-    u8 exists = 0;
+bool collision_checkTileCollisions(AABB aabb, u16 *tileCollisionFlags) {
 
-    // Iterate through each tile in the specified area
-    for (u16 currYTile = targetAABB.tileY.min; currYTile < targetAABB.tileY.max; currYTile++) {
-        for (u16 currXTile = targetAABB.tileX.min; currXTile < targetAABB.tileX.max; currXTile++) {
-            // Check if the tile is solid
-            u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
+    for (u16 y = aabb.tileY.min; y <= aabb.tileY.max; y++) {
+        for (u16 x = aabb.tileX.min; x <= aabb.tileX.max; x++) {
 
-            if (tileIndex == SOLID_TILE_INDEX || tileIndex == TOP_SOLID_TILE_INDEX) {
-                // Determine the minimum and maximum tile coordinates
-                if (currXTile < xMin) xMin = currXTile;
-                if (currYTile < yMin) yMin = currYTile;
-                if (currXTile > xMax) xMax = currXTile;
-                if (currYTile > yMax) yMax = currYTile;
-
-                exists = tileIndex;
+            u8 tileIndex = collision_getTileIndex(x, y);
+            
+            if (tileIndex != 0) {
+                setBit(tileCollisionFlags, tileIndex); // Столкновение найдено
             }
+        }
+    }
+}
+
+bool collision_searchTileCollision(AABB aabb, u8 tileIndex) {
+
+    for (u16 y = aabb.tileY.min; y <= aabb.tileY.max; y++) {
+        for (u16 x = aabb.tileX.min; x <= aabb.tileX.max; x++) {
+
+            u8 currTileIndex = collision_getTileIndex(x, y);
             
-            setBit(tileCollisionFlags, tileIndex);
-            
+            if (currTileIndex == tileIndex) {
+                return 1;
+            }
         }
     }
 
-    // If collisions are found, calculate the AABB
-    if (exists != 0) {
-        collidingTilesAABB->tileX.min = xMin;
-        collidingTilesAABB->tileY.min = yMin;
-        collidingTilesAABB->tileX.max = xMax;
-        collidingTilesAABB->tileY.max = yMax;
-
-        // Convert tile coordinates to pixels
-        collidingTilesAABB->x.min = xMin << 3; // Multiply by 8 using bitwise shift
-        collidingTilesAABB->y.min = yMin << 3;
-        collidingTilesAABB->x.max = (xMax << 3) + 8;
-        collidingTilesAABB->y.max = (yMax << 3) + 8;
-    }
-
-    return exists;
+    return 0;
 }
 
-void collision_check(Collider *collider) {
-    // Get the AABB for collision checking, then filter out only the solid tiles on the map.
-    // These tiles are those that are directly adjacent to or inside the corresponding sides of the player's AABB.
-    AABB aabbLeft;
-    AABB aabbTop;
-    AABB aabbRight;
-    AABB aabbBottom;
-    AABB objectAABB = collider->globalAABB;
+s16 collision_moveX(Collider* collider, s16 intendedDeltaX) {
+
+    AABB *globalAABB = &collider->globalAABB;
     u16 *groundCollisionData = &collider->groundCollisionData;
-    u16 *tileCollisionFlags = &collider->tileCollisionFlags;
 
-    *groundCollisionData = 0;
-    *tileCollisionFlags = 0;
+    clearBit(groundCollisionData, RIGHT_BIT_SHIFT);
+    clearBit(groundCollisionData, LEFT_BIT_SHIFT);
 
-    // проверяем сам объект на коллизии с тайлами. 
-    // ниже будем делать то же, но с aabb с которыми объект пересекается (в теле collision_checkMapArea)
-    if (collider->facingDirection > 0) {
-        for (u16 currYTile = objectAABB.tileY.min; currYTile < objectAABB.tileY.max; currYTile++) {
-            for (u16 currXTile = objectAABB.tileX.min; currXTile < objectAABB.tileX.max; currXTile++) {
-                
-                u8 tileIndex = collision_getTileIndex(currXTile, currYTile);
-                if (tileIndex != SOLID_TILE_INDEX && tileIndex != TOP_SOLID_TILE_INDEX) {
-                    setBit(tileCollisionFlags, tileIndex);
-                }
-            }
+    AABB predictedAABB = *globalAABB;
+    aabb_shiftX(&predictedAABB, intendedDeltaX);
+
+    if (!collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
+        *globalAABB = predictedAABB;
+        return intendedDeltaX;
+    }
+/*
+    predictedAABB = *globalAABB;
+    aabb_shiftX(&predictedAABB, (intendedDeltaX >= 0) ? 1 : -1);
+
+    if (collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
+        if (intendedDeltaX > 0) {
+            setBit(groundCollisionData, RIGHT_BIT_SHIFT);
+        } else if (intendedDeltaX < 0) {
+            setBit(groundCollisionData, LEFT_BIT_SHIFT);
+        }
+        return 0;
+    }
+*/
+    // остальные переменные
+    s16 actualDeltaX = 0;
+    s16 distanceX = abs(intendedDeltaX);
+    s16 stepX = (intendedDeltaX >= 0) ? 1 : -1;
+    AABB testAABB = *globalAABB;
+    bool collidedWithSolid = false;
+    s16 movedPixels = 0;
+
+    for (s16 i = 1; i <= distanceX; i++) {
+
+        aabb_shiftX(&testAABB, stepX);
+        collidedWithSolid = collision_searchTileCollision(testAABB, SOLID_TILE_INDEX);
+
+        if (collidedWithSolid) {
+            actualDeltaX = (intendedDeltaX >= 0) ? i : -i;
+            break;
         }
     }
 
-    switch (collider->facingDirection) {
-    // Moving left only
-    case DIRECTION_LEFT:
-        // Check collisions in the collision map
-        aabbLeft = aabb_getLeftAABB(objectAABB);
+    if (collidedWithSolid) {
 
-        u8 i = collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            setThreeBitField(groundCollisionData, aabbLeft.x.max - objectAABB.x.min + 1, LEFT_BIT_SHIFT);
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving right only
-    case DIRECTION_RIGHT:
-        aabbRight = aabb_getRightAABB(objectAABB);
-        // Check collisions in the collision map
-
-        i = collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            setThreeBitField(groundCollisionData, objectAABB.x.max - aabbRight.x.min + 1, RIGHT_BIT_SHIFT);
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving up only
-    case DIRECTION_UP:
-        aabbTop = aabb_getTopAABB(objectAABB);
-        // Check collisions in the collision map
-
-        i = collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            setThreeBitField(groundCollisionData, aabbTop.y.max - objectAABB.y.min + 1, TOP_BIT_SHIFT);
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving down only
-    case DIRECTION_DOWN:
-        aabbBottom = aabb_getBottomAABB(objectAABB);
-        // Check collisions in the collision map
-
-        i = collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
-            setThreeBitField(groundCollisionData, objectAABB.y.max - aabbBottom.y.min + 1, BOTTOM_BIT_SHIFT);
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving up-left
-    case DIRECTION_LEFT_UP:
-        // Check collisions in the collision map
-        aabbLeft = aabb_getLeftAABB(objectAABB);
-        aabbTop = aabb_getTopAABB(objectAABB);
-
-        i = collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbLeft.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbLeft.y, objectAABB.y) + 1;
-
-            if (v > h) {
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
+        if (actualDeltaX > 0) {
+            setBit(groundCollisionData, RIGHT_BIT_SHIFT);
+        } else if (actualDeltaX < 0) {
+            setBit(groundCollisionData, LEFT_BIT_SHIFT);
         }
 
-        i = collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbTop.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbTop.y, objectAABB.y) + 1;
-
-            if (h > v) {
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving up-right
-    case DIRECTION_RIGHT_UP:
-        // Check collisions in the collision map
-        aabbRight = aabb_getRightAABB(objectAABB);
-        aabbTop = aabb_getTopAABB(objectAABB);
-
-        i = collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbRight.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbRight.y, objectAABB.y) + 1;
-
-            if (v > h) {
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-
-        i = collision_checkMapArea(aabbTop, &aabbTop, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbTop.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbTop.y, objectAABB.y) + 1;
-
-            if (h > v) {
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving down-left
-    case DIRECTION_LEFT_DOWN:
-        // Check collisions in the collision map
-        aabbLeft = aabb_getLeftAABB(objectAABB);
-        aabbBottom = aabb_getBottomAABB(objectAABB);
-
-        i = collision_checkMapArea(aabbLeft, &aabbLeft, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbLeft.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbLeft.y, objectAABB.y) + 1;
-
-            if (v > h) {
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-
-        i = collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbBottom.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbBottom.y, objectAABB.y) + 1;
-
-            if (h > v) {
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-        break;
-    // Moving down-right
-    case DIRECTION_RIGHT_DOWN:
-        // Check collisions in the collision map
-        aabbRight = aabb_getRightAABB(objectAABB);
-        aabbBottom = aabb_getBottomAABB(objectAABB);
-
-        i = collision_checkMapArea(aabbRight, &aabbRight, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbRight.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbRight.y, objectAABB.y) + 1;
-
-            if (v > h) {
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
-
-        i = collision_checkMapArea(aabbBottom, &aabbBottom, tileCollisionFlags);
-
-        if (i == SOLID_TILE_INDEX || i == TOP_SOLID_TILE_INDEX) {
-            s16 h = collision_getIntersectionLen(aabbBottom.x, objectAABB.x) + 1;
-            s16 v = collision_getIntersectionLen(aabbBottom.y, objectAABB.y) + 1;
-
-            if (h > v) {
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            } else if (v == h) {
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-            }
-            setBit(groundCollisionData, GROUND_BIT_POS);
-        }
+        movedPixels = actualDeltaX - stepX; // Остановка на 1 пиксель раньше (работает для + и -)
+    } else {
+        movedPixels = intendedDeltaX;
     }
 
-    // Check collisions with solid objects
-    if (collidedObject == NULL || !(IS_SOLID_OBJECT(collidedObject->tileIndex) || IS_TOP_SOLID_OBJECT(collidedObject->tileIndex))) {
-        return;
+    if (movedPixels != 0) {
+        aabb_shiftX(globalAABB, movedPixels);
     }
 
-    s16 h = collision_getIntersectionLen(collidedObject->globalAABB.x, objectAABB.x) + 1;
-    s16 v = collision_getIntersectionLen(collidedObject->globalAABB.y, objectAABB.y) + 1;
-    u8 relativeDirection = aabb_getRelativePosition(objectAABB, collidedObject->globalAABB);   
-
-    if (v > h) { 
-
-        if (IS_TOP_SOLID_OBJECT(collidedObject->tileIndex)) {
-            return;
-        }
-
-        if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
-
-            setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-
-        } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
-
-            setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-
-        }
-
-    } else if (h > v) {
-
-        if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
-            
-            if (IS_TOP_SOLID_OBJECT(collidedObject->tileIndex)) {
-                return;
-            }
-
-            setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-
-        } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
-
-            setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-
-        }
-
-    } else if (v == h) {
-        // We take into account the character's movement direction so that after the shift, v does not equal h.
-
-        if (abs(player->velocity.x) + abs(player->autoVelocity.x) > abs(player->velocity.y) + abs(player->autoVelocity.y)) {
-                
-            if (IS_TOP_SOLID_OBJECT(collidedObject->tileIndex)) {
-                return;
-            }
-
-            if (IS_ON_LEFT(relativeDirection)) { // check if collidedObject is on the left
-
-                setThreeBitField(groundCollisionData, h, LEFT_BIT_SHIFT);
-
-            } else if (IS_ON_RIGHT(relativeDirection)) { // check if collidedObject is on the right
-
-                setThreeBitField(groundCollisionData, h, RIGHT_BIT_SHIFT);
-
-            }
-
-        } else if (abs(player->velocity.y) + abs(player->autoVelocity.y) > abs(player->velocity.x) + abs(player->autoVelocity.x)) {
-
-            if (IS_ON_TOP(relativeDirection)) { // check if collidedObject is on the top
-                
-                if (IS_TOP_SOLID_OBJECT(collidedObject->tileIndex)) {
-                    return;
-                }
-
-                setThreeBitField(groundCollisionData, v, TOP_BIT_SHIFT);
-
-            } else if (IS_ON_BOTTOM(relativeDirection)) { // check if collidedObject is on the bottom
-
-                setThreeBitField(groundCollisionData, v, BOTTOM_BIT_SHIFT);
-
-            }
-
-        }
-    }
+    return movedPixels;
 }
 
-s16 collision_getIntersectionLen(AxisLine_u16 a, AxisLine_u16 b) {
-    u16 start = a.min > b.min ? a.min : b.min; // The larger of the two minimum values
-    u16 end = a.max < b.max ? a.max : b.max;   // The smaller of the two maximum values
+s16 collision_moveY(Collider* collider, s16 intendedDeltaY) {
 
-    s16 len = end - start;     // Calculate the length of the intersection
-    return len > 0 ? len : 0; // If the intersection length is negative, there is no intersection
+    AABB *globalAABB = &collider->globalAABB;
+    u16 *groundCollisionData = &collider->groundCollisionData;
+
+    clearBit(groundCollisionData, TOP_BIT_SHIFT);
+    clearBit(groundCollisionData, BOTTOM_BIT_SHIFT);
+
+    AABB predictedAABB = *globalAABB;
+    aabb_shiftY(&predictedAABB, intendedDeltaY);
+
+    if (!collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
+        *globalAABB = predictedAABB;
+        return intendedDeltaY;
+    }
+/*
+    predictedAABB = *globalAABB;
+    aabb_shiftY(&predictedAABB, (intendedDeltaY >= 0) ? 1 : -1);
+
+    if (collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
+        if (intendedDeltaY > 0) {
+            setBit(groundCollisionData, BOTTOM_BIT_SHIFT);
+        } else if (intendedDeltaY < 0) {
+            setBit(groundCollisionData, TOP_BIT_SHIFT);
+        }
+        return 0;
+    }
+*/
+    // остальные переменные
+    s16 actualDeltaY = 0;
+    s16 distanceY = abs(intendedDeltaY);
+    s16 stepY = (intendedDeltaY >= 0) ? 1 : -1;
+    AABB testAABB = *globalAABB;
+    bool collidedWithSolid = false;
+    s16 movedPixels = 0;
+
+    for (s16 i = 1; i <= distanceY; i++) {
+
+        aabb_shiftY(&testAABB, stepY);
+        collidedWithSolid = collision_searchTileCollision(testAABB, SOLID_TILE_INDEX);
+
+        if (collidedWithSolid) {
+            actualDeltaY = (intendedDeltaY >= 0) ? i : -i;
+            break;
+        }
+    }
+
+    if (collidedWithSolid) {
+
+        if (actualDeltaY > 0) {
+            setBit(groundCollisionData, BOTTOM_BIT_SHIFT);
+        } else if (actualDeltaY < 0) {
+            setBit(groundCollisionData, TOP_BIT_SHIFT);
+        }
+
+        movedPixels = actualDeltaY - stepY; // Остановка на 1 пиксель раньше (работает для + и -)
+    } else {
+        movedPixels = intendedDeltaY;
+    }
+
+    if (movedPixels != 0) {
+        aabb_shiftY(globalAABB, movedPixels);
+    }
+
+    return movedPixels;
 }

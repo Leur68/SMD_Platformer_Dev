@@ -92,7 +92,6 @@ void debug_printStateOnScreen() {
 #if (DEBUG_WINDOW_PLAYER_INTS)
     drawInt(player->coyoteTimer, x, i++, len);
     drawInt(player->jumpTimer, x, i++, len);
-    drawInt(player->collider->facingDirection, x, i++, len);
 #endif
 
 #if (DEBUG_WINDOW_PLAYER_CAMERA)
@@ -111,63 +110,16 @@ void kdebug_printState() {
     bool ground = HAS_GROUND_COLLISION(player->collider);
     bool anyCollision = HAS_ANY_COLLISION(player->collider);
 
+    //////////////////////
     static char str[500];
     static char tmp[16];
     str[0] = '\n';
     str[1] = '\0';
-
     char *p = str;
-
     while (*p)
         p++;
-
     char *s;
-
-#define mystrcat()        \
-    while (*p++ = *s++);  \
-    --p;
-
-#define concU(t, v)       \
-    s = t;                \
-    mystrcat();           \
-    uintToStr(v, tmp, 1); \
-    s = tmp;              \
-    mystrcat();           \
-    s = "\n";             \
-    mystrcat();
-
-#define concS(t, v)      \
-    s = t;               \
-    mystrcat();          \
-    intToStr(v, tmp, 1); \
-    s = tmp;             \
-    mystrcat();          \
-    s = "\n";            \
-    mystrcat();
-
-#define concff32(t, v)   \
-    s = t;               \
-    mystrcat();          \
-    if (v < FASTFIX32(0)) { \
-        s = "-";             \
-        mystrcat();          \
-        intToStr(FF32_toInt(-v), tmp, 1); \
-    } else { \
-        intToStr(FF32_toInt(v), tmp, 1); \
-    } \
-    s = tmp;             \
-    mystrcat();          \
-    s = ".";             \
-    mystrcat();          \
-    intToStr(((FF32_frac(v) * 1000) / 65536), tmp, 1); \
-    s = tmp;             \
-    mystrcat();          \
-    s = "\n";            \
-    mystrcat();
-
-#define conc_() \
-    s = "\n";   \
-    mystrcat();
+    //////////////////////
 
     concU("x  ", player->collider->globalAABB.x.min)
     concU("xm  ", player->collider->globalAABB.x.max)
@@ -212,7 +164,6 @@ void kdebug_printState() {
     concU("c ", player->coyoteTimer)
     concU("jt ", player->jumpTimer)
     concU("wt ", player->waterTimer)
-    concU("d ", player->collider->facingDirection)
     concU("s ", scrolled)
     conc_()
 

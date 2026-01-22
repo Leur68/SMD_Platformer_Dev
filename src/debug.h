@@ -28,3 +28,76 @@ extern bool hasSlowModeEnabled;
 
 void debug_printStateOnScreen();
 void kdebug_printState();
+
+#define mystrcat()        \
+    while (*p++ = *s++);  \
+    --p;
+
+/*
+    You should copy this:
+
+    //////////////////////
+    static char str[500];
+    static char tmp[16];
+    str[0] = '\n';
+    str[1] = '\0';
+    char *p = str;
+    while (*p)
+        p++;
+    char *s;
+    //////////////////////
+
+    Then you should use functions at the bottom like this:
+
+    concS("dx ", deltaX)
+    concS("dy ", deltaY)
+    conc_()
+    concS("mX ", player->movedPixels.x)
+    concS("mY ", player->movedPixels.y)
+
+    At the end call following code:
+
+    KDebug_Alert(str);
+*/
+
+#define concU(t, v)       \
+    s = t;                \
+    mystrcat();           \
+    uintToStr(v, tmp, 1); \
+    s = tmp;              \
+    mystrcat();           \
+    s = "\n";             \
+    mystrcat();
+
+#define concS(t, v)      \
+    s = t;               \
+    mystrcat();          \
+    intToStr(v, tmp, 1); \
+    s = tmp;             \
+    mystrcat();          \
+    s = "\n";            \
+    mystrcat();
+
+#define concff32(t, v)   \
+    s = t;               \
+    mystrcat();          \
+    if (v < FASTFIX32(0)) { \
+        s = "-";             \
+        mystrcat();          \
+        intToStr(FF32_toInt(-v), tmp, 1); \
+    } else { \
+        intToStr(FF32_toInt(v), tmp, 1); \
+    } \
+    s = tmp;             \
+    mystrcat();          \
+    s = ".";             \
+    mystrcat();          \
+    intToStr(((FF32_frac(v) * 1000) / 65536), tmp, 1); \
+    s = tmp;             \
+    mystrcat();          \
+    s = "\n";            \
+    mystrcat();
+
+#define conc_() \
+    s = "\n";   \
+    mystrcat();

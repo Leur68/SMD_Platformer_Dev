@@ -23,3 +23,6 @@ void drawFix(f32 num, u16 x, u16 y, u16 len);
 
 #define setBit(num, bitPosition)   \
     *num |= (1 << bitPosition);
+    
+#define clearBit(num, bitPosition) \
+    *(num) &= ~(1 << (bitPosition))

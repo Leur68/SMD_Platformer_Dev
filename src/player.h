@@ -55,23 +55,6 @@ void player_init(u16 startX, u16 startY);
 void player_update();
 
 /**
- * Handles the player's movement based on input or automated controls.
- */
-void player_move();
-
-/**
- * Detects and handles collisions between the player and obstacles.
- */
-void player_handleCollisions();
-
-/**
- * Calculates the number of pixels the player will move during the current frame
- * using subpixel precision. This function takes the player's velocity into account
- * and updates their "movedPixels" accordingly.
- */
-void player_calculateSubpixelMovement();
-
-/**
  * Updates the player's sprite position on the screen.
  */
 void player_updateSprite();

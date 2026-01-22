@@ -8,11 +8,7 @@ typedef struct {
 } AABB;
 
 bool aabb_intersects(AABB aabb1, AABB aabb2);
-AABB aabb_getTopAABB(AABB aabb);
-AABB aabb_getBottomAABB(AABB aabb);
-AABB aabb_getLeftAABB(AABB aabb);
-AABB aabb_getRightAABB(AABB aabb);
-void aabb_updateTiles(AABB *aabb);
-void aabb_shift(AABB *aabb, Vect2D_s16 shift);
-void aabb_set(AABB *aabb, Vect2D_u16 pos);
-u8 aabb_getRelativePosition(AABB aabbA, AABB aabbB);
+void aabb_shift(AABB *aabb, s16 shiftX, s16 shiftY);
+void aabb_shiftX(AABB *aabb, s16 shiftX);
+void aabb_shiftY(AABB *aabb, s16 shiftY);
+void aabb_set(AABB *aabb, u16 x, u16 y);

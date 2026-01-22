@@ -76,7 +76,7 @@ const u8 collisions1[MAP_HEIGHT_TILES][MAP_WIDTH_TILES] = {
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
     1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -344,6 +344,7 @@ void stateGame_update() {
 void stateGame_joyHandlerBefore() {
     scrolled = false;
     collidedObject = NULL;
+    player->collider->tileCollisionFlags = 0;
 }
 
 void stateGame_joyHandlerAfter() {
@@ -357,7 +358,7 @@ void stateGame_buttonUpHold() {
         player->velocity.y = FASTFIX32(-MAX_VELOCITY);
     }
 #endif
-    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX)) {
+    if (HAS_TILE_COLLISION(player->collider->tileCollisionFlags, STAIRS_TILE_INDEX)) {
         player->velocity.y = FASTFIX32(0);
         player->autoVelocity.y = FASTFIX32(-2);
         player->isClimbing = true;
@@ -373,7 +374,7 @@ void stateGame_buttonDownHold() {
         player->velocity.y = FASTFIX32(MAX_VELOCITY);
     }
 #endif
-    if (HAS_TILE_COLLISION(player->collider, STAIRS_TILE_INDEX) && !GET_BOTTOM_COLLISION(player->collider)) {
+    if (HAS_TILE_COLLISION(player->collider->tileCollisionFlags, STAIRS_TILE_INDEX) && !GET_BOTTOM_COLLISION(player->collider)) {
         player->velocity.y = FASTFIX32(0);
         player->autoVelocity.y = FASTFIX32(+2);
         player->isClimbing = true;
@@ -383,7 +384,9 @@ void stateGame_buttonDownHold() {
 
 void stateGame_buttonLeftHold() {
 #if (!DEBUG_FREE_MOVE_MODE)
-    u8 left = GET_LEFT_COLLISION(player->collider);
+    AABB checkAABB = player->collider->globalAABB;
+    aabb_shiftX(&checkAABB, -1);
+    bool left = collision_searchTileCollision(checkAABB, SOLID_TILE_INDEX);
     if (!left) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
         u8 bottom = GET_BOTTOM_COLLISION(player->collider);
@@ -403,7 +406,9 @@ void stateGame_buttonLeftHold() {
 
 void stateGame_buttonRightHold() {
 #if (!DEBUG_FREE_MOVE_MODE)
-    u8 right = GET_RIGHT_COLLISION(player->collider);
+    AABB checkAABB = player->collider->globalAABB;
+    aabb_shiftX(&checkAABB, 1);
+    bool right = collision_searchTileCollision(checkAABB, SOLID_TILE_INDEX);
     if (!right) { // Without this condition, holding the movement button while pressing against a wall will result in high CPU load
 #endif
         u8 bottom = GET_BOTTOM_COLLISION(player->collider);
@@ -500,7 +505,7 @@ void stateGame_buttonCPress() {
     u8 bottom = GET_BOTTOM_COLLISION(player->collider);
     if (bottom || (player->coyoteTimer > 0 && player->coyoteTimer <= MAX_COYOTE_TIME)) {
         player->velocity.y = FASTFIX32(-JUMP);
-        setThreeBitField(&player->collider->groundCollisionData, 0, BOTTOM_BIT_SHIFT);
+        clearBit(&player->collider->groundCollisionData, BOTTOM_BIT_SHIFT);
         player->isJumping = true;
     }
 }
