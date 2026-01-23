@@ -38,17 +38,26 @@ void player_update() {
     // Update properties before moving //
     /////////////////////////////////////
 
-    // ?????????????????
-    AABB checkAABB = player->collider->globalAABB;
-    aabb_shiftY(&checkAABB, 1);
-    bool bottom = collision_searchTileCollision(checkAABB, SOLID_TILE_INDEX);
-    if (bottom) {
-        setBit(&player->collider->groundCollisionData, BOTTOM_BIT_SHIFT);
-    } else {
-        clearBit(&player->collider->groundCollisionData, BOTTOM_BIT_SHIFT);
-    }
+    //////////////////////
+    //static char str[500];
+    //static char tmp[16];
+    //str[0] = '\n';
+    //str[1] = '\0';
+    //char *p = str;
+    //while (*p)
+    //    p++;
+    //char *s;
+    //////////////////////
 
+    u16 *groundCollisionData = &player->collider->groundCollisionData;
+    AABB *globalAABB = &player->collider->globalAABB;
+
+    bool bottom = GET_BOTTOM_COLLISION(player->collider);
     bool onStairs = HAS_TILE_COLLISION(player->collider->tileCollisionFlags, STAIRS_TILE_INDEX);
+
+    if (player->isClimbing && !onStairs) {
+        player->isClimbing = false;
+    }
 
     // Handle deceleration when movement keys are released
     if (player->decelerating) {
@@ -74,17 +83,8 @@ void player_update() {
         }
     }
 
-    if (player->isClimbing && !onStairs) {
-        player->isClimbing = false;
-    }
-
-// Add gravity - проверяем РЕАЛЬНУЮ коллизию вниз, а не старую
 #if (!DEBUG_FREE_MOVE_MODE)
-    // Проверяем, есть ли что-то под ногами прямо сейчас
-    //AABB checkAABB = player->collider->globalAABB;
-    //aabb_shiftY(&checkAABB, 1);
-    //bool hasGroundBelow = collision_searchTileCollision(checkAABB, SOLID_TILE_INDEX);
-    
+    // Add gravity - проверяем РЕАЛЬНУЮ коллизию вниз, а не старую
     if ((!bottom && !onStairs) || player->isJumping) {
         if (player->velocity.y < FASTFIX32(GRAVITY)) {
             player->velocity.y += FASTFIX32(GRAVITY_ACCELERATION);
@@ -115,47 +115,78 @@ void player_update() {
     player->movedPixels = (Vect2D_s16){0, 0};
 
     if (player->velocity.x != FASTFIX32(0) || player->autoVelocity.x != FASTFIX32(0)) {
+
+        clearBit(groundCollisionData, LEFT_BIT_SHIFT);
+        clearBit(groundCollisionData, RIGHT_BIT_SHIFT);
+
         // расчет желаемого расстояния движения
         fastfix32 bufferX = (player->posBuffer.x + player->velocity.x + player->autoVelocity.x);
         s16 newPosX = FF32_toInt(FF32_int(bufferX));
-        s16 intendedDeltaX = newPosX - player->collider->globalAABB.x.min;
+        s16 intendedDeltaX = newPosX - globalAABB->x.min;
         if (intendedDeltaX != 0) {
 
-            player->movedPixels.x = collision_moveX(player->collider, intendedDeltaX);
+            player->movedPixels.x = collision_computeDeltaX(globalAABB, intendedDeltaX);
 
             if (player->movedPixels.x != intendedDeltaX) {
                 player->velocity.x = FASTFIX32(0);
                 player->autoVelocity.x = FASTFIX32(0);
+                
+                setBit(groundCollisionData, ((intendedDeltaX > 0) ? RIGHT_BIT_SHIFT : LEFT_BIT_SHIFT));
             }
             
             if (player->movedPixels.x != 0) {
+
+                aabb_shiftX(globalAABB, player->movedPixels.x);
+
                 player->posBuffer.x += FASTFIX32(player->movedPixels.x);
+            }
+        }
+
+        // если движемся по x, а по y нет, проверяем, есть ли земля под ногами и сохраняем новое значение. иначе персонаж срываясь с обрыва будет продолжать бежать по горизонтали
+        if (player->velocity.y == FASTFIX32(0) && player->autoVelocity.y == FASTFIX32(0)) {
+            AABB checkAABB = *globalAABB;
+            aabb_shiftY(&checkAABB, 1);
+            bool bottom = collision_searchTileCollision(checkAABB, SOLID_TILE_INDEX);
+            if (bottom) {
+                setBit(groundCollisionData, BOTTOM_BIT_SHIFT);
+            } else {
+                clearBit(groundCollisionData, BOTTOM_BIT_SHIFT);
             }
         }
     }
 
     if (player->velocity.y != FASTFIX32(0) || player->autoVelocity.y != FASTFIX32(0)) {
+
+        clearBit(groundCollisionData, TOP_BIT_SHIFT);
+        clearBit(groundCollisionData, BOTTOM_BIT_SHIFT);
+
         // расчет желаемого расстояния движения
         fastfix32 bufferY = (player->posBuffer.y + player->velocity.y + player->autoVelocity.y);
         s16 newPosY = FF32_toInt(FF32_int(bufferY));
-        s16 intendedDeltaY = newPosY - player->collider->globalAABB.y.min;
+        s16 intendedDeltaY = newPosY - globalAABB->y.min;
         if (intendedDeltaY != 0) {
             
-            player->movedPixels.y = collision_moveY(player->collider, intendedDeltaY);
+            player->movedPixels.y = collision_computeDeltaY(globalAABB, intendedDeltaY);
 
             if (player->movedPixels.y != intendedDeltaY) {
+
                 player->velocity.y = FASTFIX32(0);
                 player->autoVelocity.y = FASTFIX32(0);
+
+                setBit(groundCollisionData, ((intendedDeltaY > 0) ? BOTTOM_BIT_SHIFT : TOP_BIT_SHIFT));
             }
 
             if (player->movedPixels.y != 0) {
+
+                aabb_shiftY(globalAABB, player->movedPixels.y);
+
                 player->posBuffer.y += FASTFIX32(player->movedPixels.y);
             }
         }
     }
 
-    collision_checkTileCollisions(player->collider->globalAABB, &player->collider->tileCollisionFlags);
-
+    player->collider->tileCollisionFlags = 0;
+    collision_checkTileCollisions(*globalAABB, &player->collider->tileCollisionFlags);
 
 /*
     GameObject** objects = (GameObject**) POOL_getFirst(objectsPool);
@@ -236,6 +267,14 @@ void player_update() {
     if (collidedObject != NULL) {
         environment_onObjectCollidesWithPlayerInViewport(collidedObject);
     }
+
+
+    //concS("t ", GET_TOP_COLLISION(player->collider))
+    //concS("b ", GET_BOTTOM_COLLISION(player->collider))
+    //concS("r ", GET_RIGHT_COLLISION(player->collider))
+    //concS("l ", GET_LEFT_COLLISION(player->collider))
+
+    //KDebug_Alert(str);
 }
 
 void player_updateSprite() {

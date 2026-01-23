@@ -344,7 +344,6 @@ void stateGame_update() {
 void stateGame_joyHandlerBefore() {
     scrolled = false;
     collidedObject = NULL;
-    player->collider->tileCollisionFlags = 0;
 }
 
 void stateGame_joyHandlerAfter() {

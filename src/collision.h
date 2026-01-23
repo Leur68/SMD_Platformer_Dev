@@ -32,5 +32,5 @@ void collider_init(Collider* collider, u16 x, u16 y);
 u8 collision_getTileIndex(u16 xTile, u16 yTile);
 bool collision_checkTileCollisions(AABB aabb, u16 *tileCollisionFlags);
 bool collision_searchTileCollision(AABB aabb, u8 tileIndex);
-s16 collision_moveX(Collider* collider, s16 intendedDeltaX);
-s16 collision_moveY(Collider* collider, s16 intendedDeltaY);
+s16 collision_computeDeltaX(AABB* aabb, s16 intendedDeltaX);
+s16 collision_computeDeltaY(AABB* aabb, s16 intendedDeltaY);

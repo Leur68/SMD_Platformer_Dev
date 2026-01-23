@@ -46,39 +46,48 @@ bool collision_searchTileCollision(AABB aabb, u8 tileIndex) {
     return 0;
 }
 
-s16 collision_moveX(Collider* collider, s16 intendedDeltaX) {
+s16 collision_computeDeltaX(AABB* aabb, s16 intendedDeltaX) {
 
-    AABB *globalAABB = &collider->globalAABB;
-    u16 *groundCollisionData = &collider->groundCollisionData;
+    s16 stepX = (intendedDeltaX >= 0) ? 1 : -1;
 
-    clearBit(groundCollisionData, RIGHT_BIT_SHIFT);
-    clearBit(groundCollisionData, LEFT_BIT_SHIFT);
+    // если коллизии нет на желаемом расстоянии, то на следующем пикселе тоже нет
+    // поэтому нет смысла выполнять и то и другое, просто возвращаем intendedDeltaX
+    // если коллизия есть на желаемом расстоянии, то есть смысл проверить не находится ли она на следующем пикселе
+    // если на следующем пикселе, достаточно просто вернуть 0
+    
+    // проверяем есть ли коллизия в желаемой точке
 
-    AABB predictedAABB = *globalAABB;
-    aabb_shiftX(&predictedAABB, intendedDeltaX);
+    AABB testAABB;
+    testAABB = *aabb;
+    aabb_shiftX(&testAABB, intendedDeltaX);
 
-    if (!collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
-        *globalAABB = predictedAABB;
+    if (!collision_searchTileCollision(testAABB, SOLID_TILE_INDEX)) {
+        
+        // если нет, выходим из функции
+
         return intendedDeltaX;
-    }
-/*
-    predictedAABB = *globalAABB;
-    aabb_shiftX(&predictedAABB, (intendedDeltaX >= 0) ? 1 : -1);
 
-    if (collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
-        if (intendedDeltaX > 0) {
-            setBit(groundCollisionData, RIGHT_BIT_SHIFT);
-        } else if (intendedDeltaX < 0) {
-            setBit(groundCollisionData, LEFT_BIT_SHIFT);
+    } else {
+
+        // если есть, проверяем не находится ли она на следующем пикселе
+
+        testAABB = *aabb;
+        aabb_shiftX(&testAABB, stepX);
+
+        // если да, достаточно просто вернуть 0
+
+        if (collision_searchTileCollision(testAABB, SOLID_TILE_INDEX)) {
+            return 0;
         }
-        return 0;
+
     }
-*/
+    
+    // проверяем есть ли коллизия пошагово
+
     // остальные переменные
+    testAABB = *aabb;
     s16 actualDeltaX = 0;
     s16 distanceX = abs(intendedDeltaX);
-    s16 stepX = (intendedDeltaX >= 0) ? 1 : -1;
-    AABB testAABB = *globalAABB;
     bool collidedWithSolid = false;
     s16 movedPixels = 0;
 
@@ -94,58 +103,56 @@ s16 collision_moveX(Collider* collider, s16 intendedDeltaX) {
     }
 
     if (collidedWithSolid) {
-
-        if (actualDeltaX > 0) {
-            setBit(groundCollisionData, RIGHT_BIT_SHIFT);
-        } else if (actualDeltaX < 0) {
-            setBit(groundCollisionData, LEFT_BIT_SHIFT);
-        }
-
         movedPixels = actualDeltaX - stepX; // Остановка на 1 пиксель раньше (работает для + и -)
     } else {
         movedPixels = intendedDeltaX;
     }
 
-    if (movedPixels != 0) {
-        aabb_shiftX(globalAABB, movedPixels);
-    }
-
     return movedPixels;
 }
 
-s16 collision_moveY(Collider* collider, s16 intendedDeltaY) {
+s16 collision_computeDeltaY(AABB* aabb, s16 intendedDeltaY) {
 
-    AABB *globalAABB = &collider->globalAABB;
-    u16 *groundCollisionData = &collider->groundCollisionData;
+    s16 stepY = (intendedDeltaY >= 0) ? 1 : -1;
 
-    clearBit(groundCollisionData, TOP_BIT_SHIFT);
-    clearBit(groundCollisionData, BOTTOM_BIT_SHIFT);
+    // если коллизии нет на желаемом расстоянии, то на следующем пикселе тоже нет
+    // поэтому нет смысла выполнять и то и другое, просто возвращаем intendedDeltaX
+    // если коллизия есть на желаемом расстоянии, то есть смысл проверить не находится ли она на следующем пикселе
+    // если на следующем пикселе, достаточно просто вернуть 0
+    
+    // проверяем есть ли коллизия в желаемой точке
 
-    AABB predictedAABB = *globalAABB;
-    aabb_shiftY(&predictedAABB, intendedDeltaY);
+    AABB testAABB;
+    testAABB = *aabb;
+    aabb_shiftY(&testAABB, intendedDeltaY);
 
-    if (!collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
-        *globalAABB = predictedAABB;
+    if (!collision_searchTileCollision(testAABB, SOLID_TILE_INDEX)) {
+        
+        // если нет, выходим из функции
+
         return intendedDeltaY;
-    }
-/*
-    predictedAABB = *globalAABB;
-    aabb_shiftY(&predictedAABB, (intendedDeltaY >= 0) ? 1 : -1);
 
-    if (collision_searchTileCollision(predictedAABB, SOLID_TILE_INDEX)) {
-        if (intendedDeltaY > 0) {
-            setBit(groundCollisionData, BOTTOM_BIT_SHIFT);
-        } else if (intendedDeltaY < 0) {
-            setBit(groundCollisionData, TOP_BIT_SHIFT);
+    } else {
+
+        // если есть, проверяем не находится ли она на следующем пикселе
+
+        testAABB = *aabb;
+        aabb_shiftY(&testAABB, stepY);
+
+        // если да, достаточно просто вернуть 0
+
+        if (collision_searchTileCollision(testAABB, SOLID_TILE_INDEX)) {
+            return 0;
         }
-        return 0;
+
     }
-*/
+    
+    // проверяем есть ли коллизия пошагово
+    
     // остальные переменные
+    testAABB = *aabb;
     s16 actualDeltaY = 0;
     s16 distanceY = abs(intendedDeltaY);
-    s16 stepY = (intendedDeltaY >= 0) ? 1 : -1;
-    AABB testAABB = *globalAABB;
     bool collidedWithSolid = false;
     s16 movedPixels = 0;
 
@@ -161,20 +168,9 @@ s16 collision_moveY(Collider* collider, s16 intendedDeltaY) {
     }
 
     if (collidedWithSolid) {
-
-        if (actualDeltaY > 0) {
-            setBit(groundCollisionData, BOTTOM_BIT_SHIFT);
-        } else if (actualDeltaY < 0) {
-            setBit(groundCollisionData, TOP_BIT_SHIFT);
-        }
-
         movedPixels = actualDeltaY - stepY; // Остановка на 1 пиксель раньше (работает для + и -)
     } else {
         movedPixels = intendedDeltaY;
-    }
-
-    if (movedPixels != 0) {
-        aabb_shiftY(globalAABB, movedPixels);
     }
 
     return movedPixels;
